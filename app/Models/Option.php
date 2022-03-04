@@ -11,4 +11,12 @@ class Option extends Model
     protected $fillable = [
         'name',
     ];
+    public function colors()
+    {
+        return $this->hasMany(Color::class);
+    }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

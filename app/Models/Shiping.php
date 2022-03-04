@@ -14,4 +14,12 @@ class Shiping extends Model
         'city_id',
         'user_id',
     ];
+    public function city()
+    {
+        $this->belongsTo(City::class);
+    }
+    public function user()
+    {
+        $this->belongsTo(User::class);
+    }
 }

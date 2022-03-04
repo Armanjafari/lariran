@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +21,11 @@ Route::prefix('v1')->group(function () {
         Route::post('login', [AuthController::class, 'login']);
         Route::post('me', [AuthController::class, 'me']);
         Route::post('logout', [AuthController::class, 'logout']);
+    });
+    Route::prefix('category')->group(function () {
+        Route::get('/', [CategoryController::class , 'index']);
+        Route::post('create', [CategoryController::class , 'create']);
+        Route::put('update/{category}', [CategoryController::class , 'update']);
     });
 });
 

@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Waranty extends Model
+class Role extends Model
 {
     use HasFactory;
     protected $fillable = [
         'name',
+        'persian_name',
     ];
-    public function fulls()
+    public function users()
     {
-        $this->hasMany(Full::class);
+        $this->belongsToMany(User::class);
     }
 }

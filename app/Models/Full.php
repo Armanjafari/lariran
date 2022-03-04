@@ -18,4 +18,16 @@ class Full extends Model
         'product_id',
         'is_active',
     ];
+    public function waranty()
+    {
+        $this->belongsTo(Waranty::class);
+    }
+    public function color()
+    {
+        $this->belongsTo(Color::class);
+    }
+    public function product()
+    {
+        $this->belongsTo(Product::class);
+    }
 }

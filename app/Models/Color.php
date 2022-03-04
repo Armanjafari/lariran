@@ -13,4 +13,8 @@ class Color extends Model
         'value',
         'option_id',
     ];
+    public function option()
+    {
+        $this->belongsTo(Option::class);
+    }
 }

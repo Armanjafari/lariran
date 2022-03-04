@@ -20,4 +20,20 @@ class Product extends Model
         'status',
         'keywords',
     ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+    public function option()
+    {
+        $this->belongsTo(Option::class);
+    }
+    public function fulls()
+    {
+        return $this->hasMany(Full::class);
+    }
 }

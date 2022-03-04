@@ -12,4 +12,8 @@ class City extends Model
         'name',
         'province_id',
     ];
+    public function province()
+    {
+        $this->belongsTo(Province::class);
+    }
 }
