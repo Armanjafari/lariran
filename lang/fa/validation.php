@@ -172,7 +172,7 @@ return [
         'hour' => 'ساعت',
         'minute' => 'دقیقه',
         'second' => 'ثانیه',
-        'title' => 'عنوان',
+        'title' => 'عنوان انگلیسی',
         'text' => 'متن',
         'content' => 'محتوا',
         'description' => 'توضیحات',
@@ -188,5 +188,9 @@ return [
         'price' => 'قیمت',
         'pic' => 'تصویر',
         'link' => 'لینک',
+        'slug' => 'اسلاگ',
+        'images' => 'عکس',
+        'persian_name' => 'نام فارسی',
+        'persian_title' => 'عنوان فارسی',
     ],
 ];

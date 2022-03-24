@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\v1\CategoryCollection;
-use App\Http\Resources\v1\CategoryResource;
-use App\Models\Category;
+use App\Http\Resources\v1\BrandCollection;
+use App\Http\Resources\v1\BrandResource;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CategoryController extends Controller
+class BrandController extends Controller
 {
     public function __construct()
     {
@@ -19,9 +19,8 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:categories,name|string|max:255|min:2',
+            'name' => 'required|unique:brands,name|string|max:255|min:2',
             'persian_name' => 'required|min:2',
-            'parent_id' => 'integer',
           ]);
           if ($validator->fails()) {
             return response()->json([
@@ -29,27 +28,20 @@ class CategoryController extends Controller
                 'status' => 'error',
             ]);
           }
-        // $request->validate([
-        //     'name' => 'required|unique:categories,name|string|max:255|min:2',
-        //     'persian_name' => 'required|min:2',
-        //     'parent_id' => 'integer',
-        // ]);
-        Category::create([
+        Brand::create([
             'name' => $request->input('name'),
             'persian_name' => $request->input('persian_name'),
-            'parent_id' => $request->input('parent_id') ?? 0,
         ]);
         return response()->json([
             'data' => [],
             'status' => 'success',
         ]);
     }
-    public function update(Request $request , Category $category)
+    public function update(Request $request , Brand $brand)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:categories,name|string|max:255|min:2',
+            'name' => 'required|unique:brands,name|string|max:255|min:2',
             'persian_name' => 'required|min:2',
-            'parent_id' => 'required|integer'
           ]);
           if ($validator->fails()) {
             return response()->json([
@@ -57,10 +49,9 @@ class CategoryController extends Controller
                 'status' => 'error',
             ]);
           }
-        $category->update([
+        $brand->update([
             'name' => $request->input('name'),
             'persian_name' => $request->input('persian_name'),
-            'parent_id' => $request->input('parent_id'),
         ]);
         return response()->json([
             'data' => [],
@@ -69,26 +60,22 @@ class CategoryController extends Controller
     }
     public function index()
     {
-        $categories = Category::paginate(10);
-        return new CategoryCollection($categories);
-        // return response()->json([
-        //     'status' => 'success',
-        //     'data' => $categories,
-        // ]);
+        $brands = Brand::paginate(10);
+        return new BrandCollection($brands);
     }
-    public function delete(Category $category)
+    public function delete(Brand $brand)
     {
-        $category->delete();
+        $brand->delete();
         return response()->json([
             'data' => [],
             'status' => 'success',
         ],200);
     }
-    public function single(Category $category)
+    public function single(Brand $brand)
     {
-        return new CategoryResource($category);
+        return new BrandResource($brand);
     }
-    public function products(Category $category)
+    public function products(Brand $category)
     {
         //
     }

@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\OptionController;
+use App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,15 +20,39 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
-        Route::post('register', [AuthController::class, 'register']);
-        Route::post('login', [AuthController::class, 'login']);
-        Route::post('me', [AuthController::class, 'me']);
-        Route::post('logout', [AuthController::class, 'logout']);
+        Route::post('register', [AuthController::class, 'register'])->name('register');
+        Route::post('login', [AuthController::class, 'login'])->name('login');
+        Route::post('me', [AuthController::class, 'me'])->name('me');
+        Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     });
     Route::prefix('category')->group(function () {
-        Route::get('/', [CategoryController::class , 'index']);
-        Route::post('create', [CategoryController::class , 'create']);
-        Route::put('update/{category}', [CategoryController::class , 'update']);
+        Route::get('/', [CategoryController::class, 'index'])->name('category.index');
+        Route::post('create', [CategoryController::class, 'create'])->name('category.create');
+        Route::put('update/{category}', [CategoryController::class, 'update'])->name('category.update');
+        Route::delete('delete/{category}', [CategoryController::class, 'delete'])->name('category.delete');
+        Route::get('/{category}', [CategoryController::class, 'single'])->name('category.single');
+        Route::get('/{category}/products', [CategoryController::class, 'products'])->name('category.products');
+    });
+    Route::prefix('brand')->group(function () {
+        Route::get('/', [BrandController::class, 'index'])->name('brand.index');
+        Route::post('create', [BrandController::class, 'create'])->name('brand.create');
+        Route::put('update/{brand}', [BrandController::class, 'update'])->name('brand.update');
+        Route::delete('delete/{brand}', [BrandController::class, 'delete'])->name('brand.delete');
+        Route::get('/{brand}', [BrandController::class, 'single'])->name('brand.single');
+        Route::get('/{brand}/products', [BrandController::class, 'products'])->name('brand.products');
+    });
+    Route::prefix('option')->group(function () {
+        Route::get('/', [OptionController::class, 'index'])->name('option.index');
+        Route::post('create', [OptionController::class, 'create'])->name('option.create');
+        Route::put('update/{option}', [OptionController::class, 'update'])->name('option.update');
+        Route::delete('delete/{option}', [OptionController::class, 'delete'])->name('option.delete');
+    });
+    Route::prefix('product')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('product.index');
+        Route::post('create', [ProductController::class, 'create'])->name('product.create');
+        Route::put('update/{product}', [ProductController::class, 'update'])->name('product.update');
+        Route::delete('delete/{product}', [ProductController::class, 'delete'])->name('product.delete');
+        Route::get('/{product}', [ProductController::class, 'single'])->name('product.single');
     });
 });
 

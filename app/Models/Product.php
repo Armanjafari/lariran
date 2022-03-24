@@ -30,10 +30,14 @@ class Product extends Model
     }
     public function option()
     {
-        $this->belongsTo(Option::class);
+        return $this->belongsTo(Option::class);
     }
     public function fulls()
     {
         return $this->hasMany(Full::class);
+    }
+    public function images()
+    {
+        return $this->morphMany(Image::class , 'imageable');
     }
 }
