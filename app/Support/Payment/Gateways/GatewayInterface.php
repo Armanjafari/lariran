@@ -2,7 +2,7 @@
 
 namespace App\Support\Payment\Gateways;
 
-use App\Order;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 interface GatewayInterface

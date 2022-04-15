@@ -192,5 +192,6 @@ return [
         'images' => 'عکس',
         'persian_name' => 'نام فارسی',
         'persian_title' => 'عنوان فارسی',
+        'waranty_id' => 'گارانتی',
     ],
 ];

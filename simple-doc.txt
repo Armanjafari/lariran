@@ -169,3 +169,132 @@ returns : [success message]
 params[]
 
 returns : [product]
+
+
+---------------------
+### Waranty ###
+[GET] https//api.lariran.com/api/v1/waranty
+
+params[]
+
+returns : [waranty collection with pagination links]
+---------
+[POST] https//api.lariran.com/api/v1/waranty/create
+
+params[name]
+
+returns : [success message]
+---------
+[PUT] https//api.lariran.com/api/v1/waranty/update/{waranty_id} #example https//api.lariran.com/api/v1/waranty/update/2
+
+params[name]
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/waranty/delete/{waranty_id} #example https//api.lariran.com/api/v1/waranty/delete/2
+
+params[] 
+
+returns : [success message]
+---------
+[GET] https//api.lariran.com/api/v1/waranty/{waranty_id} #example https//api.lariran.com/api/v1/waranty/2
+
+params[] 
+
+returns : [waranty]
+
+
+
+---------------------
+### OptionValue ###
+[GET] https//api.lariran.com/api/v1/OptionValue
+
+params[]
+
+returns : [OptionValue collection with pagination links]
+---------
+[POST] https//api.lariran.com/api/v1/OptionValue/create
+
+params[title,value,option_id]
+
+returns : [success message]
+---------
+[PUT] https//api.lariran.com/api/v1/OptionValue/update/{OptionValue_id} #example https//api.lariran.com/api/v1/OptionValue/update/2
+
+params[title,value,option_id]
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/OptionValue/delete/{OptionValue_id} #example https//api.lariran.com/api/v1/OptionValue/delete/2
+
+params[] 
+
+returns : [success message]
+---------
+[GET] https//api.lariran.com/api/v1/OptionValue/{OptionValue_id} #example https//api.lariran.com/api/v1/OptionValue/2 // this may not be useful
+
+params[] 
+
+returns : [OptionValue]
+
+
+
+
+---------------------
+### Currency ###
+[GET] https//api.lariran.com/api/v1/currency
+
+params[]
+
+returns : [currency collection with pagination links]
+---------
+[POST] https//api.lariran.com/api/v1/currency/create
+
+params[name,persian_name,value]
+
+returns : [success message]
+---------
+[PUT] https//api.lariran.com/api/v1/currency/update/{currency_id} #example https//api.lariran.com/api/v1/currency/update/2
+
+params[name,persian_name,value]
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/currency/delete/{currency_id} #example https//api.lariran.com/api/v1/currency/delete/2
+
+params[] 
+
+returns : [success message]
+---------
+[GET] https//api.lariran.com/api/v1/currency/{currency_id} #example https//api.lariran.com/api/v1/currency/2
+
+params[] 
+
+returns : [currency]
+
+
+---------------------
+### Vareity ###
+[GET] https//api.lariran.com/api/v1/product/{product_id}/vareity/
+
+params[]
+
+returns : [vareity collection with pagination links]
+---------
+[POST] https//api.lariran.com/api/v1/product/{product_id}/vareity/create
+
+params[stock,price,show_price,waranty_id,currency_id , optional=>[is_active , color_id]]
+
+returns : [success message]
+---------
+[PUT] https//api.lariran.com/api/v1/product/vareity/update/{vareity_id} #example https//api.lariran.com/api/v1/product/vareity/update/86
+
+params[stock,price,show_price,waranty_id,currency_id , optional=>[is_active , color_id]]
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/product/vareity/delete/{vareity_id} #example https//api.lariran.com/api/v1/product/vareity/delete/2
+
+params[] 
+
+returns : [success message]

@@ -17,10 +17,10 @@ return new class extends Migration
             $table->bigInteger('order_id')->unsigned();
             $table->bigInteger('full_id')->unsigned();
             $table->integer('quantity');
-            $table->unsignedBigInteger('market_id');
+            // $table->unsignedBigInteger('market_id'); bug from iranturan project
             $table->unsignedBigInteger('price');
             
-            $table->foreign('market_id')->references('id')->on('markets')->onDelete('cascade');
+            // $table->foreign('market_id')->references('id')->on('markets')->onDelete('cascade');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('full_id')->references('id')->on('fulls')->onDelete('cascade');
         });

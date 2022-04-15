@@ -17,17 +17,30 @@ class Full extends Model
         'color_id',
         'product_id',
         'is_active',
+        'currency_id',
     ];
     public function waranty()
     {
-        $this->belongsTo(Waranty::class);
+        return $this->belongsTo(Waranty::class);
     }
     public function color()
     {
-        $this->belongsTo(Color::class);
+        return $this->belongsTo(Color::class);
     }
     public function product()
     {
-        $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class);
+    }
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+    public function hasStock(int $quantity)
+    {
+        return $this->stock >= $quantity;
+    }
+    public function decrementStock($count)
+    {
+        return $this->decrement('stock' , $count);
     }
 }

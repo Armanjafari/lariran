@@ -13,6 +13,6 @@ class Waranty extends Model
     ];
     public function fulls()
     {
-        $this->hasMany(Full::class);
+        return $this->hasMany(Full::class);
     }
 }

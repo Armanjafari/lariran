@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Color extends Model
+class Currency extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title' ,
+        'name',
+        'persian_name',
         'value',
-        'option_id',
     ];
-    public function option()
+    public function products()
     {
-        return $this->belongsTo(Option::class);
+        return $this->hasMany(Full::class);
     }
 }

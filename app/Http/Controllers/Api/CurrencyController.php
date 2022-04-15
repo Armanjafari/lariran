@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\v1\CategoryCollection;
-use App\Http\Resources\v1\CategoryResource;
-use App\Models\Category;
+use App\Http\Resources\v1\CurrencyCollection;
+use App\Http\Resources\v1\CurrencyResource;
+use App\Models\Currency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CategoryController extends Controller
+class CurrencyController extends Controller
 {
     public function __construct()
     {
@@ -19,9 +19,9 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:categories,name|string|max:255|min:2',
-            'persian_name' => 'required|min:2',
-            'parent_id' => 'integer',
+            'name' => 'required|unique:waranties,name|string|max:255|min:2',
+            'persian_name' => 'required|string|max:255|min:2',
+            'value' => 'required',
           ]);
           if ($validator->fails()) {
             return response()->json([
@@ -29,27 +29,22 @@ class CategoryController extends Controller
                 'status' => 'error',
             ]);
           }
-        // $request->validate([
-        //     'name' => 'required|unique:categories,name|string|max:255|min:2',
-        //     'persian_name' => 'required|min:2',
-        //     'parent_id' => 'integer',
-        // ]);
-        Category::create([
+        Currency::create([
             'name' => $request->input('name'),
             'persian_name' => $request->input('persian_name'),
-            'parent_id' => $request->input('parent_id') ?? 0,
+            'value' => $request->input('value'),
         ]);
         return response()->json([
             'data' => [],
             'status' => 'success',
         ]);
     }
-    public function update(Request $request , Category $category)
+    public function update(Request $request , Currency $currency)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:categories,name|string|max:255|min:2',
-            'persian_name' => 'required|min:2',
-            'parent_id' => 'required|integer'
+            'name' => 'required|string|max:255|min:2',
+            'persian_name' => 'required|string|max:255|min:2',
+            'value' => 'required',
           ]);
           if ($validator->fails()) {
             return response()->json([
@@ -57,10 +52,10 @@ class CategoryController extends Controller
                 'status' => 'error',
             ]);
           }
-        $category->update([
+        $currency->update([
             'name' => $request->input('name'),
             'persian_name' => $request->input('persian_name'),
-            'parent_id' => $request->input('parent_id'),
+            'value' => $request->input('value'),
         ]);
         return response()->json([
             'data' => [],
@@ -69,27 +64,19 @@ class CategoryController extends Controller
     }
     public function index()
     {
-        $categories = Category::all();
-        return new CategoryCollection($categories);
-        // return response()->json([
-        //     'status' => 'success',
-        //     'data' => $categories,
-        // ]);
+        $currencies = Currency::paginate(10);
+        return new CurrencyCollection($currencies);
     }
-    public function delete(Category $category)
+    public function delete(Currency $currency)
     {
-        $category->delete();
+        $currency->delete();
         return response()->json([
             'data' => [],
             'status' => 'success',
         ],200);
     }
-    public function single(Category $category)
+    public function single(Currency $currency)
     {
-        return new CategoryResource($category);
-    }
-    public function products(Category $category)
-    {
-        //
+        return new CurrencyResource($currency); // TODO currency validation with admin should check
     }
 }

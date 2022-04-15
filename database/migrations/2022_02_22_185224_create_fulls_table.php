@@ -29,9 +29,9 @@ return new class extends Migration
             
             $table->unsignedBigInteger('color_id')->nullable();
             $table->foreign('color_id')->references('id')->on('colors')->onUpdate('cascade');
-            
-
             $table->timestamps();
+            $table->unique(['product_id', 'color_id']);
+
         });
     }
 

@@ -17,7 +17,7 @@ class ProductCollection extends ResourceCollection
         return [
             'data' => $this->collection->transform(function($product){
                 return [
-                    'id' => $this->id,
+                    'id' => $product->id,
                     'title' => $product->title,
                     'persian_title' => $product->persian_title,
                     'category_id' => new CategoryResource($product->category),
@@ -29,6 +29,7 @@ class ProductCollection extends ResourceCollection
                     'keywords' => $product->keywords ?? '',
                     'status' => $product->status ?? '', 
                     'images' => new ImageCollection($product->images), 
+                    'varieties' => new VarietyCollection($product->fulls), 
                 ];
             }),
         ];
