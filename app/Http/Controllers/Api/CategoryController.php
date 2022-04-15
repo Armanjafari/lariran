@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\CategoryCollection;
 use App\Http\Resources\v1\CategoryResource;
+use App\Http\Resources\v1\ProductCollection;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -13,7 +14,7 @@ class CategoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum','role:admin'])->except(['index', 'single']);
+        $this->middleware(['auth:sanctum','role:admin'])->except(['index', 'single' , 'products']);
 
     }
     public function create(Request $request)
@@ -88,8 +89,8 @@ class CategoryController extends Controller
     {
         return new CategoryResource($category);
     }
-    public function products(Category $category)
+    public function products(Category $category , Request $request)
     {
-        //
+        return new ProductCollection($category->products()->paginate(10));
     }
 }

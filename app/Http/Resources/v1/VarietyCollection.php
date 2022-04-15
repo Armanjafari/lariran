@@ -15,13 +15,13 @@ class VarietyCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->transform(function($variety){
+            $this->collection->transform(function ($variety) { // 'data' =>
                 if (!is_null($variety->color_id)) {
                     return [
                         'id' => $variety->id,
                         // 'stock' => $variety->stock,
-                        'price' =>  $variety->price,
-                        'show_price' =>  $variety->show_price,
+                        'price' =>  ($variety->price * $variety->currency->value),
+                        'show_price' =>  ($variety->show_price * $variety->currency->value),
                         'waranty_id' =>  new WarantyResource($variety->waranty),
                         // 'product_id' =>  $variety->product_id,
                         // 'currency_id' =>  $variety->currency_id,
@@ -33,8 +33,8 @@ class VarietyCollection extends ResourceCollection
                     return [
                         'id' => $variety->id,
                         // 'stock' => $variety->stock,
-                        'price' =>  $variety->price,
-                        'show_price' =>  $variety->show_price,
+                        'price' =>  ($variety->price * $variety->currency->value),
+                        'show_price' =>  ($variety->show_price * $variety->currency->value),
                         'waranty_id' =>  new WarantyResource($variety->waranty),
                         // 'product_id' =>  $variety->product_id,
                         // 'currency_id' =>  $variety->currency_id,
