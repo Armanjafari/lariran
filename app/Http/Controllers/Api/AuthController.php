@@ -13,6 +13,8 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum')->only(['me', 'logout']);
+        $this->middleware('throttle:5,5')->only(['register']); // TODO set captcha for everywhere that needed
+        $this->middleware('throttle:5,5')->only(['login']);
     }
     public function register(Request $request)
     {

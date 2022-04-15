@@ -193,5 +193,6 @@ return [
         'persian_name' => 'نام فارسی',
         'persian_title' => 'عنوان فارسی',
         'waranty_id' => 'گارانتی',
+        'color_id' => 'متغیر',
     ],
 ];

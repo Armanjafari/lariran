@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 use App\Exceptions\QuantityExceededException;
+use App\Http\Resources\v1\BasketCollection;
 use App\Models\Full;
-use App\Models\Product;
 use App\Support\Basket\Basket;
 use App\Support\Payment\Transaction;
 use App\Support\Storage\Contracts\StorageInterface;
@@ -26,6 +26,7 @@ class BasketController extends Controller
     public function index()
     {
         $items = $this->basket->all();
+        return new BasketCollection($items);
         //dd($items);
         // return view('Product.basket',compact('items'));
         return response()->json([
@@ -72,13 +73,23 @@ class BasketController extends Controller
     }
     public function update(Request $request , Full $product)
     {
-        $this->basket->update($product,$request->quantity);
-        return response()->json([
-            'data' => [
-                'basket' => ' سبر خرید ویرایش شد '
-            ],
-            'status' => 'success',
-        ]);
+        try {
+            $this->basket->update($product,$request->quantity);
+            return response()->json([
+                'data' => [
+                    'basket' => ' سبر خرید ویرایش شد '
+                ],
+                'status' => 'success',
+            ]);
+        } catch (QuantityExceededException $e) {
+            return response()->json([
+                'data' => [
+                    'basket' => 'مقدار مورد نظر بیش از موجودی انبار میباشد'
+                ],
+                'status' => 'error',
+            ]);
+        }
+
     }
     public function checkoutForm()
     {

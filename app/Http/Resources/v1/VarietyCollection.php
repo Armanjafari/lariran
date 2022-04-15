@@ -15,19 +15,34 @@ class VarietyCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->transform(function($varierty){
-                return [
-                    'id' => $varierty->id,
-                    // 'stock' => $varierty->stock,
-                    'price' =>  $varierty->price,
-                    'show_price' =>  $varierty->show_price,
-                    'waranty_id' =>  new WarantyResource($varierty->waranty),
-                    // 'product_id' =>  $varierty->product_id,
-                    // 'currency_id' =>  $varierty->currency_id,
-                    'color_id' =>  $varierty->color_id ?? null,
-                    // 'is_active' =>  $varierty->is_active ?? 1,
-                    // 'product_id' => new ProductResource($varierty->product),
-                ];
+            'data' => $this->collection->transform(function($variety){
+                if (!is_null($variety->color_id)) {
+                    return [
+                        'id' => $variety->id,
+                        // 'stock' => $variety->stock,
+                        'price' =>  $variety->price,
+                        'show_price' =>  $variety->show_price,
+                        'waranty_id' =>  new WarantyResource($variety->waranty),
+                        // 'product_id' =>  $variety->product_id,
+                        // 'currency_id' =>  $variety->currency_id,
+                        'color_id' =>  new ColorResource($variety->color_id),
+                        // 'is_active' =>  $variety->is_active ?? 1,
+                        // 'product_id' => new ProductResource($variety->product),
+                    ];
+                } else {
+                    return [
+                        'id' => $variety->id,
+                        // 'stock' => $variety->stock,
+                        'price' =>  $variety->price,
+                        'show_price' =>  $variety->show_price,
+                        'waranty_id' =>  new WarantyResource($variety->waranty),
+                        // 'product_id' =>  $variety->product_id,
+                        // 'currency_id' =>  $variety->currency_id,
+                        'color_id' =>  null,
+                        // 'is_active' =>  $variety->is_active ?? 1,
+                        // 'product_id' => new ProductResource($variety->product),
+                    ];
+                }
             }),
         ];
     }

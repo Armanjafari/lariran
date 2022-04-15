@@ -14,6 +14,8 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (!is_null($this->option)) {
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -29,6 +31,23 @@ class ProductResource extends JsonResource
             'images' => new ImageCollection($this->images), 
             'varieties' => new VarietyCollection($this->fulls), 
         ];
+    } else {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'persian_title' => $this->persian_title,
+            'category_id' => new CategoryResource($this->category),
+            'slug' => $this->slug,
+            'brand_id' => new BrandResource($this->brand),
+            'option_id' => null,
+            'description' => $this->description,
+            'weight' => $this->weight,
+            'keywords' => $this->keywords ?? '',
+            'status' => $this->status ?? '', 
+            'images' => new ImageCollection($this->images), 
+            'varieties' => new VarietyCollection($this->fulls), 
+        ];
+    }
     }
     public function with($request)
     {

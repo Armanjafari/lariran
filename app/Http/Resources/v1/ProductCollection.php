@@ -14,23 +14,42 @@ class ProductCollection extends ResourceCollection
      */
     public function toArray($request)
     {
+
         return [
-            'data' => $this->collection->transform(function($product){
-                return [
-                    'id' => $product->id,
-                    'title' => $product->title,
-                    'persian_title' => $product->persian_title,
-                    'category_id' => new CategoryResource($product->category),
-                    'slug' => $product->slug,
-                    'brand_id' => new BrandResource($product->brand),
-                    'option_id' => new OptionResource($product->option),
-                    'description' => $product->description,
-                    'weight' => $product->weight,
-                    'keywords' => $product->keywords ?? '',
-                    'status' => $product->status ?? '', 
-                    'images' => new ImageCollection($product->images), 
-                    'varieties' => new VarietyCollection($product->fulls), 
-                ];
+            'data' => $this->collection->transform(function ($product) {
+                if (!is_null($product->option)) {
+                    return [
+                        'id' => $product->id,
+                        'title' => $product->title,
+                        'persian_title' => $product->persian_title,
+                        'category_id' => new CategoryResource($product->category),
+                        'slug' => $product->slug,
+                        'brand_id' => new BrandResource($product->brand),
+                        'option_id' =>  new OptionResource($product->option),
+                        'description' => $product->description,
+                        'weight' => $product->weight,
+                        'keywords' => $product->keywords ?? '',
+                        'status' => $product->status ?? '',
+                        'images' => new ImageCollection($product->images),
+                        'varieties' => new VarietyCollection($product->fulls),
+                    ];
+                } else {
+                    return [
+                        'id' => $product->id,
+                        'title' => $product->title,
+                        'persian_title' => $product->persian_title,
+                        'category_id' => new CategoryResource($product->category),
+                        'slug' => $product->slug,
+                        'brand_id' => new BrandResource($product->brand),
+                        'option_id' =>  null ,
+                        'description' => $product->description,
+                        'weight' => $product->weight,
+                        'keywords' => $product->keywords ?? '',
+                        'status' => $product->status ?? '',
+                        'images' => new ImageCollection($product->images),
+                        'varieties' => new VarietyCollection($product->fulls),
+                    ];
+                }
             }),
         ];
     }

@@ -14,6 +14,8 @@ class VarietyResource extends JsonResource
      */
     public function toArray($request)
     {
+        if (!is_null($this->option)) {
+
         return [
             'id' => $this->id,
             // 'stock' => $this->stock,
@@ -22,11 +24,26 @@ class VarietyResource extends JsonResource
             'waranty_id' =>  new WarantyResource($this->waranty_id),
             // 'product_id' =>  $this->product_id,
             // 'currency_id' =>  $this->currency_id,
-            'color_id' =>  $this->color_id ?? null,
+            'color_id' =>  new ColorResource($this->color_id),
             // 'is_active' =>  $this->is_active ?? 1,
             // 'product_id' => new ProductResource($this->product),
 
         ];
+    } else {
+        return [
+            'id' => $this->id,
+            // 'stock' => $this->stock,
+            'price' =>  $this->price,
+            'show_price' =>  $this->show_price,
+            'waranty_id' =>  new WarantyResource($this->waranty_id),
+            // 'product_id' =>  $this->product_id,
+            // 'currency_id' =>  $this->currency_id,
+            'color_id' => null,
+            // 'is_active' =>  $this->is_active ?? 1,
+            // 'product_id' => new ProductResource($this->product),
+
+        ];
+    }
     }
     public function with($request)
     {

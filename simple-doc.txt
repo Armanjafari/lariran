@@ -298,3 +298,42 @@ returns : [success message]
 params[] 
 
 returns : [success message]
+
+
+
+---------------------
+### Basket ###
+[GET] https//api.lariran.com/api/v1/basket/
+
+params[]
+
+returns : [basket products with quantity]
+---------
+[GET] https//api.lariran.com/api/v1/basket/add/{vareity_id}
+
+params[]
+
+returns : [success message]
+---------
+[GET] https//api.lariran.com/api/v1/basket/clear
+
+params[]
+
+returns : [success message]
+---------
+[put] https//api.lariran.com/api/v1/basket/update/{vareity_id} https//api.lariran.com/api/v1/basket/update/6
+
+params[quantity]
+
+returns : [success message]
+
+
+
+---------------------
+### search ###
+[get] https//api.lariran.com/api/v1/search https//api.lariran.com/api/v1/search?query=mobile-phone
+
+params[query]
+
+returns : [product collection]
+---------

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CurrencyController;
+use App\Http\Controllers\api\HomeController;
 use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\WarantyController;
@@ -70,7 +71,7 @@ Route::prefix('v1')->group(function () {
         Route::get('add/{product}', [BasketController::class, 'add'])->name('basket.add');
         Route::get('clear/', [BasketController::class, 'clear']);
         Route::get('/', [BasketController::class, 'index'])->name('basket.index');
-        Route::post('update/{product}', [BasketController::class, 'update'])->name('basket.update');
+        Route::put('update/{product}', [BasketController::class, 'update'])->name('basket.update');
         Route::get('checkout', [BasketController::class, 'checkoutForm'])->name('basket.checkout.form');
         Route::post('checkout', [BasketController::class, 'checkout'])->name('basket.checkout');
     });
@@ -95,6 +96,7 @@ Route::prefix('v1')->group(function () {
         Route::delete('delete/{currency}', [CurrencyController::class, 'delete'])->name('currency.delete');
         Route::get('/{currency}', [CurrencyController::class, 'single'])->name('currency.single');
     });
+    Route::get('search/', [HomeController::class , 'search'])->name('index.search');
     // Route::prefix('variety')->group(function () {
         // Route::get('/', [VarietyController::class, 'index'])->name('variety.index');
 
