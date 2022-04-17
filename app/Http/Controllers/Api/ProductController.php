@@ -38,7 +38,6 @@ class ProductController extends Controller
                 'status' => 'error',
             ]);
           }
-          dd($request->all());
         $product = Product::create([
             'name' => $request->input('name'),
             'title' => $request->input('title'),
