@@ -17,7 +17,7 @@ class ImageResource extends JsonResource
     {
         return[
             'id' => $this->id,
-            'address' => $this->address, // Request::getHost() .
+            'address' => 'https://api.lariran.com' . $this->address, // Request::getHost() .
             'belongs_to' => $this->imageable_id,
         ];
     }

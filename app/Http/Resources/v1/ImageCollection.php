@@ -19,7 +19,7 @@ class ImageCollection extends ResourceCollection
              $this->collection->transform(function ($image) {
                 return [
                     'id' => $image->id,
-                    'address' => $image->address,
+                    'address' => 'https://api.lariran.com' . $image->address,
                     'belongs_to' => $image->imageable_id,
                 ];
             });

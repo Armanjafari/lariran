@@ -38,6 +38,7 @@ class ProductController extends Controller
                 'status' => 'error',
             ]);
           }
+          dd($request->all());
         $product = Product::create([
             'name' => $request->input('name'),
             'title' => $request->input('title'),
@@ -51,7 +52,7 @@ class ProductController extends Controller
             'keywords' => $request->input('keywords') ?? '',
             'status' => $request->input('status') ?? 1,
         ]);
-        if ($request->has('images')) {
+        if ($request->hasFile('images') && !is_null($request->images)) {
             $this->image($request, $product);
         }
         //  else if ($request->has('main')){
@@ -65,9 +66,10 @@ class ProductController extends Controller
     private function image(Request $request, Product $product)
     {
         // $i = 1;
-        // dd($request->file('images'));
-        $image = $request->file('images');
-        foreach ($request->file('images') as $image) {
+        $images = $request->file('images');
+        // dd($images);
+        foreach ($images as $image) {
+            // dd('here');
             $destination = '/images/' . now()->year . '/' . now()->month . '/' . now()->day . '/';
             $filename = date('mdYHis') . uniqid() . '.' .$image->getClientOriginalExtension();
             $image->move(public_path($destination), $filename);
