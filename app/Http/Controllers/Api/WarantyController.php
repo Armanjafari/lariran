@@ -38,7 +38,7 @@ class WarantyController extends Controller
     public function update(Request $request , Waranty $waranty)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:waranties,name|string|max:255|min:2',
+            'name' => 'required|string|max:255|min:2|unique:waranties,name,' . $waranty->id,
           ]);
           if ($validator->fails()) {
             return response()->json([

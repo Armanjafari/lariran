@@ -37,7 +37,7 @@ class OptionController extends Controller
     public function update(Request $request , Option $option)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:options,name|string|max:255|min:2',
+            'name' => 'required|string|max:255|min:2|unique:options,name,' . $option->id,
           ]);
           if ($validator->fails()) {
             return response()->json([

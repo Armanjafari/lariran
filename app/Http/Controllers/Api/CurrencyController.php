@@ -42,7 +42,7 @@ class CurrencyController extends Controller
     public function update(Request $request , Currency $currency)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|min:2',
+            'name' => 'required|string|max:255|min:2|unique:waranties,name,' . $currency->id,
             'persian_name' => 'required|string|max:255|min:2',
             'value' => 'required',
           ]);

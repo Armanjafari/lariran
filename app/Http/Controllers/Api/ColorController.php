@@ -42,7 +42,7 @@ class ColorController extends Controller
     public function update(Request $request , Color $optionValue)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255|min:2',
+            'title' => 'required|string|max:255|min:2|unique:colors,title,' . $optionValue->id,
             'value' => 'required|max:255|min:2',
             'option_id' => 'required|exists:options,id',
           ]);

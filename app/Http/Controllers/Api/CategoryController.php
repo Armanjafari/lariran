@@ -48,7 +48,7 @@ class CategoryController extends Controller
     public function update(Request $request , Category $category)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:categories,name|string|max:255|min:2',
+            'name' => 'required|string|max:255|min:2|unique:categories,name,' . $category->id,
             'persian_name' => 'required|min:2',
             'parent_id' => 'required|integer'
           ]);

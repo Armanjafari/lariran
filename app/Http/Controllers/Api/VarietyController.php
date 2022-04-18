@@ -44,7 +44,7 @@ class VarietyController extends Controller
                     'status' => 'error',
                 ]);
               }
-          }
+          } // TODO fix this shit for update method
         //   dd('here');
           $product->fulls()->create([
             'stock' => $request->input('stock'),

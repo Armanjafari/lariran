@@ -81,10 +81,10 @@ class ProductController extends Controller
     public function update(Request $request , Product $product)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|unique:products,title,' . $product->id,
             'persian_title' => 'required',
             'category_id' => 'required',
-            'slug' => 'required',
+            'slug' => 'required|unique:products,slug,' . $product->id,
             'brand_id' => 'required',
             'option_id' => 'integer|exists:options,id',
             'description' => 'required',

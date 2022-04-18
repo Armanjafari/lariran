@@ -40,7 +40,7 @@ class BrandController extends Controller
     public function update(Request $request , Brand $brand)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:brands,name|string|max:255|min:2',
+            'name' => 'required|string|max:255|min:2|unique:brands,name,'. $brand->id, 
             'persian_name' => 'required|min:2',
           ]);
           if ($validator->fails()) {
