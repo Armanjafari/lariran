@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\v1\ColorCollection;
 use App\Http\Resources\v1\OptionCollection;
 use App\Models\Option;
 use Illuminate\Http\Request;
@@ -65,5 +66,9 @@ class OptionController extends Controller
             'data' => [],
             'status' => 'success',
         ],200);
+    }
+    public function optionValue(Option $option)
+    {
+        return new ColorCollection($option->values);
     }
 }

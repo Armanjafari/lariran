@@ -79,6 +79,12 @@ params[]
 
 returns : [option collection with pagination links]
 ---------
+[GET] https//api.lariran.com/api/v1/option/OptionValue/{option_id}
+
+params[]
+
+returns : [OptionValue collection]
+---------
 [POST] https//api.lariran.com/api/v1/option/create
 
 params[name]

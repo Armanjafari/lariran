@@ -49,6 +49,7 @@ Route::prefix('v1')->group(function () {
     });
     Route::prefix('option')->group(function () {
         Route::get('/', [OptionController::class, 'index'])->name('option.index');
+        Route::get('/optionValue/{option}', [OptionController::class, 'optionValue'])->name('option.OptionValue');
         Route::post('create', [OptionController::class, 'create'])->name('option.create');
         Route::put('update/{option}', [OptionController::class, 'update'])->name('option.update');
         Route::delete('delete/{option}', [OptionController::class, 'delete'])->name('option.delete');
