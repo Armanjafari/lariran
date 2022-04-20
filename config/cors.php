@@ -21,13 +21,15 @@ return [
 
     'allowed_origins' => ['*'],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => ['*'], // added value bye myself
 
     'allowed_headers' => ['*'],
 
     'exposed_headers' => [],
 
     'max_age' => 0,
+    'Access-Control-Allow-Origin' => ['*'], // added bye myself
+
 
     'supports_credentials' => false,
 
