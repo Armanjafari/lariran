@@ -14,7 +14,7 @@ class VarietyCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return [
+        return 
             $this->collection->transform(function ($variety) { // 'data' =>
                 if (!is_null($variety->color_id)) {
                     return [
@@ -43,8 +43,7 @@ class VarietyCollection extends ResourceCollection
                         // 'product_id' => new ProductResource($variety->product),
                     ];
                 }
-            }),
-        ];
+            });
     }
     public function with($request)
     {
