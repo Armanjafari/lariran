@@ -69,7 +69,12 @@ returns : [category]
 params[]
 
 returns : [product collection]
+---------
+[GET] https//api.lariran.com/api/v1/category/{category_id}/products #example https//api.lariran.com/api/v1/category/2/products
 
+params[] 
+
+returns : [product collection]
 
 ---------------------
 ### Option ###

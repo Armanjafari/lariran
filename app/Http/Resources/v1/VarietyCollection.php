@@ -25,7 +25,7 @@ class VarietyCollection extends ResourceCollection
                         'waranty_id' =>  new WarantyResource($variety->waranty),
                         // 'product_id' =>  $variety->product_id,
                         // 'currency_id' =>  $variety->currency_id,
-                        'color_id' =>  new ColorResource($variety->color_id),
+                        'color_id' =>  new ColorResource($variety->color),
                         // 'is_active' =>  $variety->is_active ?? 1,
                         // 'product_id' => new ProductResource($variety->product),
                     ];

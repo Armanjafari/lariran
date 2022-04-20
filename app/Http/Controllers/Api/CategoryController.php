@@ -7,7 +7,9 @@ use App\Http\Resources\v1\CategoryCollection;
 use App\Http\Resources\v1\CategoryResource;
 use App\Http\Resources\v1\ProductCollection;
 use App\Models\Category;
+use App\Models\Full;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
@@ -91,6 +93,43 @@ class CategoryController extends Controller
     }
     public function products(Category $category , Request $request)
     {
-        return new ProductCollection($category->products()->paginate(10));
+        $validator = Validator::make($request->all(), [
+            'sort' => 'integer',
+            'min' => 'integer',
+            'max' => 'integer',
+
+          ]);
+          if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+          }
+          $pro = [];
+          $proz = new Full();
+          foreach ($category->products as $product) {
+            $product->load('fulls');
+
+            foreach ($product->fulls as $full) {
+                array_push($pro , $full);
+            }
+        }
+        $proz = $proz->fill($pro);
+          if ($request->input('sort') == 1) {
+            $proz = $proz->orderBy('price' , 'asc');
+        }elseif ($request->input('sort') == 2) {
+            $proz = $proz->orderBy('price' , 'desc');
+
+        }
+        if (isset($request->min)) {
+            $proz = $proz->having('price','<=' , $request->min);
+        }
+
+        $proz = $proz->get()->unique('product_id');
+        $products = [];
+        foreach ($proz as $full) {
+                array_push($products, $full->product);
+            }
+        return new ProductCollection($products); // $category->products()->paginate(10)
     }
 }
