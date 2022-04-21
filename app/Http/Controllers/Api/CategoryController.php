@@ -105,31 +105,32 @@ class CategoryController extends Controller
                 'status' => 'error',
             ]);
           }
-          $pro = [];
-          $proz = new Full();
-          foreach ($category->products as $product) {
-            $product->load('fulls');
+          $products = $category->products;
+        //   $pro = [];
+        //   $proz = new Full();
+        //   foreach ($category->products as $product) {
+        //     $product->load('fulls');
 
-            foreach ($product->fulls as $full) {
-                array_push($pro , $full);
-            }
-        }
-        $proz = $proz->fill($pro);
-          if ($request->input('sort') == 1) {
-            $proz = $proz->orderBy('price' , 'asc');
-        }elseif ($request->input('sort') == 2) {
-            $proz = $proz->orderBy('price' , 'desc');
+        //     foreach ($product->fulls as $full) {
+        //         array_push($pro , $full);
+        //     }
+        // }
+        // $proz = $proz->fill($pro);
+        //   if ($request->input('sort') == 1) {
+        //     $proz = $proz->orderBy('price' , 'asc');
+        // }elseif ($request->input('sort') == 2) {
+        //     $proz = $proz->orderBy('price' , 'desc');
 
-        }
-        if (isset($request->min)) {
-            $proz = $proz->having('price','<=' , $request->min);
-        }
+        // }
+        // if (isset($request->min)) {
+        //     $proz = $proz->having('price','<=' , $request->min);
+        // }
 
-        $proz = $proz->get()->unique('product_id');
-        $products = [];
-        foreach ($proz as $full) {
-                array_push($products, $full->product);
-            }
+        // $proz = $proz->get()->unique('product_id');
+        // $products = [];
+        // foreach ($proz as $full) {
+        //         array_push($products, $full->product);
+        //     }
         return new ProductCollection($products); // $category->products()->paginate(10)
     }
 }
