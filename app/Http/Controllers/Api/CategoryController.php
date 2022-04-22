@@ -8,7 +8,9 @@ use App\Http\Resources\v1\CategoryResource;
 use App\Http\Resources\v1\ProductCollection;
 use App\Models\Category;
 use App\Models\Full;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,8 +18,7 @@ class CategoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum','role:admin'])->except(['index', 'single' , 'products']);
-
+        $this->middleware(['auth:sanctum', 'role:admin'])->except(['index', 'single', 'products']);
     }
     public function create(Request $request)
     {
@@ -25,13 +26,13 @@ class CategoryController extends Controller
             'name' => 'required|unique:categories,name|string|max:255|min:2',
             'persian_name' => 'required|min:2',
             'parent_id' => 'integer',
-          ]);
-          if ($validator->fails()) {
+        ]);
+        if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
                 'status' => 'error',
             ]);
-          }
+        }
         // $request->validate([
         //     'name' => 'required|unique:categories,name|string|max:255|min:2',
         //     'persian_name' => 'required|min:2',
@@ -47,19 +48,19 @@ class CategoryController extends Controller
             'status' => 'success',
         ]);
     }
-    public function update(Request $request , Category $category)
+    public function update(Request $request, Category $category)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|min:2|unique:categories,name,' . $category->id,
             'persian_name' => 'required|min:2',
             'parent_id' => 'required|integer'
-          ]);
-          if ($validator->fails()) {
+        ]);
+        if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
                 'status' => 'error',
             ]);
-          }
+        }
         $category->update([
             'name' => $request->input('name'),
             'persian_name' => $request->input('persian_name'),
@@ -68,7 +69,7 @@ class CategoryController extends Controller
         return response()->json([
             'data' => [],
             'status' => 'success',
-        ],200);
+        ], 200);
     }
     public function index()
     {
@@ -85,27 +86,43 @@ class CategoryController extends Controller
         return response()->json([
             'data' => [],
             'status' => 'success',
-        ],200);
+        ], 200);
     }
     public function single(Category $category)
     {
         return new CategoryResource($category);
     }
-    public function products(Category $category , Request $request)
+    public function products(Category $category, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'sort' => 'integer',
             'min' => 'integer',
             'max' => 'integer',
 
-          ]);
-          if ($validator->fails()) {
+        ]);
+        if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
                 'status' => 'error',
             ]);
-          }
-          $products = $category->products;
+        }
+        $products = $category->products;
+        // dd($products);
+        // array_push($products, $category->products);
+        foreach ($category->child as $category) {
+            $products = $products->push($category->products()->get());
+            foreach ($category->child as $category) {
+                $products = $products->push($category->products()->get());
+                foreach ($category->child as $category) {
+                    $products = $products->push($category->products()->get());
+                }
+            }
+        }
+        $products = Arr::flatten($products);
+        
+        // dd($products);
+        $paginator = new LengthAwarePaginator($products,count($products),10);
+        // dd($paginator);
         //   $pro = [];
         //   $proz = new Full();
         //   foreach ($category->products as $product) {
@@ -131,6 +148,6 @@ class CategoryController extends Controller
         // foreach ($proz as $full) {
         //         array_push($products, $full->product);
         //     }
-        return new ProductCollection($products); // $category->products()->paginate(10)
+        return new ProductCollection($paginator); // $category->products()->paginate(10)
     }
 }
