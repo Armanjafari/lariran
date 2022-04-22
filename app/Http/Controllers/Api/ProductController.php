@@ -77,6 +77,7 @@ class ProductController extends Controller
             ]);
             // $i++;
         }
+
     }
     public function update(Request $request , Product $product)
     {
@@ -91,7 +92,7 @@ class ProductController extends Controller
             'weight' => 'required',
             'keywords' => 'string',
             'status' => 'integer',
-            'images' => 'image|mimes:jpeg,jpg,png|max:512'
+            'images.*' => 'image|mimes:jpeg,jpg,png|max:512', // 
           ]);
           if ($validator->fails()) {
             return response()->json([
@@ -112,7 +113,7 @@ class ProductController extends Controller
             'keywords' => $request->input('keywords') ?? '',
             'status' => $request->input('status') ?? 1,
         ]);
-        if ($request->has('images')) {
+        if ($request->hasFile('images') && !is_null($request->images)) {
             $this->deleteImage($product);
             $this->image($request, $product);
         }
@@ -124,7 +125,7 @@ class ProductController extends Controller
     private function deleteImage(Product $product)
     {
         foreach ($product->images as $image) {
-            File::delete($image->address);
+            File::delete(public_path() . $image->address);
             $image->delete();
         }
     }

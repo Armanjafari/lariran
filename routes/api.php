@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CurrencyController;
 use App\Http\Controllers\api\HomeController;
+use App\Http\Controllers\Api\LandingController;
 use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\WarantyController;
@@ -57,7 +58,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('product')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('product.index');
         Route::post('create', [ProductController::class, 'create'])->name('product.create');
-        Route::put('update/{product}', [ProductController::class, 'update'])->name('product.update');
+        Route::post('update/{product}', [ProductController::class, 'update'])->name('product.update');
         Route::delete('delete/{product}', [ProductController::class, 'delete'])->name('product.delete');
         Route::get('/{product}', [ProductController::class, 'single'])->name('product.single');
 
@@ -108,6 +109,10 @@ Route::prefix('v1')->group(function () {
         // Route::get('/{variety}', [VarietyController::class, 'single'])->name('variety.single');
     // });
 
+    Route::prefix('landing')->group(function () {
+        Route::get('/', [LandingController::class, 'index'])->name('landing.index');
+        Route::post('create', [LandingController::class, 'create'])->name('landing.create');
+    });
 
 });
 
