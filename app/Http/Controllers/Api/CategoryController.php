@@ -122,7 +122,6 @@ class CategoryController extends Controller
         
         // dd($products);
         $paginator = new LengthAwarePaginator($products,count($products),10);
-        // dd($paginator);
         //   $pro = [];
         //   $proz = new Full();
         //   foreach ($category->products as $product) {

@@ -60,7 +60,7 @@ class AuthController extends Controller
         ]);
         if (!Auth::attempt($attr)) {
             return response()->json([
-                'data' => 'Credentials not match',
+                'data' => 'نام کاربری یا رمز عبور اشتباه میباشد',
                 'status' => 'error',
         ],401);
         }

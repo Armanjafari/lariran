@@ -31,6 +31,6 @@ return [
     'Access-Control-Allow-Origin' => ['*'], // added bye myself
 
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\BrandCollection;
 use App\Http\Resources\v1\BrandResource;
+use App\Http\Resources\v1\ProductCollection;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -75,8 +76,8 @@ class BrandController extends Controller
     {
         return new BrandResource($brand);
     }
-    public function products(Brand $category)
+    public function products(Brand $brand)
     {
-        //
+        return new ProductCollection($brand->products); // 
     }
 }
