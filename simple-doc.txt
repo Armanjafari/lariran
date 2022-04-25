@@ -347,10 +347,78 @@ returns : [success message]
 
 
 ---------------------
-### search ###
+### Search ###
 [get] https//api.lariran.com/api/v1/search https//api.lariran.com/api/v1/search?query=mobile-phone
 
 params[query]
 
 returns : [product collection]
+---------
+
+
+
+
+---------------------
+### Attribute ###
+[GET] https//api.lariran.com/api/v1/attribute
+
+params[]
+
+returns : [attribute collection with pagination links]
+---------
+[POST] https//api.lariran.com/api/v1/attribute/create
+
+params[name,category_id]
+
+returns : [success message]
+---------
+[PUT] https//api.lariran.com/api/v1/attribute/update/{attribute_id} #example https//api.lariran.com/api/v1/attribute/update/2
+
+params[name,category_id]
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/attribute/delete/{attribute_id} #example https//api.lariran.com/api/v1/attribute/delete/2
+
+params[] 
+
+returns : [success message]
+---------
+[GET] https//api.lariran.com/api/v1/attribute/category/{category_id} #example https//api.lariran.com/api/v1/attribute/category/1 # by category
+
+params[] 
+
+returns : [attribute collection with pagination links]
+---------
+
+
+
+
+
+
+---------------------
+### AttributeValue ###
+[GET] https//api.lariran.com/api/v1/attributeValue
+
+params[]
+
+returns : [attributeValue collection with pagination links]
+---------
+[POST] https//api.lariran.com/api/v1/attributeValue/create
+
+params[value,product_id,attribute_id]
+
+returns : [success message]
+---------
+[PUT] https//api.lariran.com/api/v1/attributeValue/update/{attributeValue_id} #example https//api.lariran.com/api/v1/attributeValue/update/2
+
+params[value,product_id,attribute_id]
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/attributeValue/delete/{attributeValue_id} #example https//api.lariran.com/api/v1/attributeValue/delete/2
+
+params[] 
+
+returns : [success message]
 ---------

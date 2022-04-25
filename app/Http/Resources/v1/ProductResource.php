@@ -28,7 +28,8 @@ class ProductResource extends JsonResource
             'weight' => $this->weight,
             'keywords' => $this->keywords ?? '',
             'status' => $this->status ?? '', 
-            'images' => new ImageCollection($this->images), 
+            'images' => new ImageCollection($this->images),
+            'attributes' => new AttributeValueCollection($this->attributes),
             'varieties' => new VarietyCollection($this->fulls), 
         ];
     } else {
@@ -44,7 +45,8 @@ class ProductResource extends JsonResource
             'weight' => $this->weight,
             'keywords' => $this->keywords ?? '',
             'status' => $this->status ?? '', 
-            'images' => new ImageCollection($this->images), 
+            'images' => new ImageCollection($this->images),
+            'attributes' => new AttributeValueCollection($this->attributes),
             'varieties' => new VarietyCollection($this->fulls), 
         ];
     }

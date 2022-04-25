@@ -31,6 +31,7 @@ class ProductCollection extends ResourceCollection
                         'keywords' => $product->keywords ?? '',
                         'status' => $product->status ?? '',
                         'images' => new ImageCollection($product->images),
+                        'attributes' => new AttributeValueCollection($product->attributes),
                         'varieties' => new VarietyCollection($product->fulls),
                     ];
                 } else {
@@ -47,6 +48,7 @@ class ProductCollection extends ResourceCollection
                         'keywords' => $product->keywords ?? '',
                         'status' => $product->status ?? '',
                         'images' => new ImageCollection($product->images),
+                        'attributes' => new AttributeValueCollection($product->attributes),
                         'varieties' => new VarietyCollection($product->fulls),
                     ];
                 }

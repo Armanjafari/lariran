@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AttributeController;
+use App\Http\Controllers\Api\AttributeValueController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BasketController;
 use App\Http\Controllers\Api\BrandController;
@@ -66,7 +68,6 @@ Route::prefix('v1')->group(function () {
         Route::put('/variety/update/{variety}',  [VarietyController::class, 'update'])->name('variety.update');
         Route::delete('/variety/delete/{variety}',  [VarietyController::class, 'delete'])->name('variety.delete');
         Route::get('/{product}/variety/',  [VarietyController::class, 'index'])->name('variety.index');
-
     });
     Route::prefix('basket')->group(function () {
 
@@ -98,22 +99,34 @@ Route::prefix('v1')->group(function () {
         Route::delete('delete/{currency}', [CurrencyController::class, 'delete'])->name('currency.delete');
         Route::get('/{currency}', [CurrencyController::class, 'single'])->name('currency.single');
     });
-    Route::get('search/', [HomeController::class , 'search'])->name('index.search');
+    Route::get('search/', [HomeController::class, 'search'])->name('index.search');
     // Route::prefix('variety')->group(function () {
-        // Route::get('/', [VarietyController::class, 'index'])->name('variety.index');
+    // Route::get('/', [VarietyController::class, 'index'])->name('variety.index');
 
-        // Route::post('create', [VarietyController::class, 'create'])->name('variety.create');
-        // Route::put('update/{variety}', [VarietyController::class, 'update'])->name('variety.update');
-        // Route::delete('delete/{variety}', [VarietyController::class, 'delete'])->name('variety.delete');
+    // Route::post('create', [VarietyController::class, 'create'])->name('variety.create');
+    // Route::put('update/{variety}', [VarietyController::class, 'update'])->name('variety.update');
+    // Route::delete('delete/{variety}', [VarietyController::class, 'delete'])->name('variety.delete');
 
-        // Route::get('/{variety}', [VarietyController::class, 'single'])->name('variety.single');
+    // Route::get('/{variety}', [VarietyController::class, 'single'])->name('variety.single');
     // });
 
     Route::prefix('landing')->group(function () {
         Route::get('/', [LandingController::class, 'index'])->name('landing.index');
         Route::post('create', [LandingController::class, 'create'])->name('landing.create');
     });
-
+    Route::prefix('attribute')->group(function () {
+        Route::get('/', [AttributeController::class, 'index'])->name('attribute.index');
+        Route::post('create', [AttributeController::class, 'create'])->name('attribute.create');
+        Route::get('category/{category}', [AttributeController::class, 'category'])->name('attribute.category');
+        Route::put('update/{attribute}', [AttributeController::class, 'update'])->name('attribute.update');
+        Route::delete('delete/{attribute}', [AttributeController::class, 'delete'])->name('attribute.delete');
+    });
+    Route::prefix('attributeValue')->group(function () {
+        Route::get('/', [AttributeValueController::class, 'index'])->name('attribute.value.index');
+        Route::post('create', [AttributeValueController::class, 'create'])->name('attribute.value.create');
+        Route::put('update/{attributeValue}', [AttributeValueController::class, 'update'])->name('attribute.value.update');
+        Route::delete('delete/{attributeValue}', [AttributeValueController::class, 'delete'])->name('attribute.value.delete');
+    });
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

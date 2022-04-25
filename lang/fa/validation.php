@@ -150,7 +150,7 @@ return [
     */
 
     'attributes' => [
-        'name' => 'نام',
+        'name' => 'نام انگلیسی',
         'username' => 'نام کاربری',
         'email' => 'ایمیل',
         'first_name' => 'نام',
@@ -194,5 +194,6 @@ return [
         'persian_title' => 'عنوان فارسی',
         'waranty_id' => 'گارانتی',
         'color_id' => 'متغیر',
+        'value' => 'مقدار',
     ],
 ];
