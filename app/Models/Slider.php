@@ -11,6 +11,7 @@ class Slider extends Model
     protected $fillable = [
         'link',
         'type',
+        'persian_name',
     ];
     public function image()
     {

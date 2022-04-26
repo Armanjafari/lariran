@@ -12,6 +12,7 @@ use App\Http\Controllers\api\HomeController;
 use App\Http\Controllers\Api\LandingController;
 use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\SliderController;
 use App\Http\Controllers\Api\WarantyController;
 use App\Http\Controllers\Api\VarietyController;
 use Illuminate\Support\Facades\Route;
@@ -128,6 +129,15 @@ Route::prefix('v1')->group(function () {
         Route::post('create', [AttributeValueController::class, 'create'])->name('attribute.value.create');
         Route::put('update/{attributeValue}', [AttributeValueController::class, 'update'])->name('attribute.value.update');
         Route::delete('delete/{attributeValue}', [AttributeValueController::class, 'delete'])->name('attribute.value.delete');
+    });
+
+
+    Route::prefix('slider')->group(function () {
+        Route::get('/', [SliderController::class, 'index'])->name('slider.index');
+        Route::post('create', [SliderController::class, 'create'])->name('slider.create');
+        Route::get('type/{type}', [SliderController::class, 'type'])->name('slider.type');
+        Route::post('update/{slider}', [SliderController::class, 'update'])->name('slider.update');
+        Route::delete('delete/{slider}', [SliderController::class, 'delete'])->name('slider.delete');
     });
 });
 

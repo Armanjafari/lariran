@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('sliders', function (Blueprint $table) {
             $table->id();
+            $table->string('persian_name');
             $table->text('link');
             $table->enum('type', ['top', 'main', 'left', 'right', 'bottom', 'bottom-right', 'bottom-left' ])->default('main');
             $table->string('color')->nullable();
