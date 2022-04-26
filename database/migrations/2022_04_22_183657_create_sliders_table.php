@@ -15,11 +15,9 @@ return new class extends Migration
     {
         Schema::create('sliders', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('persian_name');
-            $table->unsignedInteger('type');
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->text('link');
+            $table->enum('type', ['top', 'main', 'left', 'right', 'bottom', 'bottom-right', 'bottom-left' ])->default('main');
+            $table->string('color')->nullable();
             $table->timestamps();
         });
     }

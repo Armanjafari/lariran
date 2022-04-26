@@ -63,6 +63,7 @@ Route::prefix('v1')->group(function () {
         Route::post('update/{product}', [ProductController::class, 'update'])->name('product.update');
         Route::delete('delete/{product}', [ProductController::class, 'delete'])->name('product.delete');
         Route::get('/{product}', [ProductController::class, 'single'])->name('product.single');
+        Route::get('{product}/relateds', [ProductController::class, 'relateds'])->name('product.relateds');
 
         Route::post('/{product}/variety/create',  [VarietyController::class, 'create'])->name('variety.create');
         Route::put('/variety/update/{variety}',  [VarietyController::class, 'update'])->name('variety.update');

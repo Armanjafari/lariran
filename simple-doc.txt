@@ -186,6 +186,12 @@ returns : [success message]
 params[]
 
 returns : [product]
+---------
+[GET] https//api.lariran.com/api/v1/product/{product_id}/relateds #example https//api.lariran.com/api/v1/product/2/relateds
+
+params[]
+
+returns : [products collection]
 
 
 ---------------------
@@ -421,4 +427,10 @@ returns : [success message]
 params[] 
 
 returns : [success message]
+---------
+[GET] https//api.lariran.com/api/v1/attributeValue/product/{product_id} #example https//api.lariran.com/api/v1/attributeValue/product/1
+
+params[] 
+
+returns : [attributeValue collection]
 ---------

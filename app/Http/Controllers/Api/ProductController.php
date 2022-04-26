@@ -14,7 +14,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum','role:admin'])->except(['index', 'single']);
+        $this->middleware(['auth:sanctum','role:admin'])->except(['index', 'single','relateds']);
 
     }
     public function create(Request $request)
@@ -146,5 +146,10 @@ class ProductController extends Controller
     public function single(Product $product)
     {
         return new ProductResource($product);
+    }
+    public function relateds(Product $product)
+    {
+        $products = Product::limit(10)->where('category_id'  ,'=', $product->category_id)->get();
+        return new ProductCollection($products); 
     }
 }

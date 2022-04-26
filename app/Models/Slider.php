@@ -9,12 +9,10 @@ class Slider extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
-        'persian_name',
+        'link',
         'type',
-        'category_id',
     ];
-    public function images()
+    public function image()
     {
         return $this->morphOne(Image::class , 'imageable');
     }

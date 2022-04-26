@@ -31,6 +31,7 @@ class ProductResource extends JsonResource
             'images' => new ImageCollection($this->images),
             'attributes' => new AttributeValueCollection($this->attributes),
             'varieties' => new VarietyCollection($this->fulls), 
+            // 'relatives' => new ProductCollection($this->category()->simplePaginate(10)),
         ];
     } else {
         return [
@@ -48,6 +49,8 @@ class ProductResource extends JsonResource
             'images' => new ImageCollection($this->images),
             'attributes' => new AttributeValueCollection($this->attributes),
             'varieties' => new VarietyCollection($this->fulls), 
+            // 'relatives' => new ProductCollection($this->category->products()->limit(10)),
+
         ];
     }
     }
