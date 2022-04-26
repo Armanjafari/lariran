@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\AttributeValueCollection;
 use App\Models\AttributeValue;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -73,5 +74,11 @@ class AttributeValueController extends Controller
             'data' => [],
             'status' => 'success',
         ],200);
+    }
+    public function product(Product $product)
+    {
+        $attributes = $product->attributes;
+
+        return new AttributeValueCollection($attributes);
     }
 }

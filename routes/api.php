@@ -123,6 +123,7 @@ Route::prefix('v1')->group(function () {
     });
     Route::prefix('attributeValue')->group(function () {
         Route::get('/', [AttributeValueController::class, 'index'])->name('attribute.value.index');
+        Route::get('/product/{product}', [AttributeValueController::class, 'product'])->name('attribute.value.product');
         Route::post('create', [AttributeValueController::class, 'create'])->name('attribute.value.create');
         Route::put('update/{attributeValue}', [AttributeValueController::class, 'update'])->name('attribute.value.update');
         Route::delete('delete/{attributeValue}', [AttributeValueController::class, 'delete'])->name('attribute.value.delete');
