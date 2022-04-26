@@ -13,7 +13,7 @@ class AttributeValueController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum','role:admin'])->except(['index']);
+        $this->middleware(['auth:sanctum','role:admin'])->except(['index','product']);
 
     }
     public function create(Request $request)
