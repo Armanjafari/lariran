@@ -65,9 +65,8 @@ class SliderController extends Controller
             'link' => 'required|url',
             'type' => 'required|in:main,top,left,right,bottom,bottom-right,bottom-left',
             'color' => 'string',
-            'imagee' => 'string',
+            'image' => 'image|mimes:jpeg,jpg,png|max:512',
             'persian_name' => 'required|string',
-            'images' => 'image|mimes:jpeg,jpg,png|max:512'
         ]);
         if ($validator->fails()) {
             return response()->json([

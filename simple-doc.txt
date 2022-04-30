@@ -446,13 +446,13 @@ returns : [slider collection]
 ---------
 [POST] https//api.lariran.com/api/v1/slider/create
 
-params[persian_name,link,image,type,optional=>color] // type should be one of these strings => top main bottom left right bottom-left bottom-right
+params[image,persian_name,link,image,type,optional=>color] // type should be one of these strings => top main bottom left right bottom-left bottom-right
 
 returns : [success message]
 ---------
 [POST] https//api.lariran.com/api/v1/slider/update/{slider_id} #example https//api.lariran.com/api/v1/slider/update/2
 
-params[persian_name,link,image,type,optional=>color]
+params[image,persian_name,link,image,type,optional=>color]
 
 returns : [success message]
 ---------

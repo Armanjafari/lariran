@@ -12,6 +12,7 @@ class Slider extends Model
         'link',
         'type',
         'persian_name',
+        'color'
     ];
     public function image()
     {
