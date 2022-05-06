@@ -22,7 +22,7 @@ class SliderController extends Controller
         $validator = Validator::make($request->all(), [
             'link' => 'required|url',
             'type' => 'required||in:main,top,left,right,bottom,bottom-right,bottom-left',
-            'color' => 'string',
+            // 'color' => 'string',
             'persian_name' => 'required|string',
             'image' => 'image|mimes:jpeg,jpg,png|max:512'
         ]);
@@ -64,7 +64,7 @@ class SliderController extends Controller
         $validator = Validator::make($request->all(), [
             'link' => 'required|url',
             'type' => 'required|in:main,top,left,right,bottom,bottom-right,bottom-left',
-            'color' => 'string',
+            // 'color' => 'string',
             'image' => 'image|mimes:jpeg,jpg,png|max:512',
             'persian_name' => 'required|string',
         ]);

@@ -18,13 +18,14 @@ class BasketCollection extends ResourceCollection
              $this->collection->transform(function($varierty){
                 return [
                     'id' => $varierty->id,
-                    'price' => $varierty->price,
-                    'show_price' => $varierty->show_price,
+                    'price' => ($varierty->price * $varierty->currency->value),
+                    'show_price' => ($varierty->show_price * $varierty->currency->value),
                     'persian_title' => $varierty->product->persian_title,
                     'title' => $varierty->product->persian_title,
                     'price' => $varierty->price,
                     'color_id' => $varierty->color_id ?? null,
                     'quantity' => $varierty->quantity,
+                    'product_id' => $varierty->product_id,
                     'image' => $varierty->product->images->first() ?? '',
 
                 ];
