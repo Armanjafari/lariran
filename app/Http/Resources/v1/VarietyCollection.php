@@ -19,7 +19,7 @@ class VarietyCollection extends ResourceCollection
                 if (!is_null($variety->color_id)) {
                     return [
                         'id' => $variety->id,
-                        // 'stock' => $variety->stock,
+                        'stock' => $variety->stock,
                         'price' =>  ($variety->price * $variety->currency->value),
                         'show_price' =>  ($variety->show_price * $variety->currency->value),
                         'waranty_id' =>  new WarantyResource($variety->waranty),
@@ -32,7 +32,7 @@ class VarietyCollection extends ResourceCollection
                 } else {
                     return [
                         'id' => $variety->id,
-                        // 'stock' => $variety->stock,
+                        'stock' => $variety->stock,
                         'price' =>  ($variety->price * $variety->currency->value),
                         'show_price' =>  ($variety->show_price * $variety->currency->value),
                         'waranty_id' =>  new WarantyResource($variety->waranty),

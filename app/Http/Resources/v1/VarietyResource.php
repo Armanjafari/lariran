@@ -18,7 +18,7 @@ class VarietyResource extends JsonResource
 
         return [
             'id' => $this->id,
-            // 'stock' => $this->stock,
+            'stock' => $this->stock,
             'price' =>  ($this->price * $this->currency->value),
             'show_price' =>  ($this->show_price * $this->currency->value),
             'waranty_id' =>  new WarantyResource($this->waranty_id),
@@ -32,7 +32,7 @@ class VarietyResource extends JsonResource
     } else {
         return [
             'id' => $this->id,
-            // 'stock' => $this->stock,
+            'stock' => $this->stock,
             'price' =>  ($this->price * $this->currency->value),
             'show_price' =>  ($this->show_price * $this->currency->value),
             'waranty_id' =>  new WarantyResource($this->waranty_id),

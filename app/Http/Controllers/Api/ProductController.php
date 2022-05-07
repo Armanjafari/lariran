@@ -92,7 +92,7 @@ class ProductController extends Controller
             'weight' => 'required',
             'keywords' => 'string',
             'status' => 'integer',
-            'images.*' => 'image|mimes:jpeg,jpg,png|max:512', // 
+            // 'images.*' => 'image|mimes:jpeg,jpg,png|max:512', //  TODO this bug should be fixed
           ]);
           if ($validator->fails()) {
             return response()->json([
