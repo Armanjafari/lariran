@@ -101,6 +101,7 @@ class SliderController extends Controller
     }
     public function delete(Slider $slider)
     {
+        $this->deleteImage($slider);
         $slider->delete();
         return response()->json([
             'data' => [],

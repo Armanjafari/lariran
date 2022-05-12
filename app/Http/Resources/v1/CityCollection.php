@@ -4,7 +4,7 @@ namespace App\Http\Resources\v1;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class BrandCollection extends ResourceCollection
+class CityCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -15,12 +15,10 @@ class BrandCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->transform(function($brand){
+            'data' => $this->collection->transform(function ($city) {
                 return [
-                    'id' => $brand->id,
-                    'name' => $brand->name,
-                    'persian_name' => $brand->persian_name,
-                    'image' => new ImageResource($brand->image) ?? null
+                    'id' => $city->id,
+                    'name' => $city->name,
                 ];
             }),
         ];

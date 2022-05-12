@@ -3,15 +3,15 @@
 namespace App\Support\Payment;
 
 use App\Events\OrderRegistered;
-use App\Order;
-use App\Payment;
+use App\Models\Order;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Support\Basket\Basket;
 use App\Support\Payment\Gateways\GatewayInterface;
 use App\Support\Payment\Gateways\Pasargad;
 use App\Support\Payment\Gateways\Saman;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Str;
 class Transaction
 {
     private $request;
@@ -72,7 +72,7 @@ class Transaction
 
         $this->normalizeQuantity($order);
 
-        event(new OrderRegistered($order));
+        // event(new OrderRegistered($order));
 
         $this->basket->clear();
     }
@@ -114,7 +114,7 @@ class Transaction
     {
         $order = Order::create([
             'user_id' => auth()->user()->id,
-            'code' => bin2hex(str_random(16)),
+            'code' => bin2hex(Str::random(16)),
             'amount' => $this->basket->subTotal()
         ]);
 

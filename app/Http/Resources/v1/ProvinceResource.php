@@ -4,7 +4,7 @@ namespace App\Http\Resources\v1;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BrandResource extends JsonResource
+class ProvinceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,14 +17,6 @@ class BrandResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'persian_name' => $this->persian_name,
-            'image' => new ImageResource($this->image) ?? null
-        ];
-    }
-    public function with($request)
-    {
-        return [
-            'status' => 'success',
         ];
     }
 }

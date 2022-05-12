@@ -125,13 +125,13 @@ returns : [product collection with pagination links]
 ---------
 [POST] https//api.lariran.com/api/v1/brand/create
 
-params[name,persian_name]
+params[name,persian_name , optional => image]
 
 returns : [success message]
 ---------
 [PUT] https//api.lariran.com/api/v1/brand/update/{brand_id} #example https//api.lariran.com/api/v1/brand/update/2
 
-params[name,persian_name]
+params[name,persian_name , optional => image]
 
 returns : [success message]
 ---------
@@ -469,3 +469,51 @@ params[]
 returns : [slider collection]
 ---------
 
+
+
+
+
+
+---------------------
+### Shipping ###
+[GET] https//api.lariran.com/api/v1/address
+
+params[]
+
+returns : [address collection]
+---------
+[POST] https//api.lariran.com/api/v1/address/create
+
+params[address,postal_code,city_id]
+
+returns : [success message]
+---------
+[PUT] https//api.lariran.com/api/v1/address/update/{address_id} #example https//api.lariran.com/api/v1/address/update/2
+
+params[address,postal_code,city_id]
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/address/delete/{address_id} #example https//api.lariran.com/api/v1/address/delete/2
+
+params[] 
+
+returns : [success message]
+---------
+[GET] https//api.lariran.com/api/v1/address/{address_id} #example https//api.lariran.com/api/v1/address/2
+
+params[] 
+
+returns : [address]
+---------
+[GET] https//api.lariran.com/api/v1/address/province
+
+params[] 
+
+returns : [province collection]
+---------
+[GET] https//api.lariran.com/api/v1/address/city/{province_id} #example https//api.lariran.com/api/v1/address/city/14
+
+params[] 
+
+returns : [city collection]

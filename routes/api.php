@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\LandingController;
 use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SliderController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WarantyController;
 use App\Http\Controllers\Api\VarietyController;
 use Illuminate\Support\Facades\Route;
@@ -138,6 +139,18 @@ Route::prefix('v1')->group(function () {
         Route::get('type/{type}', [SliderController::class, 'type'])->name('slider.type');
         Route::post('update/{slider}', [SliderController::class, 'update'])->name('slider.update');
         Route::delete('delete/{slider}', [SliderController::class, 'delete'])->name('slider.delete');
+    });
+    Route::prefix('address')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('address.index');
+        Route::post('create', [UserController::class, 'create'])->name('address.create');
+        Route::get('/{address}', [UserController::class, 'single'])->name('address.single');
+        Route::post('update/{address}', [UserController::class, 'update'])->name('address.update');
+        Route::delete('delete/{address}', [UserController::class, 'delete'])->name('address.delete');
+
+        
+        Route::get('province', [UserController::class, 'province'])->name('address.province');
+        Route::get('city/{province}', [UserController::class, 'city'])->name('address.city');
+
     });
 });
 

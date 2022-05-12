@@ -136,8 +136,8 @@ class ProductController extends Controller
     }
     public function delete(Product $product)
     {
-        $product->delete();
         $this->deleteImage($product);
+        $product->delete();
         return response()->json([
             'data' => [],
             'status' => 'success',

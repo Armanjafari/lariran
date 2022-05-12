@@ -39,7 +39,7 @@ class BasketController extends Controller
         if (!$product->is_active) {
             return response()->json([
                 'data' => [
-                    'basket' => 'محصول مورد نظر وجود ندارد'
+                    'basket' => 'محصول مورد نظر بیش از ظرفیت انبار است'
                 ],
                 'status' => 'error',
             ]);
