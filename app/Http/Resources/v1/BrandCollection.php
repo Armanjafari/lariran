@@ -14,14 +14,24 @@ class BrandCollection extends ResourceCollection
      */
     public function toArray($request)
     {
+
         return [
-            'data' => $this->collection->transform(function($brand){
-                return [
-                    'id' => $brand->id,
-                    'name' => $brand->name,
-                    'persian_name' => $brand->persian_name,
-                    'image' => new ImageResource($brand->image) ?? null
-                ];
+            'data' => $this->collection->transform(function ($brand) {
+                if (!is_null($brand->image)) {
+                    return [
+                        'id' => $brand->id,
+                        'name' => $brand->name,
+                        'persian_name' => $brand->persian_name,
+                        'image' => new ImageResource($brand->image),
+                    ];
+                } else {
+                    return [
+                        'id' => $brand->id,
+                        'name' => $brand->name,
+                        'persian_name' => $brand->persian_name,
+                        'image' => null,
+                    ];
+                }
             }),
         ];
     }

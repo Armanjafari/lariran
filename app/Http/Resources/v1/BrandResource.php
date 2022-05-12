@@ -14,12 +14,22 @@ class BrandResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'persian_name' => $this->persian_name,
-            'image' => new ImageResource($this->image) ?? null
-        ];
+        if (!is_null($this->image)) {
+
+            return [
+                'id' => $this->id,
+                'name' => $this->name,
+                'persian_name' => $this->persian_name,
+                'image' => new ImageResource($this->image),
+            ];
+        } else {
+            return [
+                'id' => $this->id,
+                'name' => $this->name,
+                'persian_name' => $this->persian_name,
+                'image' => null,
+            ];
+        }
     }
     public function with($request)
     {
