@@ -23,8 +23,8 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'address' => 'required',
-            'postal_code' => 'required',
-            'city_id' => 'required|exists:cities,id',
+            'postal_code' => 'required|integer',
+            'city_id' => 'required|integer|exists:cities,id',
           ]);
           if ($validator->fails()) {
             return response()->json([

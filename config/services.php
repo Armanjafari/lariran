@@ -29,5 +29,12 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'payment' => [
+        'mellat' => [
+            'terminal_id' => env('MELLAT_TERMINAL_ID'),
+            'username' => env('MELLAT_USERNAME'),
+            'user_password' => env('MELLAT_USER_PASSWORD'),
+        ]
+    ]
 
 ];

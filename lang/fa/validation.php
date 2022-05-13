@@ -195,5 +195,6 @@ return [
         'waranty_id' => 'گارانتی',
         'color_id' => 'متغیر',
         'value' => 'مقدار',
+        'city_id' => 'شهر',
     ],
 ];

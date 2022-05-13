@@ -16,10 +16,10 @@ class Shiping extends Model
     ];
     public function city()
     {
-        $this->belongsTo(City::class);
+        return $this->belongsTo(City::class);
     }
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 }

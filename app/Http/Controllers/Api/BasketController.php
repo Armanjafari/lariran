@@ -7,10 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Exceptions\QuantityExceededException;
 use App\Http\Resources\v1\BasketCollection;
 use App\Models\Full;
+use App\Models\Shiping;
 use App\Support\Basket\Basket;
 use App\Support\Payment\Transaction;
 use App\Support\Storage\Contracts\StorageInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BasketController extends Controller
 {
@@ -18,10 +20,9 @@ class BasketController extends Controller
     private $transaction;
     public function __construct(Basket $basket, Transaction $transaction)
     {
-        $this->middleware('auth:sanctum')->only(['checkoutForm' , 'checkout']);
+        $this->middleware('auth:sanctum')->only(['checkoutForm', 'checkout']);
         $this->basket = $basket;
         $this->transaction = $transaction;
-        
     }
     public function index()
     {
@@ -47,7 +48,7 @@ class BasketController extends Controller
 
         }
         try {
-            $this->basket->add($product , 1);
+            $this->basket->add($product, 1);
             return response()->json([
                 'data' => [
                     'basket' => 'محصول به سبد خرید اضافه شد'
@@ -64,17 +65,16 @@ class BasketController extends Controller
             ]);
             // return back()->with('error', '');
         }
-        
     }
 
     public function clear()
     {
         resolve(StorageInterface::class)->clear();
     }
-    public function update(Request $request , Full $product)
+    public function update(Request $request, Full $product)
     {
         try {
-            $this->basket->update($product,$request->quantity);
+            $this->basket->update($product, $request->quantity);
             return response()->json([
                 'data' => [
                     'basket' => ' سبر خرید ویرایش شد '
@@ -89,7 +89,6 @@ class BasketController extends Controller
                 'status' => 'error',
             ]);
         }
-
     }
     public function checkoutForm()
     {
@@ -97,15 +96,44 @@ class BasketController extends Controller
     }
     public function checkout(Request $request)
     {
-        $this->validateForm($request);
+        $validator = Validator::make($request->all(), [
+            'method' => 'required',
+            'shipping' => 'required|exists:shipings,id',
+            'gateway' => 'required_if:method,online'
+        ]);
+        if (!auth()->id() == Shiping::find($request->shipping)->id) {
+            return response()->json([
+                'data' => [
+                    'shipping' => 'آدرس وارد شده صحیح نمیباشد'
+                ],
+                'status' => 'error',
+            ]);
+        }
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+
+
+
+        // $this->validateForm($request);
         $order = $this->transaction->checkout(); // TODO check this
+        dd($order);
         return redirect()->route('index')->withSuccess('سفارش شما با شماره' . $order->id ?? '');
     }
     private function validateForm(Request $request)
     {
-        $request->validate([
-            'method' => ['required'],
-            'gateway' => ['required_if:method,online']
+        $validator = Validator::make($request->all(), [
+            'method' => 'required',
+            'gateway' => 'required_if:method,online'
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Support\Basket\Basket;
 use App\Support\Cost\BasketCost;
+use App\Support\Cost\Contracts\CostInterface;
 use App\Support\Cost\DiscountCost;
 use App\Support\Cost\ShippingCost;
 use App\Support\Discount\DiscountManager;

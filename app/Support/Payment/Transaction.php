@@ -2,84 +2,70 @@
 
 namespace App\Support\Payment;
 
-use App\Events\OrderRegistered;
 use App\Models\Order;
 use App\Models\Payment;
-use Illuminate\Http\Request;
 use App\Support\Basket\Basket;
-use App\Support\Payment\Gateways\GatewayInterface;
-use App\Support\Payment\Gateways\Pasargad;
+use App\Support\Cost\Contracts\CostInterface;
+use App\Support\Payment\Gateways\Mellat;
 use App\Support\Payment\Gateways\Saman;
+use App\Support\Payment\Gateways\Pasargad;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+
 class Transaction
 {
     private $request;
-
     private $basket;
-
-
-    public function __construct(Request $request, Basket $basket)
+    private $cost;
+    public function __construct(Request $request, Basket $basket, CostInterface $cost)
     {
         $this->request = $request;
         $this->basket = $basket;
+        $this->cost = $cost;
     }
-
-
     public function checkout()
     {
         DB::beginTransaction();
-
         try {
-
             $order = $this->makeOrder();
-
             $payment = $this->makePayment($order);
-
             DB::commit();
+            // dd('payment was successful');
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e->getMessage() . 'erorr');
             return null;
         }
-
         if ($payment->isOnline()) {
-            return $this->gatewayFactory()->pay($order);
-        }
-
-        $this->completeOrder($order);
-
+            return $this->gatewayFactory()->pay($order, $this->cost->getTotalCosts());
+        } // chech this normalize
+        $this->normalizeQuantity($order);
+        // $this->normalizeWallet($order);
+        // $this->sendSms($order);
+        $this->basket->clear();
         return $order;
     }
-
-
+    private function gatewayFactory()
+    {
+        $gateway = [
+            'saman' => Saman::class,
+            'mellat' => Mellat::class,
+            'pasargad' => Pasargad::class
+        ][$this->request->gateway];
+        return resolve($gateway);
+    }
     public function verify()
     {
+        // TODO basket is not dynamic !
         $result = $this->gatewayFactory()->verify($this->request);
-
-        if ($result['status'] === GatewayInterface::TRANSACTION_FAILED) return false;
-
+        if ($result['status'] != 0) return false;
         $this->confirmPayment($result);
-
-        $this->completeOrder($result['order']);
-
-
+        $this->normalizeQuantity($result['order']);
+        // $this->normalizeWallet($result['order']);
+        // $this->sendSms($result['order']);
+        $this->basket->clear();
         return true;
     }
-
-
-    private function completeOrder($order)
-    {
-
-        $this->normalizeQuantity($order);
-
-        // event(new OrderRegistered($order));
-
-        $this->basket->clear();
-    }
-
-
-
-
 
     private function normalizeQuantity($order)
     {
@@ -87,59 +73,63 @@ class Transaction
             $product->decrementStock($product->pivot->quantity);
         }
     }
-
-
-
-
     private function confirmPayment($result)
     {
         return $result['order']->payment->confirm($result['refNum'], $result['gateway']);
     }
-
-
-
-
-    private function gatewayFactory()
-    {
-        $gateway = [
-            'saman' => Saman::class,
-            'pasargad' => Pasargad::class
-        ][$this->request->gateway];
-
-        return resolve($gateway);
-    }
-
-
     private function makeOrder()
     {
         $order = Order::create([
             'user_id' => auth()->user()->id,
-            'code' => bin2hex(Str::random(16)),
-            'amount' => $this->basket->subTotal()
+            'code' => time(),
+            'amount' => $this->basket->subTotal(),
+            'shiping_id' => $this->request->input('shipping'),
         ]);
-
-        $order->products()->attach($this->products());
-
+        // dd($this->products());
+        $order->fulls()->attach($this->products());
         return $order;
     }
-
-
     private function makePayment($order)
     {
+
         return Payment::create([
             'order_id' => $order->id,
             'method' => $this->request->method,
-            'amount' => $order->amount
+            'amount' => $this->cost->getTotalCosts(),
+            'status' => 100
         ]);
     }
-
-
     private function products()
     {
         foreach ($this->basket->all() as $product) {
-            $products[$product->id] = ['quantity' => $product->quantity];
+            $products[$product->id] = [
+                'quantity' => $product->quantity,
+                'price' => ($product->price * $product->currency->value),
+            ];
         }
-
         return $products;
     }
+    // private function normalizeWallet($order)
+    // {
+    //     // TODO refactor needed
+    //     foreach ($order->products as $product) {
+    //         $profit = ($product->pivot->category_id / 100) * ($product->pivot->price * $product->pivot->quantity);
+    //         $final = ($product->pivot->price * $product->pivot->quantity)  - $profit;
+    //         $product->product->market->increaseWallet($final);
+    //         $product->product->market->increaseProfit($profit);
+    //     }
+    // }
+    // private function sendSms($order)
+    // {
+    //     $sms = new MeliPayamak($order->user , '' , 'مشتری گرامی خرید شما با موفقیت انجام شد');
+    //     $sms->send();
+    //     foreach ($order->products as $product) {
+    //         $sms = new MeliPayamak($product->pivot->market->user , '' ,
+    //          $product->product->pure->persian_title .
+    //          '  ثبت شد محصول :' . $order->id .
+    //           'فروشنده محترم سفارش شما با شماره');
+    //         $sms->send();
+    //     }
+    // }
+
 }

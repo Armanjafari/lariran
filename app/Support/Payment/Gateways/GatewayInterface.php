@@ -11,7 +11,7 @@ interface GatewayInterface
     const TRANSACTION_SUCCESS = 'transaction.success';
 
 
-    public function pay(Order $order);
+    public function pay(Order $order ,  int $amount);
     public function verify(Request $request);
     public function getName(): string;
 }
