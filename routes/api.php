@@ -147,12 +147,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/{address}', [UserController::class, 'single'])->name('address.single');
         Route::post('update/{address}', [UserController::class, 'update'])->name('address.update');
         Route::delete('delete/{address}', [UserController::class, 'delete'])->name('address.delete');
-
-        
-        Route::get('province', [UserController::class, 'province'])->name('address.province');
-        Route::get('city/{province}', [UserController::class, 'city'])->name('address.city');
-
     });
+    Route::get('province/', [UserController::class, 'province'])->name('address.province');
+    Route::get('city/{province}', [UserController::class, 'city'])->name('address.city');
         Route::post('payment/{gateway}/callback', [PaymentController::class, 'verify'])->name('payment.verify');
         Route::get('payment/{gateway}/callback', [PaymentController::class, 'verify'])->name('payment.verify.get');
 

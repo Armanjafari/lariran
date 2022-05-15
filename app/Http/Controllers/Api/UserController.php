@@ -16,7 +16,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum']);
+        $this->middleware(['auth:sanctum'])->except(['province' , 'city']);
 
     }
     public function create(Request $request)
@@ -85,8 +85,6 @@ class UserController extends Controller
     {
         return new ShippingResource($address); // TODO currency validation with admin should check
     }
-
-
     public function province()
     {
         $provinces = Province::all();
