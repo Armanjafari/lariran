@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\CurrencyController;
 use App\Http\Controllers\api\HomeController;
 use App\Http\Controllers\Api\LandingController;
 use App\Http\Controllers\Api\OptionController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SliderController;
@@ -150,9 +151,14 @@ Route::prefix('v1')->group(function () {
     });
     Route::get('province/', [UserController::class, 'province'])->name('address.province');
     Route::get('city/{province}', [UserController::class, 'city'])->name('address.city');
-        Route::post('payment/{gateway}/callback', [PaymentController::class, 'verify'])->name('payment.verify');
-        Route::get('payment/{gateway}/callback', [PaymentController::class, 'verify'])->name('payment.verify.get');
+    Route::post('payment/{gateway}/callback', [PaymentController::class, 'verify'])->name('payment.verify');
+    Route::get('payment/{gateway}/callback', [PaymentController::class, 'verify'])->name('payment.verify.get');
 
+
+        Route::get('orders/', [OrderController::class, 'index'])->name('order.index');
+        Route::post('order/{order}/change/status/', [OrderController::class, 'changeStatus'])->name('order.change.status');
+        // Route::put('update/{Order}', [OrderController::class, 'update'])->name('order.update');
+        Route::get('{user}/orders', [OrderController::class, 'user'])->name('order.user');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

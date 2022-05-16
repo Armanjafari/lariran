@@ -101,17 +101,17 @@ class BasketController extends Controller
             'shipping' => 'required|exists:shipings,id',
             'gateway' => 'required_if:method,online'
         ]);
-        if (!auth()->id() == Shiping::find($request->shipping)->id) {
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+        if (!auth()->id() == Shiping::find($request->shipping)->user_id) {
             return response()->json([
                 'data' => [
                     'shipping' => 'آدرس وارد شده صحیح نمیباشد'
                 ],
-                'status' => 'error',
-            ]);
-        }
-        if ($validator->fails()) {
-            return response()->json([
-                'data' => $validator->errors(),
                 'status' => 'error',
             ]);
         }

@@ -101,6 +101,7 @@ class Transaction
     }
     private function products()
     {
+        $products = [];
         foreach ($this->basket->all() as $product) {
             $products[$product->id] = [
                 'quantity' => $product->quantity,

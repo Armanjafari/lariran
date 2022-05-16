@@ -506,14 +506,20 @@ params[]
 
 returns : [address]
 ---------
-[GET] https//api.lariran.com/api/v1/address/province
+[GET] https//api.lariran.com/api/v1/province
 
 params[] 
 
 returns : [province collection]
 ---------
-[GET] https//api.lariran.com/api/v1/address/city/{province_id} #example https//api.lariran.com/api/v1/address/city/14
+[GET] https//api.lariran.com/api/v1/city/{province_id} #example https//api.lariran.com/api/v1/city/14
 
 params[] 
 
 returns : [city collection]
+---------
+[POST] https//api.lariran.com/api/v1/basket/checkout
+
+params[method=>online ,gateway->mellat , shipping] 
+
+returns : [redirects to shapark]
