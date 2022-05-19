@@ -196,5 +196,6 @@ return [
         'color_id' => 'متغیر',
         'value' => 'مقدار',
         'city_id' => 'شهر',
+        'attribute_id' => 'ویژگی',
     ],
 ];

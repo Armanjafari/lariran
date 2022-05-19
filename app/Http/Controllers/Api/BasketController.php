@@ -90,10 +90,10 @@ class BasketController extends Controller
             ]);
         }
     }
-    public function checkoutForm()
-    {
-        return view('Product.checkout');
-    }
+    // public function checkoutForm()
+    // {
+    //     return view('Product.checkout');
+    // }
     public function checkout(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -121,7 +121,13 @@ class BasketController extends Controller
         // $this->validateForm($request);
         $order = $this->transaction->checkout(); // TODO check this
         dd($order);
-        return redirect()->route('index')->withSuccess('سفارش شما با شماره' . $order->id ?? '');
+        return response()->json([
+            'data' => [
+                'order' => 'سفارش شما با شماره' . $order->id ?? ''
+            ],
+            'status' => 'success
+            '
+        ]);
     }
     private function validateForm(Request $request)
     {

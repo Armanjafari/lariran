@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\v1\ImageCollection;
 use App\Http\Resources\v1\ProductCollection;
 use App\Http\Resources\v1\ProductResource;
+use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -14,8 +16,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum','role:admin'])->except(['index', 'single','relateds']);
-
+        $this->middleware(['auth:sanctum', 'role:admin'])->except(['index', 'single', 'relateds', 'productImages']);
     }
     public function create(Request $request)
     {
@@ -30,14 +31,13 @@ class ProductController extends Controller
             'weight' => 'required',
             'keywords' => 'string',
             'status' => 'integer',
-            'images.*' => 'image|mimes:jpeg,jpg,png|max:512' // 
-          ]);
-          if ($validator->fails()) {
+        ]);
+        if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
                 'status' => 'error',
             ]);
-          }
+        }
         $product = Product::create([
             'name' => $request->input('name'),
             'title' => $request->input('title'),
@@ -51,35 +51,12 @@ class ProductController extends Controller
             'keywords' => $request->input('keywords') ?? '',
             'status' => $request->input('status') ?? 1,
         ]);
-        if ($request->hasFile('images') && !is_null($request->images)) {
-            $this->image($request, $product);
-        }
-        //  else if ($request->has('main')){
-        //     $this->image($request, $product);
-        // }
         return response()->json([
             'data' => [],
             'status' => 'success',
         ]);
     }
-    private function image(Request $request, Product $product)
-    {
-        // $i = 1;
-        $images = $request->file('images');
-        // dd($images);
-        foreach ($images as $image) {
-            // dd('here');
-            $destination = '/images/' . now()->year . '/' . now()->month . '/' . now()->day . '/';
-            $filename = date('mdYHis') . uniqid() . '.' .$image->getClientOriginalExtension();
-            $image->move(public_path($destination), $filename);
-            $product->images()->create([
-                'address' => $destination . $filename
-            ]);
-            // $i++;
-        }
-
-    }
-    public function update(Request $request , Product $product)
+    public function update(Request $request, Product $product)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:products,title,' . $product->id,
@@ -92,14 +69,13 @@ class ProductController extends Controller
             'weight' => 'required',
             'keywords' => 'string',
             'status' => 'integer',
-            // 'images.*' => 'image|mimes:jpeg,jpg,png|max:512', //  TODO this bug should be fixed
-          ]);
-          if ($validator->fails()) {
+        ]);
+        if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
                 'status' => 'error',
             ]);
-          }
+        }
         $product->update([
             'name' => $request->input('name'),
             'title' => $request->input('title'),
@@ -113,22 +89,12 @@ class ProductController extends Controller
             'keywords' => $request->input('keywords') ?? '',
             'status' => $request->input('status') ?? 1,
         ]);
-        if ($request->hasFile('images') && !is_null($request->images)) {
-            $this->deleteImage($product);
-            $this->image($request, $product);
-        }
         return response()->json([
             'data' => [],
             'status' => 'success',
-        ],200);
+        ], 200);
     }
-    private function deleteImage(Product $product)
-    {
-        foreach ($product->images as $image) {
-            File::delete(public_path() . $image->address);
-            $image->delete();
-        }
-    }
+
     public function index()
     {
         $products = Product::paginate(10);
@@ -136,12 +102,12 @@ class ProductController extends Controller
     }
     public function delete(Product $product)
     {
-        $this->deleteImage($product);
+        // $this->deleteImage($product); TODO code has been changed this should be fixed !
         $product->delete();
         return response()->json([
             'data' => [],
             'status' => 'success',
-        ],200);
+        ], 200);
     }
     public function single(Product $product)
     {
@@ -149,7 +115,43 @@ class ProductController extends Controller
     }
     public function relateds(Product $product)
     {
-        $products = Product::limit(10)->where('category_id'  ,'=', $product->category_id)->get();
-        return new ProductCollection($products); 
+        $products = Product::limit(10)->where('category_id', '=', $product->category_id)->get();
+        return new ProductCollection($products);
+    }
+    public function imageCreate(Request $request, Product $product)
+    {
+        $validator = Validator::make($request->all(), [
+            'image' => 'image|mimes:jpeg,jpg,png|max:512'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+        $image = $request->file('image');
+        $destination = '/images/' . now()->year . '/' . now()->month . '/' . now()->day . '/';
+        $filename = date('mdYHis') . uniqid() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path($destination), $filename);
+        $product->images()->create([
+            'address' => $destination . $filename
+        ]);
+        return response()->json([
+            'data' => [],
+            'status' => 'success',
+        ], 200);
+    }
+    public function imageDelete(Image $image)
+    {
+        File::delete(public_path() . $image->address);
+        $image->delete();
+        return response()->json([
+            'data' => [],
+            'status' => 'success',
+        ], 200);
+    }
+    public function productImages(Product $product)
+    {
+        return new ImageCollection($product->images);
     }
 }

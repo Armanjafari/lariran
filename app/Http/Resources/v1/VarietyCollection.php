@@ -14,18 +14,19 @@ class VarietyCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return 
+        return
             $this->collection->transform(function ($variety) { // 'data' =>
                 if (!is_null($variety->color_id)) {
                     return [
                         'id' => $variety->id,
                         'stock' => $variety->stock,
-                        'price' =>  ($variety->price * $variety->currency->value),
-                        'show_price' =>  ($variety->show_price * $variety->currency->value),
+                        'price' =>  $variety->convertEnglishToPersian($variety->price * $variety->currency->value),
+                        'show_price' =>  $variety->convertEnglishToPersian($variety->show_price * $variety->currency->value),
                         'waranty_id' =>  new WarantyResource($variety->waranty),
                         // 'product_id' =>  $variety->product_id,
                         // 'currency_id' =>  $variety->currency_id,
                         'color_id' =>  new ColorResource($variety->color),
+                        'percent' => $variety->percentage(),
                         // 'is_active' =>  $variety->is_active ?? 1,
                         // 'product_id' => new ProductResource($variety->product),
                     ];
@@ -33,12 +34,13 @@ class VarietyCollection extends ResourceCollection
                     return [
                         'id' => $variety->id,
                         'stock' => $variety->stock,
-                        'price' =>  ($variety->price * $variety->currency->value),
-                        'show_price' =>  ($variety->show_price * $variety->currency->value),
+                        'price' =>  $variety->convertEnglishToPersian($variety->price * $variety->currency->value),
+                        'show_price' =>  $variety->convertEnglishToPersian($variety->show_price * $variety->currency->value),
                         'waranty_id' =>  new WarantyResource($variety->waranty),
                         // 'product_id' =>  $variety->product_id,
                         // 'currency_id' =>  $variety->currency_id,
                         'color_id' =>  null,
+                        'percent' => $variety->percentage(),
                         // 'is_active' =>  $variety->is_active ?? 1,
                         // 'product_id' => new ProductResource($variety->product),
                     ];

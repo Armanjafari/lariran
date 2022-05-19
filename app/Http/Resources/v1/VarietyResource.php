@@ -16,34 +16,36 @@ class VarietyResource extends JsonResource
     {
         if (!is_null($this->option)) {
 
-        return [
-            'id' => $this->id,
-            'stock' => $this->stock,
-            'price' =>  ($this->price * $this->currency->value),
-            'show_price' =>  ($this->show_price * $this->currency->value),
-            'waranty_id' =>  new WarantyResource($this->waranty_id),
-            // 'product_id' =>  $this->product_id,
-            // 'currency_id' =>  $this->currency_id,
-            'color_id' =>  new ColorResource($this->color_id),
-            // 'is_active' =>  $this->is_active ?? 1,
-            // 'product_id' => new ProductResource($this->product),
+            return [
+                'id' => $this->id,
+                'stock' => $this->stock,
+                'price' =>  $this->convertEnglishToPersian($this->price * $this->currency->value),
+                'show_price' =>  $this->convertEnglishToPersian($this->show_price * $this->currency->value),
+                'waranty_id' =>  new WarantyResource($this->waranty_id),
+                // 'product_id' =>  $this->product_id,
+                // 'currency_id' =>  $this->currency_id,
+                'color_id' =>  new ColorResource($this->color_id),
+                'percent' => $this->percentage(),
+                // 'is_active' =>  $this->is_active ?? 1,
+                // 'product_id' => new ProductResource($this->product),
 
-        ];
-    } else {
-        return [
-            'id' => $this->id,
-            'stock' => $this->stock,
-            'price' =>  ($this->price * $this->currency->value),
-            'show_price' =>  ($this->show_price * $this->currency->value),
-            'waranty_id' =>  new WarantyResource($this->waranty_id),
-            // 'product_id' =>  $this->product_id,
-            // 'currency_id' =>  $this->currency_id,
-            'color_id' => null,
-            // 'is_active' =>  $this->is_active ?? 1,
-            // 'product_id' => new ProductResource($this->product),
+            ];
+        } else {
+            return [
+                'id' => $this->id,
+                'stock' => $this->stock,
+                'price' =>  $this->convertEnglishToPersian($this->price * $this->currency->value),
+                'show_price' =>  $this->convertEnglishToPersian($this->show_price * $this->currency->value),
+                'waranty_id' =>  new WarantyResource($this->waranty_id),
+                // 'product_id' =>  $this->product_id,
+                // 'currency_id' =>  $this->currency_id,
+                'color_id' => null,
+                'percent' => $this->percentage(),
+                // 'is_active' =>  $this->is_active ?? 1,
+                // 'product_id' => new ProductResource($this->product),
 
-        ];
-    }
+            ];
+        }
     }
     public function with($request)
     {

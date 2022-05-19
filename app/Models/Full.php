@@ -43,4 +43,15 @@ class Full extends Model
     {
         return $this->decrement('stock' , $count);
     }
+    public function percentage()
+    {
+        return 100 - (int)(($this->price * $this->currency->value) * 100 / ($this->show_price * $this->currency->value));
+    }
+    function convertEnglishToPersian($input)
+    {
+        $input = number_format($input);
+        $persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        $english = [0,  1,  2,  3,  4,  5,  6,  7,  8,  9];
+        return str_replace($english, $persian, $input);
+    }
 }

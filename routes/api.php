@@ -68,6 +68,11 @@ Route::prefix('v1')->group(function () {
         Route::delete('delete/{product}', [ProductController::class, 'delete'])->name('product.delete');
         Route::get('/{product}', [ProductController::class, 'single'])->name('product.single');
         Route::get('{product}/relateds', [ProductController::class, 'relateds'])->name('product.relateds');
+        
+        Route::post('{product}/image/create',[ProductController::class, 'imageCreate'])->name('product.image.create');
+        Route::get('{product}/image/',[ProductController::class, 'productImages'])->name('product.image.list');
+        // TODO bad code
+        Route::delete('/image/delete/{image}',[ProductController::class, 'imageDelete'])->name('product.image.delete'); 
 
         Route::post('/{product}/variety/create',  [VarietyController::class, 'create'])->name('variety.create');
         Route::put('/variety/update/{variety}',  [VarietyController::class, 'update'])->name('variety.update');
@@ -105,15 +110,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/{currency}', [CurrencyController::class, 'single'])->name('currency.single');
     });
     Route::get('search/', [HomeController::class, 'search'])->name('index.search');
-    // Route::prefix('variety')->group(function () {
-    // Route::get('/', [VarietyController::class, 'index'])->name('variety.index');
 
-    // Route::post('create', [VarietyController::class, 'create'])->name('variety.create');
-    // Route::put('update/{variety}', [VarietyController::class, 'update'])->name('variety.update');
-    // Route::delete('delete/{variety}', [VarietyController::class, 'delete'])->name('variety.delete');
-
-    // Route::get('/{variety}', [VarietyController::class, 'single'])->name('variety.single');
-    // });
 
     Route::prefix('landing')->group(function () {
         Route::get('/', [LandingController::class, 'index'])->name('landing.index');
@@ -155,10 +152,10 @@ Route::prefix('v1')->group(function () {
     Route::get('payment/{gateway}/callback', [PaymentController::class, 'verify'])->name('payment.verify.get');
 
 
-        Route::get('orders/', [OrderController::class, 'index'])->name('order.index');
-        Route::post('order/{order}/change/status/', [OrderController::class, 'changeStatus'])->name('order.change.status');
-        // Route::put('update/{Order}', [OrderController::class, 'update'])->name('order.update');
-        Route::get('{user}/orders', [OrderController::class, 'user'])->name('order.user');
+    Route::post('orders/', [OrderController::class, 'index'])->name('order.index');
+    Route::post('order/{order}/change/status/', [OrderController::class, 'changeStatus'])->name('order.change.status');
+    // Route::put('update/{Order}', [OrderController::class, 'update'])->name('order.update');
+    Route::post('{user}/orders', [OrderController::class, 'user'])->name('order.user');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

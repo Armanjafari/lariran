@@ -192,6 +192,26 @@ returns : [product]
 params[]
 
 returns : [products collection]
+---------
+
+
+[POST] https//api.lariran.com/api/v1/product/{product_id}/image/create #example https//api.lariran.com/api/v1/product/2/image/create
+
+params[image]
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/product/image/delete/{image_id} #example https//api.lariran.com/api/v1/product/image/delete/2
+
+params[]
+
+returns : [success message]
+---------
+[GET] https//api.lariran.com/api/v1/product/image/
+
+params[]
+
+returns : [image collection]
 
 
 ---------------------
@@ -523,3 +543,26 @@ returns : [city collection]
 params[method=>online ,gateway->mellat , shipping] 
 
 returns : [redirects to shapark]
+
+
+
+---------------------
+### Order ###
+[POST] https//api.lariran.com/api/v1/orders // admin permission needed
+
+params[]
+
+returns : [orders collection]
+---------
+[POST] https//api.lariran.com/api/v1/order/{order_id}/change/status/ https//api.lariran.com/api/v1/order/1/change/status/  // admin permission needed
+
+params[status]
+
+returns : [succes message]
+---------
+[POST] https//api.lariran.com/api/v1/{user_id}/orders https//api.lariran.com/api/v1/1/orders
+
+params[]
+
+returns : [orders collection]
+---------

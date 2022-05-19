@@ -33,6 +33,7 @@ class ProductCollection extends ResourceCollection
                         'images' => new ImageCollection($product->images),
                         'attributes' => new AttributeValueCollection($product->attributes),
                         'varieties' => new VarietyCollection($product->fulls),
+
                     ];
                 } else {
                     return [
@@ -42,7 +43,7 @@ class ProductCollection extends ResourceCollection
                         'category_id' => new CategoryResource($product->category),
                         'slug' => $product->slug,
                         'brand_id' => new BrandResource($product->brand),
-                        'option_id' =>  null ,
+                        'option_id' =>  null,
                         'description' => $product->description,
                         'weight' => $product->weight,
                         'keywords' => $product->keywords ?? '',
@@ -50,6 +51,7 @@ class ProductCollection extends ResourceCollection
                         'images' => new ImageCollection($product->images),
                         'attributes' => new AttributeValueCollection($product->attributes),
                         'varieties' => new VarietyCollection($product->fulls),
+
                     ];
                 }
             }),
