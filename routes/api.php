@@ -87,6 +87,9 @@ Route::prefix('v1')->group(function () {
         Route::put('update/{product}', [BasketController::class, 'update'])->name('basket.update');
         Route::get('checkout', [BasketController::class, 'checkoutForm'])->name('basket.checkout.form');
         Route::post('checkout', [BasketController::class, 'checkout'])->name('basket.checkout');
+
+        Route::get('cost/check', [BasketController::class, 'checkCost'])->name('basket.cost.check');
+
     });
     Route::prefix('waranty')->group(function () {
         Route::get('/', [WarantyController::class, 'index'])->name('waranty.index');
@@ -154,6 +157,7 @@ Route::prefix('v1')->group(function () {
 
     Route::post('orders/', [OrderController::class, 'index'])->name('order.index');
     Route::post('order/{order}/change/status/', [OrderController::class, 'changeStatus'])->name('order.change.status');
+    Route::post('order/{order}/change/trackingCode/', [OrderController::class, 'changeTrackingCode'])->name('order.change.tracking.code');
     // Route::put('update/{Order}', [OrderController::class, 'update'])->name('order.update');
     Route::post('{user}/orders', [OrderController::class, 'user'])->name('order.user');
 });

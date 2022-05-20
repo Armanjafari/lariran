@@ -23,6 +23,7 @@ class OrderCollection extends ResourceCollection
                     'gateway' => $order->payment->gateway ?? null,
                     'tracking_code' => $order->payment->trackingCode ?? null,
                     'amount' => $order->payment->amount,
+                    'shiping' => new ShippingResource($order->shiping),
                     'ref_num' => $order->payment->ref_num,
                     'status' => __('orders.' . $order->payment->status),
                     'products' => $order->fulls // TODO fix this thing

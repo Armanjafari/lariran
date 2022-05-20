@@ -14,8 +14,7 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
-        $this->middleware('role:admin')->only(['index' , 'changeStatus']);
-
+        $this->middleware('role:admin')->only(['index', 'changeStatus','changeTrackingCode']);
     }
     public function index()
     {
@@ -26,12 +25,12 @@ class OrderController extends Controller
     {
         return new OrderCollection($user);
     }
-    public function changeStatus(Request $request , Order $order)
+    public function changeStatus(Request $request, Order $order)
     {
         $validator = Validator::make($request->all(), [
             'status' => 'required|int|between:-2,101',
-          ]);
-          if ($validator->fails()) {
+        ]);
+        if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
                 'status' => 'error',
@@ -45,5 +44,23 @@ class OrderController extends Controller
             'status' => 'success',
         ]);
     }
+    public function changeTrackingCode(Order $order, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'tracking_code' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+        $order->payment()->update([
+            $request->input('tracking_code'),
+        ]);
+        return response()->json([
+            'data' => [],
+            'status' => 'success',
+        ]);
+    }
 }
-

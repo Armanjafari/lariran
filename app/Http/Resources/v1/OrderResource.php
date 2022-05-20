@@ -21,6 +21,7 @@ class OrderResource extends JsonResource
             'gateway' => $this->payment->gateway ?? null,
             'tracking_code' => $this->payment->trackingCode ?? null,
             'amount' => $this->payment->amount,
+            'shiping' => new ShippingResource($this->shiping),
             'ref_num' => $this->payment->ref_num,
             'status' => __('orders.' . $this->payment->status),
         ];
