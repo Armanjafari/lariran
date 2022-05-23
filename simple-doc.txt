@@ -560,6 +560,12 @@ params[status]
 
 returns : [succes message]
 ---------
+[POST] https//api.lariran.com/api/v1/order/{order_id}/change/trackingCode/ https//api.lariran.com/api/v1/order/1/change/trackingCode/  // admin permission needed
+
+params[tracking_code]
+
+returns : [succes message]
+---------
 [POST] https//api.lariran.com/api/v1/{user_id}/orders https//api.lariran.com/api/v1/1/orders
 
 params[]

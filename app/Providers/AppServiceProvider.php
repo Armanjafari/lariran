@@ -35,8 +35,9 @@ class AppServiceProvider extends ServiceProvider
 			return new SessionStorage('cart');
 		});
         $this->app->bind(CostInterface::class , function($app){
+            $request = $this->app->request;
             $basketCost = new BasketCost($app->make(Basket::class));
-            $shippingCost = new ShippingCost($basketCost);
+            $shippingCost = new ShippingCost($basketCost, $request);
             $discountCost = new DiscountCost($shippingCost, $app->make(DiscountManager::class));
             return $discountCost;
         });

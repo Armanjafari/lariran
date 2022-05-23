@@ -9,6 +9,7 @@ use App\Http\Resources\v1\BasketCollection;
 use App\Models\Full;
 use App\Models\Shiping;
 use App\Support\Basket\Basket;
+use App\Support\Cost\Contracts\CostInterface;
 use App\Support\Payment\Transaction;
 use App\Support\Storage\Contracts\StorageInterface;
 use Illuminate\Http\Request;
@@ -24,16 +25,10 @@ class BasketController extends Controller
         $this->basket = $basket;
         $this->transaction = $transaction;
     }
-    public function index()
+    public function index(CostInterface $cost)
     {
         $items = $this->basket->all();
         return new BasketCollection($items);
-        //dd($items);
-        // return view('Product.basket',compact('items'));
-        return response()->json([
-            'data' => $items,
-            'status' => 'success',
-        ]);
     }
     public function add(Full $product)
     {
@@ -117,7 +112,6 @@ class BasketController extends Controller
         }
 
 
-
         // $this->validateForm($request);
         $order = $this->transaction->checkout(); // TODO check this
         dd($order);
@@ -141,5 +135,24 @@ class BasketController extends Controller
                 'status' => 'error',
             ]);
         }
+    }
+    public function checkCost(CostInterface $cost , Request $request)
+    { // TODO end this
+        $validator = Validator::make($request->all(), [
+            'shipping' => 'required|exists:shipings,id',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+        $full_basket = $cost->getSummary();
+        $full_basket['مجموع'] = $cost->getTotalCosts();
+        return response()->json([
+            'data' => $full_basket,
+            'status' => 'success',
+        ]);
+        dd($cost->getTotalCosts());
     }
 }

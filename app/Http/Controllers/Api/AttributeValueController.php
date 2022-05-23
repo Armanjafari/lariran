@@ -19,9 +19,9 @@ class AttributeValueController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'value' => 'required|unique:attribute_values,value|string|min:2',
-            'product_id' => 'required|exists:products,id',
-            'attribute_id' => 'required|exists:attributes,id',
+            'value' => 'required|string',
+            'product_id' => 'required|integer|exists:products,id',
+            'attribute_id' => 'required|integer|exists:attributes,id',
           ]);
           if ($validator->fails()) {
             return response()->json([
@@ -42,7 +42,7 @@ class AttributeValueController extends Controller
     public function update(Request $request , AttributeValue $attributeValue)
     {
         $validator = Validator::make($request->all(), [
-            'value' => 'required|string|min:2|unique:attribute_values,value,'. $attributeValue->id, 
+            'value' => 'required|string|unique:attribute_values,value,'. $attributeValue->id, 
             'product_id' => 'required|exists:products,id',
             'attribute_id' => 'required|exists:attributes,id',
           ]);

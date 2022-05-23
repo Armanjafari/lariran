@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\v1;
 
+use App\Support\Cost\Contracts\CostInterface;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class BasketCollection extends ResourceCollection
@@ -14,6 +15,7 @@ class BasketCollection extends ResourceCollection
      */
     public function toArray($request)
     {
+        $cost = resolve(CostInterface::class);
         return [
             $this->collection->transform(function ($varierty) {
                 return [
@@ -29,6 +31,7 @@ class BasketCollection extends ResourceCollection
                     'percent' => $varierty->percentage(),
                 ];
             }),
+            'total' => $cost->getTotalCosts(),
         ];
     }
     public function with($request)

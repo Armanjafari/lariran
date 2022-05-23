@@ -1,6 +1,7 @@
 <?php
 namespace App\Support\Cost;
 
+use App\Models\Shiping;
 use App\Support\Cost\Contracts\CostInterface;
 use GhaniniaIR\Shipping\Shipping;
 use Illuminate\Http\Request;
@@ -8,24 +9,31 @@ use Illuminate\Http\Request;
 class ShippingCost implements CostInterface
 {
     private $SHIPPING_COST = 0;
+    private $weight;
+    private $price;
+    private $request;
     private $cost;
-    public function __construct(CostInterface $cost)
+    public function __construct(CostInterface $cost , Request $request)
     {
         $this->cost = $cost;
-        // dd($cost->basket->add(1));
+        $this->request = $request;
+        $this->setVariables();
     }
-    public function setCost(Request $request)
+    public function setVariables()
     {
         foreach ($this->cost->basket->all() as $full) {
-            $this->SHIPPING_COST += $full->product->pure->weight;
+            $this->weight += $full->product->weight;
+            $this->price += ($full->price * $full->currency->value) * 10;
         }
         
     }
     public function getCost()
     {
-        // dd(Shipping::pishtaz(5,1,6000)->getPrice());
-        // return Shipping::pishtaz(22,5,5000)->getPrice() / 10;
-        return 0;
+        if (!$this->request->has('shipping')) {
+            return 0;
+        }
+        $dst = Shiping::find($this->request->shipping)->city->province->id;
+        return (int)(Shipping::pishtaz(5,$dst,$this->weight,$this->price)->getPrice() / 10);
     }
     public function getTotalCosts()
     {
