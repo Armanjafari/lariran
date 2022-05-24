@@ -26,7 +26,7 @@ class OrderCollection extends ResourceCollection
                     'shiping' => new ShippingResource($order->shiping),
                     'ref_num' => $order->payment->ref_num,
                     'status' => [
-                        'id' => $order->pamyment->status,
+                        'id' => $order->payment->status,
                         'name' => __('orders.' . $order->payment->status)],
                     'products' => new ProductForOrderCollection($order->fulls),
                 ];

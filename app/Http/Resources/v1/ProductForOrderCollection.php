@@ -22,9 +22,9 @@ class ProductForOrderCollection extends ResourceCollection
                         'price' =>  $variety->pivot->price,
                         'waranty_id' =>  new WarantyResource($variety->waranty),
                         'color_id' =>  new ColorResource($variety->color),
-                        'image' => $variety->product->images->first()->address ?? null,
-                        'persian_title' => $variety->product->persian_title,
-                        'product_id' => $variety->product->id,
+                        // 'image' => $variety->product->first()->address ?? null,
+                        'persian_title' => $variety->product->persian_title ?? null,
+                        'product_id' => $variety->product->id ?? null,
                         'quantity' => $variety->pivot->quantity
                     ];
                 } else {

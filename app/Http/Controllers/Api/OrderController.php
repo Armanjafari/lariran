@@ -19,7 +19,7 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::paginate(10);
-        $orders->load('fulls.product');
+        $orders->load('fulls.product.images');
         return new OrderCollection($orders);
     }
     public function user(User $user)
