@@ -115,7 +115,7 @@ class ProductController extends Controller
     }
     public function relateds(Product $product)
     {
-        $products = Product::limit(10)->where('category_id', '=', $product->category_id)->get();
+        $products = Product::limit(10)->where('category_id', '=', $product->category_id)->where('id' , '!=' , $product->id)->get();
         return new ProductCollection($products);
     }
     public function imageCreate(Request $request, Product $product)

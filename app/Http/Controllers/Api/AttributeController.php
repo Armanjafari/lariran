@@ -19,7 +19,7 @@ class AttributeController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:attributes,name|string|min:2',
+            'name' => 'required|string|min:2',
             'category_id' => 'required|exists:categories,id',
           ]);
           if ($validator->fails()) {
@@ -40,7 +40,7 @@ class AttributeController extends Controller
     public function update(Request $request , Attribute $attribute)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|min:2|unique:attributes,name,'. $attribute->id, 
+            'name' => 'required|string|min:2', 
             'category_id' => 'required|exists:categories,id',
           ]);
           if ($validator->fails()) {

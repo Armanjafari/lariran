@@ -19,7 +19,7 @@ class Order extends Model
     // TODO fix this thing
     public function fulls()
     {
-        return $this->belongsToMany(Full::class);
+        return $this->belongsToMany(Full::class)->withPivot(['quantity','price']);;
     }
     public function payment()
     {

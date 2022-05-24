@@ -147,6 +147,22 @@ class BasketController extends Controller
                 'status' => 'error',
             ]);
         }
+        try {
+            if (!auth()->id() == Shiping::find($request->shipping)->user_id) {
+                return response()->json([
+                    'data' => [
+                        'shipping' => 'آدرس وارد شده صحیح نمیباشد'
+                    ],
+                    'status' => 'error',
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'data' => 'unAuthrozied',
+                'status' => 'error',
+            ]);
+        }
+
         $full_basket = $cost->getSummary();
         $full_basket['مجموع'] = $cost->getTotalCosts();
         return response()->json([
