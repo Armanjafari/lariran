@@ -40,7 +40,7 @@ class ProductController extends Controller
             ]);
         }
         $request->slug = Str::slug($request->input('slug'), '-');
-        $validator2 = Validator::make($request->all(), [
+        $validator2 = Validator::make(['slug' => $request->slug], [
             'slug' => 'unique:products,slug',
         ]);
 
@@ -90,13 +90,13 @@ class ProductController extends Controller
             ]);
         }
         $request->slug = Str::slug($request->input('slug'), '-');
-        $validator2 = Validator::make($request->all(), [
-            'slug' => '|unique:products,slug,' . $product->id,
+        $validator2 = Validator::make(['slug' => $request->slug], [
+            'slug' => 'unique:products,slug,' . $product->id,
         ]);
 
         if ($validator2->fails()) {
             return response()->json([
-                'data' => $validator->errors(),
+                'data' => $validator2->errors(),
                 'status' => 'error',
             ]);
         }
