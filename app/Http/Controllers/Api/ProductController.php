@@ -46,7 +46,7 @@ class ProductController extends Controller
 
         if ($validator2->fails()) {
             return response()->json([
-                'data' => $validator->errors(),
+                'data' => $validator2->errors(),
                 'status' => 'error',
             ]);
         }
