@@ -11,6 +11,7 @@ use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -23,10 +24,10 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:products,title',
             'persian_title' => 'required',
+            'slug' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'slug' => 'required|unique:products,slug',
             'brand_id' => 'required|exists:brands,id',
-            'option_id' => 'integer|exists:options,id',
+            'option_id' => 'required|integer|exists:options,id',
             'description' => 'required',
             'weight' => 'required',
             'keywords' => 'string',
@@ -38,12 +39,24 @@ class ProductController extends Controller
                 'status' => 'error',
             ]);
         }
+        $request->slug = Str::slug($request->input('slug'), '-');
+        $validator2 = Validator::make($request->all(), [
+            'slug' => 'unique:products,slug',
+        ]);
+
+        if ($validator2->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+
         $product = Product::create([
             'name' => $request->input('name'),
             'title' => $request->input('title'),
             'persian_title' => $request->input('persian_title'),
             'category_id' => $request->input('category_id'),
-            'slug' => $request->input('slug'),
+            'slug' => Str::slug($request->input('slug'), '-'),
             'brand_id' => $request->input('brand_id'),
             'option_id' => $request->input('option_id') ?? null,
             'description' => $request->input('description'),
@@ -62,7 +75,7 @@ class ProductController extends Controller
             'title' => 'required|unique:products,title,' . $product->id,
             'persian_title' => 'required',
             'category_id' => 'required',
-            'slug' => 'required|unique:products,slug,' . $product->id,
+            'slug' => 'required',
             'brand_id' => 'required',
             'option_id' => 'integer|exists:options,id',
             'description' => 'required',
@@ -76,12 +89,23 @@ class ProductController extends Controller
                 'status' => 'error',
             ]);
         }
+        $request->slug = Str::slug($request->input('slug'), '-');
+        $validator2 = Validator::make($request->all(), [
+            'slug' => '|unique:products,slug,' . $product->id,
+        ]);
+
+        if ($validator2->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
         $product->update([
             'name' => $request->input('name'),
             'title' => $request->input('title'),
             'persian_title' => $request->input('persian_title'),
             'category_id' => $request->input('category_id'),
-            'slug' => $request->input('slug'),
+            'slug' => Str::slug($request->input('slug'), '-'),
             'brand_id' => $request->input('brand_id'),
             'option_id' => $request->input('option_id') ?? null,
             'description' => $request->input('description'),

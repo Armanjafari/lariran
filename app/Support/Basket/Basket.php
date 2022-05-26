@@ -48,7 +48,7 @@ class Basket
     }
     public function all()
     {
-        $products = Full::find([13,15,30]);
+        $products = Full::find(array_keys($this->storage->all()));
         foreach ($products as $product) {
             $product->quantity = $this->get($product)['quantity'];
         }
@@ -67,9 +67,6 @@ class Basket
     {
         return $this->storage->clear();
     }
-    public function count()
-    {
-        return $this->storage->count();
-    }
+
 }
 ?>

@@ -47,7 +47,7 @@ class Full extends Model
     {
         return 100 - (int)(($this->price * $this->currency->value) * 100 / ($this->show_price * $this->currency->value));
     }
-    function convertEnglishToPersian($input)
+    public function convertEnglishToPersian($input)
     {
         $input = number_format($input);
         $persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];

@@ -101,7 +101,7 @@ class BasketController extends Controller
                 'status' => 'error',
             ]);
         }
-        if (!$this->basket->count()) {
+        if (!$this->basket->itemCount()) {
             return response()->json([
                 'data' => ['basket' => 'سبد خرید خالی است'],
                 'status' => 'error',
