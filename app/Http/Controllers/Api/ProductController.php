@@ -121,7 +121,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::paginate(10);
+        $products = Product::orderBy('created_at' , 'asc')->paginate(10);
         return new ProductCollection($products);
     }
     public function delete(Product $product)
