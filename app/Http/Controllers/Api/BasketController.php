@@ -39,7 +39,6 @@ class BasketController extends Controller
                 ],
                 'status' => 'error',
             ]);
-            // return back()->with('error', "محصول مورد نظر وجود ندارد");
 
         }
         try {
@@ -99,6 +98,12 @@ class BasketController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+        if (!$this->basket->count()) {
+            return response()->json([
+                'data' => ['basket' => 'سبد خرید خالی است'],
                 'status' => 'error',
             ]);
         }
@@ -169,6 +174,6 @@ class BasketController extends Controller
             'data' => $full_basket,
             'status' => 'success',
         ]);
-        dd($cost->getTotalCosts());
+        // dd($cost->getTotalCosts());
     }
 }
