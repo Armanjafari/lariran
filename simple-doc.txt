@@ -66,7 +66,7 @@ returns : [category]
 ---------
 [GET] https//api.lariran.com/api/v1/category/{category_id}/products #example https//api.lariran.com/api/v1/category/2/products
 
-params[]
+params[optional=>sort,min,max,stock]
 
 returns : [product collection]
 ---------

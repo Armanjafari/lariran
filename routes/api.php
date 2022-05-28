@@ -85,7 +85,7 @@ Route::prefix('v1')->group(function () {
         Route::get('clear/', [BasketController::class, 'clear']);
         Route::get('/', [BasketController::class, 'index'])->name('basket.index');
         Route::put('update/{product}', [BasketController::class, 'update'])->name('basket.update');
-        Route::get('checkout', [BasketController::class, 'checkoutForm'])->name('basket.checkout.form');
+        // Route::get('checkout', [BasketController::class, 'checkout'])->name('basket.checkout.form');
         Route::post('checkout', [BasketController::class, 'checkout'])->name('basket.checkout');
 
         Route::get('cost/check', [BasketController::class, 'checkCost'])->name('basket.cost.check');

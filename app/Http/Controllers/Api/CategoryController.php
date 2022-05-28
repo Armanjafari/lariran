@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\CategoryCollection;
 use App\Http\Resources\v1\CategoryResource;
-use App\Http\Resources\v1\ProductCollection;
+use App\Http\Resources\v1\ProductForCategoriesCollection;
 use App\Models\Category;
 use App\Models\Full;
-use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
@@ -98,6 +96,7 @@ class CategoryController extends Controller
             'sort' => 'integer',
             'min' => 'integer',
             'max' => 'integer',
+            'stock' => 'boolean',
 
         ]);
         if ($validator->fails()) {
@@ -106,48 +105,61 @@ class CategoryController extends Controller
                 'status' => 'error',
             ]);
         }
-        $products = $category->products;
-        // dd($products);
-        // array_push($products, $category->products);
-        foreach ($category->child as $category) {
-            $products = $products->push($category->products()->get());
+        if (($request->input('sort') >= 1 && $request->input('sort') >= 3) || !$request->input('sort')) {
+
+            $products = $category->products;
+            // dd($products);
+            // array_push($products, $category->products);
             foreach ($category->child as $category) {
                 $products = $products->push($category->products()->get());
                 foreach ($category->child as $category) {
                     $products = $products->push($category->products()->get());
+                    foreach ($category->child as $category) {
+                        $products = $products->push($category->products()->get());
+                    }
                 }
             }
+            $products = Arr::flatten($products);
+
+            // dd($products);
+            $pro = [];
+            $proz = new Full();
+            foreach ($category->products as $product) {
+                $product->load('fulls');
+
+                foreach ($product->fulls as $full) {
+                    array_push($pro, $full);
+                }
+            }
+            $proz = $proz->fill($pro);
+            if ($request->input('sort') == 1) {
+                $proz = $proz->orderBy('price', 'asc');
+            } elseif ($request->input('sort') == 2) {
+                $proz = $proz->orderBy('price', 'desc');
+            } elseif($request->input('sort') == 3){
+                $proz = $proz->orderBy('created_at', 'desc');
+            }
+            if (isset($request->min)) {
+                $proz = $proz->having('price', '>=', $request->min);
+            }
+            if (isset($request->max)) {
+                $proz = $proz->having('price', '<=', $request->max);
+            }
+            if($request->stock){
+                $proz = $proz->having('stock', '>', 0);
+            }
+            $proz->get()->unique('product_id');
+            // $proz = $proz->get()->toArray();
+            // $proz = $proz->get()->unique('product_id');
+
+            // $products = [];
+            // foreach ($proz as $full) {
+            //     array_push($products, $full->product);
+            // }
+            // return $proz->paginate();
+            // $paginator = new LengthAwarePaginator($proz, count($proz), 10);
+            return new ProductForCategoriesCollection($proz->paginate(10)); // $category->products()->paginate(10)
         }
-        $products = Arr::flatten($products);
-        
-        // dd($products);
-        $paginator = new LengthAwarePaginator($products,count($products),10);
-        //   $pro = [];
-        //   $proz = new Full();
-        //   foreach ($category->products as $product) {
-        //     $product->load('fulls');
 
-        //     foreach ($product->fulls as $full) {
-        //         array_push($pro , $full);
-        //     }
-        // }
-        // $proz = $proz->fill($pro);
-        //   if ($request->input('sort') == 1) {
-        //     $proz = $proz->orderBy('price' , 'asc');
-        // }elseif ($request->input('sort') == 2) {
-        //     $proz = $proz->orderBy('price' , 'desc');
-        // }
-        // return $proz->get();
-        // if (isset($request->min)) {
-        //     $proz = $proz->having('price','<=' , $request->min);
-        // }
-
-        // $proz = $proz->get()->unique('product_id');
-        // $products = [];
-        // foreach ($proz as $full) {
-        //         array_push($products, $full->product);
-        //     }
-        // return $products;
-        return new ProductCollection($paginator); // $category->products()->paginate(10)
     }
 }

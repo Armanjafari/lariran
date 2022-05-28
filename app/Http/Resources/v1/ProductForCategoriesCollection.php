@@ -14,6 +14,26 @@ class ProductForCategoriesCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection->transform(function ($variety) {
+                return [
+                    'id' => $variety->product_id,
+                    'title' => $variety->product->title,
+                    'persian_title' => $variety->product->persian_title,
+                    'slug' => $variety->product->slug,
+                    'stock' => $variety->stock,
+                    'image' => $variety->product->images->first()->address ?? null,
+                    'price' =>  $variety->convertEnglishToPersian($variety->price * $variety->currency->value),
+                    'show_price' =>  $variety->convertEnglishToPersian($variety->show_price * $variety->currency->value),
+                    'percent' => $variety->percentage(),
+                ];
+            }),
+        ];
+    }
+    public function with($request)
+    {
+        return [
+            'status' => 'success',
+        ];
     }
 }
