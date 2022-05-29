@@ -9,6 +9,7 @@ use App\Http\Resources\v1\ProductForCategoriesCollection;
 use App\Models\Category;
 use App\Models\Full;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
@@ -106,7 +107,6 @@ class CategoryController extends Controller
             ]);
         }
         if (($request->input('sort') >= 1 && $request->input('sort') >= 3) || !$request->input('sort')) {
-
             $products = $category->products;
             // dd($products);
             // array_push($products, $category->products);
@@ -136,7 +136,7 @@ class CategoryController extends Controller
                 $proz = $proz->orderBy('price', 'asc');
             } elseif ($request->input('sort') == 2) {
                 $proz = $proz->orderBy('price', 'desc');
-            } elseif($request->input('sort') == 3){
+            } elseif($request->input('sort') == 3 || !$request->input('sort')){
                 $proz = $proz->orderBy('created_at', 'desc');
             }
             if (isset($request->min)) {
@@ -148,17 +148,16 @@ class CategoryController extends Controller
             if($request->stock){
                 $proz = $proz->having('stock', '>', 0);
             }
-            $proz->get()->unique('product_id');
+            // $proz->get()->unique('product_id');
             // $proz = $proz->get()->toArray();
-            // $proz = $proz->get()->unique('product_id');
-
+            $proz = $proz->get()->unique('product_id');
             // $products = [];
             // foreach ($proz as $full) {
             //     array_push($products, $full->product);
             // }
             // return $proz->paginate();
-            // $paginator = new LengthAwarePaginator($proz, count($proz), 10);
-            return new ProductForCategoriesCollection($proz->paginate(10)); // $category->products()->paginate(10)
+            $paginator = new LengthAwarePaginator($proz, count($proz), 10);
+            return new ProductForCategoriesCollection($paginator); // $category->products()->paginate(10)
         }
 
     }
