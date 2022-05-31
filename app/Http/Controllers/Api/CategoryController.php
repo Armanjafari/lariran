@@ -106,7 +106,7 @@ class CategoryController extends Controller
                 'status' => 'error',
             ]);
         }
-        if (($request->input('sort') >= 1 && $request->input('sort') >= 3) || !$request->input('sort')) {
+        if (($request->input('sort') >= 1 && $request->input('sort') <= 3) || !$request->input('sort')) {
             $products = $category->products;
             // dd($products);
             // array_push($products, $category->products);
@@ -124,13 +124,13 @@ class CategoryController extends Controller
             // dd($products);
             $pro = [];
             $proz = new Full();
-            foreach ($category->products as $product) {
+            foreach ($products as $product) {
                 $product->load('fulls');
-
                 foreach ($product->fulls as $full) {
                     array_push($pro, $full);
                 }
             }
+            // dd($pro);
             $proz = $proz->fill($pro);
             if ($request->input('sort') == 1) {
                 $proz = $proz->orderBy('price', 'asc');
@@ -151,11 +151,7 @@ class CategoryController extends Controller
             // $proz->get()->unique('product_id');
             // $proz = $proz->get()->toArray();
             $proz = $proz->get()->unique('product_id');
-            // $products = [];
-            // foreach ($proz as $full) {
-            //     array_push($products, $full->product);
-            // }
-            // return $proz->paginate();
+
             $paginator = new LengthAwarePaginator($proz, count($proz), 10);
             return new ProductForCategoriesCollection($paginator); // $category->products()->paginate(10)
         }
