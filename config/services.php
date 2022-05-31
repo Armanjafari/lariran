@@ -35,6 +35,11 @@ return [
             'username' => env('MELLAT_USERNAME'),
             'user_password' => env('MELLAT_USER_PASSWORD'),
         ]
-    ]
+    ],
+    'sms' => [
+        'farazsms' => [
+            'api_key' => env('FARAZ_SMS_API_KEY'),
+        ]
+    ],
 
 ];

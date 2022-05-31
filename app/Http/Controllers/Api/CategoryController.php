@@ -130,10 +130,16 @@ class CategoryController extends Controller
                     array_push($pro, $full);
                 }
             }
-            // dd($pro);
-            $proz = $proz->fill($pro);
+            $ids = [];
+            foreach ($pro as $value) {
+                array_push($ids, $value->id);
+                
+            }
+            $proz = Full::whereIn('id', array_values($ids));
+            // $proz = $proz->fill($pro);
+            // dd($proz);
             if ($request->input('sort') == 1) {
-                $proz = $proz->orderBy('price', 'asc');
+                $proz->orderBy('price', 'asc');
             } elseif ($request->input('sort') == 2) {
                 $proz = $proz->orderBy('price', 'desc');
             } elseif($request->input('sort') == 3 || !$request->input('sort')){
