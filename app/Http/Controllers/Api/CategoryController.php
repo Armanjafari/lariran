@@ -138,13 +138,10 @@ class CategoryController extends Controller
             $proz = Full::whereIn('id', array_values($ids));
             // $proz = $proz->fill($pro);
             // dd($proz);
-            if ($request->input('sort') == 1) {
-                $proz->orderBy('price', 'asc');
-            } elseif ($request->input('sort') == 2) {
-                $proz = $proz->orderBy('price', 'desc');
-            } elseif($request->input('sort') == 3 || !$request->input('sort')){
-                $proz = $proz->orderBy('created_at', 'desc');
-            }
+            // foreach ($proz->get() as $full) {
+            //     $full->price = $full->currency->value * $full->price;
+            //     // dd($full);
+            // }
             if (isset($request->min)) {
                 $proz = $proz->having('price', '>=', $request->min);
             }
@@ -154,10 +151,20 @@ class CategoryController extends Controller
             if($request->stock){
                 $proz = $proz->having('stock', '>', 0);
             }
+
+            if ($request->input('sort') == 1) {
+                $proz->orderBy('price', 'asc'); // $variety->price 
+            } elseif ($request->input('sort') == 2) {
+                $proz = $proz->orderBy('price', 'desc');
+            } elseif($request->input('sort') == 3 || !$request->input('sort')){
+                $proz = $proz->orderBy('created_at', 'desc');
+            }
+
+
             // $proz->get()->unique('product_id');
             // $proz = $proz->get()->toArray();
             $proz = $proz->get()->unique('product_id');
-
+            // dd($proz);
             $paginator = new LengthAwarePaginator($proz, count($proz), 10);
             return new ProductForCategoriesCollection($paginator); // $category->products()->paginate(10)
         }

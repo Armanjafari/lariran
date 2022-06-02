@@ -198,5 +198,6 @@ return [
         'city_id' => 'شهر',
         'attribute_id' => 'ویژگی',
         'phone_number' => 'شماره موبایل',
+        'desc' => 'توضیحات',
     ],
 ];

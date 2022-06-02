@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\BasketController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ColorController;
+use App\Http\Controllers\Api\CommntController;
 use App\Http\Controllers\Api\CurrencyController;
 use App\Http\Controllers\api\HomeController;
 use App\Http\Controllers\Api\LandingController;
@@ -160,6 +161,17 @@ Route::prefix('v1')->group(function () {
     Route::post('order/{order}/change/trackingCode/', [OrderController::class, 'changeTrackingCode'])->name('order.change.tracking.code');
     // Route::put('update/{Order}', [OrderController::class, 'update'])->name('order.update');
     Route::post('{user}/orders', [OrderController::class, 'user'])->name('order.user');
+
+
+
+    Route::prefix('comment')->group(function () {
+        Route::get('/', [CommntController::class, 'index'])->name('comment.index');
+        Route::post('create', [CommntController::class, 'create'])->name('comment.create');
+        Route::put('changeStatus/{comment}', [CommntController::class, 'changeStatus'])->name('comment.change.status');
+        Route::delete('delete/{comment}', [CommntController::class, 'delete'])->name('comment.delete');
+        Route::get('ByProduct/{product}', [CommntController::class, 'ByProduct'])->name('comment.by.Product');
+        Route::get('/ByUser', [CommntController::class, 'ByUser'])->name('comment.by.user');
+    });
 });
 Route::prefix('v2')->group(function () {
     Route::prefix('authWithCode')->group(function () {

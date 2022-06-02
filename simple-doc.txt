@@ -605,3 +605,43 @@ params[name,phone_number]
 
 returns : [action , phone_number] // in this case action is login
 ---------
+
+
+
+---------------------
+### Comment ###
+[GET] https//api.lariran.com/api/v1/comment
+
+params[]
+
+returns : [comment collection with pagination links]
+---------
+[POST] https//api.lariran.com/api/v1/comment/create
+
+params[desc,score , product_id] // score => 1 , 5 
+
+returns : [success message]
+---------
+[PUT] https//api.lariran.com/api/v1/comment/changeStatus // admin permission needed
+
+params[is_active] // is_active => 0,1
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/comment/delete/{comment_id}  #example https//api.lariran.com/api/v1/comment/delete/2  // admin permission needed
+
+params[] 
+
+returns : [success message]
+---------
+[GET] https//api.lariran.com/api/v1/comment/ByProduct/{product_id} #example https//api.lariran.com/api/v1/comment/ByProduct/2
+
+params[] 
+
+returns : [comment collection with pagination links]
+---------
+[GET] https//api.lariran.com/api/v1/comment/ByUser/
+
+params[]
+
+returns : [comment collection]
