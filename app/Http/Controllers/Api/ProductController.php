@@ -165,6 +165,30 @@ class ProductController extends Controller
             'status' => 'success',
         ], 200);
     }
+    public function imageDescCreate(Request $request, Product $product)
+    {
+        $validator = Validator::make($request->all(), [
+            'image' => 'image|mimes:jpeg,jpg,png|max:1024'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+        $image = $request->file('image');
+        $destination = '/images/' . now()->year . '/' . now()->month . '/' . now()->day . '/';
+        $filename = date('mdYHis') . uniqid() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path($destination), $filename);
+        $product->images()->create([
+            'address' => $destination . $filename,
+            'type' => 'desc',
+        ]);
+        return response()->json([
+            'data' => ['image' => $destination . $filename],
+            'status' => 'success',
+        ], 200);
+    }
     public function imageDelete(Image $image)
     {
         File::delete(public_path() . $image->address);
@@ -176,6 +200,6 @@ class ProductController extends Controller
     }
     public function productImages(Product $product)
     {
-        return new ImageCollection($product->images);
+        return new ImageCollection($product->images()->where('type' , null)->get());
     }
 }

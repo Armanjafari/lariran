@@ -21,10 +21,16 @@ class PaymentController extends Controller
     }
     private function sendErrorResponse()
     {
-        return redirect()->route('response.failed');
+        return response()->json([
+            'data' => 'تراکنش با خطا مواجه شد',
+            'status' => 'error',
+        ]);
     }
     private function sendSuccessResponse()
     {
-        return redirect()->route('response.success');
+        return response()->json([
+            'data' => 'تراکنش با موفقیت انجام شد',
+            'status' => 'success',
+        ]);
     }
 }

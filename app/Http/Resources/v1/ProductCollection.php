@@ -30,7 +30,7 @@ class ProductCollection extends ResourceCollection
                         'weight' => $product->weight,
                         'keywords' => $product->keywords ?? '',
                         'status' => $product->status ?? '',
-                        'images' => new ImageCollection($product->images),
+                        'images' => new ImageCollection($product->images()->where('type' , null)->get()),
                         'attributes' => new AttributeValueCollection($product->attributes),
                         'varieties' => new VarietyCollection($product->fulls),
 

@@ -28,7 +28,7 @@ class ProductResource extends JsonResource
                 'weight' => $this->weight,
                 'keywords' => $this->keywords ?? '',
                 'status' => $this->status ?? '',
-                'images' => new ImageCollection($this->images),
+                'images' => new ImageCollection($this->images()->where('type' , null)->get()),
                 'attributes' => new AttributeValueCollection($this->attributes),
                 'varieties' => new VarietyCollection($this->fulls),
             ];

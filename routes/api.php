@@ -72,6 +72,7 @@ Route::prefix('v1')->group(function () {
         Route::get('{product}/relateds', [ProductController::class, 'relateds'])->name('product.relateds');
 
         Route::post('{product}/image/create', [ProductController::class, 'imageCreate'])->name('product.image.create');
+        Route::post('{product}/image/desc/create', [ProductController::class, 'imageDescCreate'])->name('product.image.desc.create');
         Route::get('{product}/image/', [ProductController::class, 'productImages'])->name('product.image.list');
         // TODO bad code
         Route::delete('/image/delete/{image}', [ProductController::class, 'imageDelete'])->name('product.image.delete');
