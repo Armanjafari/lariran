@@ -16,7 +16,7 @@ class AuthWithCodeController extends Controller
     public $code;
     public function __construct()
     {
-        $this->middleware('guest');
+        // $this->middleware('guest');
         // $this->middleware('auth:sanctum')->only(['me', 'logout']);
         $this->middleware('throttle:5,5')->only(['register']); // TODO set captcha for everywhere that needed
         $this->middleware('throttle:5,5')->only(['login']);
