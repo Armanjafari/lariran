@@ -29,7 +29,7 @@ class ProductController extends Controller
             'brand_id' => 'required|exists:brands,id',
             'option_id' => 'required|integer|exists:options,id',
             'description' => 'required',
-            'weight' => 'required',
+            'weight' => 'required|integer',
             'keywords' => 'string',
             'status' => 'integer',
         ]);
@@ -39,7 +39,7 @@ class ProductController extends Controller
                 'status' => 'error',
             ]);
         }
-        $request->slug = Str::slug($request->input('slug'), '-');
+        $request->slug = str_replace(' ','-', $request->slug);
         $validator2 = Validator::make(['slug' => $request->slug], [
             'slug' => 'unique:products,slug',
         ]);
@@ -56,11 +56,11 @@ class ProductController extends Controller
             'title' => $request->input('title'),
             'persian_title' => $request->input('persian_title'),
             'category_id' => $request->input('category_id'),
-            'slug' => Str::slug($request->input('slug'), '-'),
+            'slug' => $request->input('slug'),
             'brand_id' => $request->input('brand_id'),
             'option_id' => $request->input('option_id') ?? null,
             'description' => $request->input('description'),
-            'weight' => $request->input('weight'),
+            'weight' => $request->input('weight') ?? 0,
             'keywords' => $request->input('keywords') ?? '',
             'status' => $request->input('status') ?? 1,
         ]);
@@ -79,7 +79,7 @@ class ProductController extends Controller
             'brand_id' => 'required',
             'option_id' => 'integer|exists:options,id',
             'description' => 'required',
-            'weight' => 'required',
+            'weight' => 'required|integer',
             'keywords' => 'string',
             'status' => 'integer',
         ]);
@@ -89,7 +89,7 @@ class ProductController extends Controller
                 'status' => 'error',
             ]);
         }
-        $request->slug = Str::slug($request->input('slug'), '-');
+        $request->slug = str_replace(' ','-', $request->slug);
         $validator2 = Validator::make(['slug' => $request->slug], [
             'slug' => 'unique:products,slug,' . $product->id,
         ]);
@@ -105,11 +105,11 @@ class ProductController extends Controller
             'title' => $request->input('title'),
             'persian_title' => $request->input('persian_title'),
             'category_id' => $request->input('category_id'),
-            'slug' => Str::slug($request->input('slug'), '-'),
+            'slug' => $request->input('slug'),
             'brand_id' => $request->input('brand_id'),
             'option_id' => $request->input('option_id') ?? null,
             'description' => $request->input('description'),
-            'weight' => $request->input('weight'),
+            'weight' => $request->input('weight') ?? 0,
             'keywords' => $request->input('keywords') ?? '',
             'status' => $request->input('status') ?? 1,
         ]);

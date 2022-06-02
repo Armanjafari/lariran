@@ -10,7 +10,8 @@ use App\Services\Notifications\Providers\Contracts\Provider;
 class Notification{
     public function __call($method, $arguments)
     {
-        $providerPath = __NAMESPACE__ . '\Providers\\' . substr($method,4) . 'Provider';
+        // dd(substr($method,0,3));
+        $providerPath = __NAMESPACE__ . '\Providers\\' . substr($method,0,3) . 'Provider';
         if(!class_exists($providerPath)){
             throw new \Exception('Class Does not exist');
         }

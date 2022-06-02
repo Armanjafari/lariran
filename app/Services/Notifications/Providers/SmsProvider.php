@@ -2,28 +2,29 @@
 
 namespace App\Services\Notifications\Providers;
 
-use App\Models\User;
+use App\Models\Code;
 use App\Services\Notifications\Providers\Contracts\Provider;
 use \GuzzleHttp\Client;
 class SmsProvider implements Provider{
 
-    private $user;
+    private $phone_number;
     private $code;
-    public function __construct($user)
+    public function __construct($phone_number)
     {
-        $this->user = $user;
+        $this->phone_number = $phone_number;
         $this->code = mt_rand(10000,99999);
     }
     public function send()
     {  
-        $this->user->activeCode()->create([
+        Code::create([
             'code' => $this->code,
+            'phone_number' => $this->phone_number,
             'expired_at' => now()->addMinutes(2)]);
-        $client = new Client(['headers' => ['Authorization' =>'AccessKey 1MBWwEqHPAHXbO_3P0AGfnhsWRLOuJslxiCq8K32lN0='],
+        $client = new Client(['headers' => ['Authorization' =>'AccessKey ' . config('services.sms.farazsms.api_key')],
         'json' => [
-            'pattern_code' => 'avolm8i3rb',
+            'pattern_code' => 'hlb8yrj2quumd04',
             'originator' => '+983000505',
-            'recipient' => $this->user->phone_number,
+            'recipient' => $this->phone_number,
             'values' => [
                 'OTP' => (string)$this->code,
             ]],

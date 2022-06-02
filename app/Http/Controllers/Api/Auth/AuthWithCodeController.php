@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Code;
+use App\Models\User;
 use App\Services\Notifications\Notification;
+use App\Services\Notifications\Providers\SmsProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AuthWithCodeController extends Controller
 {
@@ -16,69 +21,91 @@ class AuthWithCodeController extends Controller
         $this->middleware('throttle:5,5')->only(['register']); // TODO set captcha for everywhere that needed
         $this->middleware('throttle:5,5')->only(['login']);
     }
+    public function checkLogin(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+        $user = User::where('phone_number', $request->input('phone_number'))->first();
+        if (!$user) {
+            return response()->json([
+                'data' => [
+                    'action' => 'register',
+                    'phone_number' => $request->input('phone_number'),
+                ],
+                'status' => 'success',
+            ]);
+        }
+        $this->sendSms($request->input('phone_number'));
+        return response()->json([
+            'data' => [
+                'action' => 'login',
+                'phone_number' => $request->input('phone_number'),
+            ],
+            'status' => 'success',
+        ]);
+    }
     public function login(Request $request)
     {
 
-        $phone_number = $request->input('phone_number') ?? session()->get('phone_number');
-        session()->put('phone_number', $phone_number);
-        $user = User::where('phone_number',$phone_number)->first();
-        if (!$user) {
-                return redirect()->route('register.form.with.code');
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required|exists:users,phone_number',
+            'code' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
         }
+        $code = Code::where('code', $request->input('code'))->where('phone_number', $request->input('phone_number'))->firstOr(function(){
+            return response()->json([
+                'data' => ['code' => 'کد وارد شده نامعتبر میباشد'],
+                'status' => 'error',
+            ]);
+        });
+        $user = User::where('phone_number', $request->input('phone_number'))->first();
+        $status = Code::ValidateCode($request->input('code'));
+        if ($status) {
+            return response()->json([
+                'data' => ['token' => $user->createToken('API Token')->plainTextToken],
+                'status' => 'success'
+            ]);
+        }
+        return response()->json([
+            'data' => ['code' => 'کد و یا شماره تلفن وارد شده نامعتبر میباشد'],
+            'status' => 'error',
+        ]);
+    }
 
-        $this->sendSms($user , 'code');
-        return redirect()->route('verify_login_code');
-    }
-    public function registerForm()
+    public function sendSms($phone_number)
     {
-        $provinces = Province::all();
-        return view('AuthWithCode.register',compact('provinces'));
-    }
-    public function sendSms($user, $method)
-    {
-        $notif = resolve(Notification::class);
-        $notif->SmsProvider()->send();
-    }
-    public function verifyForm()
-    {
-        return view('AuthWithCode.verify');
-    }
-    public function username()
-    {
-        return "phone_number";
-    }
-    public function codeValidator(CodeValidator $request)
-    {
-        $user = User::where('phone_number',session()->get('phone_number'))->first();
-        session()->forget('phone_number');
-        $status = ActiveCode::ValidateCode($request->input('code'),$user);
-        //dd($status);
-        if( $status)
-        {
-            Auth::login($user);
-            return redirect()->route('index');
-        }
-        return redirect()->back()->withErrors('errors', 'کد منقظی شده است');   
+        $notif = new SmsProvider($phone_number);
+        $notif->send();
     }
     public function register(Request $request)
     {
         $request->validate([
             'name' => 'required',
-            'city' => 'required',
-            'postal_code' => 'required',
-            'address' => 'required',
+            'phone_number' => 'required|unique:users,phone_number',
         ]);
         $user = User::create([
             'name' => $request->input('name'),
-            'phone_number' => session()->get('phone_number'),
+            'phone_number' => $request->input('phone_number'),
         ]);
-        $user->shipings()->create([
-            'city_id' => $request->input('city'),
-            'postal_code' => $request->input('postal_code'),
-            'address' => $request->input('address'),
+        $this->sendSms($request->input('phone_number'));
+        return response()->json([
+            'data' => [
+                'action' => 'login',
+                'phone_number' => $request->input('phone_number'),
+            ],
+            'status' => 'success',
         ]);
-        $this->sendSms($user , 'code');
-        return redirect()->route('verify_login_code')->withSuccess(' ثبت نام با موفقیت انجام شد ');
-        
     }
 }

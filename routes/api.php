@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AttributeController;
 use App\Http\Controllers\Api\AttributeValueController;
+use App\Http\Controllers\Api\Auth\AuthWithCodeController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BasketController;
 use App\Http\Controllers\Api\BrandController;
@@ -68,11 +69,11 @@ Route::prefix('v1')->group(function () {
         Route::delete('delete/{product}', [ProductController::class, 'delete'])->name('product.delete');
         Route::get('/{product}', [ProductController::class, 'single'])->name('product.single');
         Route::get('{product}/relateds', [ProductController::class, 'relateds'])->name('product.relateds');
-        
-        Route::post('{product}/image/create',[ProductController::class, 'imageCreate'])->name('product.image.create');
-        Route::get('{product}/image/',[ProductController::class, 'productImages'])->name('product.image.list');
+
+        Route::post('{product}/image/create', [ProductController::class, 'imageCreate'])->name('product.image.create');
+        Route::get('{product}/image/', [ProductController::class, 'productImages'])->name('product.image.list');
         // TODO bad code
-        Route::delete('/image/delete/{image}',[ProductController::class, 'imageDelete'])->name('product.image.delete'); 
+        Route::delete('/image/delete/{image}', [ProductController::class, 'imageDelete'])->name('product.image.delete');
 
         Route::post('/{product}/variety/create',  [VarietyController::class, 'create'])->name('variety.create');
         Route::put('/variety/update/{variety}',  [VarietyController::class, 'update'])->name('variety.update');
@@ -89,7 +90,6 @@ Route::prefix('v1')->group(function () {
         Route::post('checkout', [BasketController::class, 'checkout'])->name('basket.checkout');
 
         Route::get('cost/check', [BasketController::class, 'checkCost'])->name('basket.cost.check');
-
     });
     Route::prefix('waranty')->group(function () {
         Route::get('/', [WarantyController::class, 'index'])->name('waranty.index');
@@ -160,6 +160,13 @@ Route::prefix('v1')->group(function () {
     Route::post('order/{order}/change/trackingCode/', [OrderController::class, 'changeTrackingCode'])->name('order.change.tracking.code');
     // Route::put('update/{Order}', [OrderController::class, 'update'])->name('order.update');
     Route::post('{user}/orders', [OrderController::class, 'user'])->name('order.user');
+});
+Route::prefix('v2')->group(function () {
+    Route::prefix('authWithCode')->group(function () {
+        Route::post('check', [AuthWithCodeController::class, 'checkLogin'])->name('auth.check');
+        Route::post('register', [AuthWithCodeController::class, 'register'])->name('register.with.code');
+        Route::post('login', [AuthWithCodeController::class, 'login'])->name('login.with.code');
+    });
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

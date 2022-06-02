@@ -579,3 +579,29 @@ params[]
 
 returns : [orders collection]
 ---------
+
+
+
+
+
+
+---------------------
+### AuthWithCode ###
+[POST] https//api.lariran.com/api/v2/AuthWithCode/check
+
+params[phone_number]
+
+returns : [action , phone_number] // action can be one of 'register' and 'login'
+---------
+[POST] https//api.lariran.com/api/v2/AuthWithCode/login
+
+params[code,phone_number]
+
+returns : [auth token]
+---------
+[POST] https//api.lariran.com/api/v2/AuthWithCode/register
+
+params[name,phone_number]
+
+returns : [action , phone_number] // in this case action is login
+---------
