@@ -160,7 +160,7 @@ class CategoryController extends Controller
                 $newway = $newway->where('stock', '>', 0);
             }
             if ($request->input('sort') == 1) {
-                $newway = $newway->sortDesc('price');
+                $newway = $newway->sortByDesc('price');
             } elseif ($request->input('sort') == 2) {
                 $newway = $newway->sortBy('price');
             } elseif ($request->input('sort') == 3 || !$request->input('sort')) {
