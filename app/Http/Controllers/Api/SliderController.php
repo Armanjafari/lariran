@@ -15,7 +15,7 @@ class SliderController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum', 'role:admin'])->except(['index']);
+        $this->middleware(['auth:sanctum', 'role:admin'])->except(['index','type']);
     }
     public function create(Request $request)
     {

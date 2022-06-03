@@ -13,7 +13,7 @@ class CommntController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum'])->except('ByProduct');
+        $this->middleware(['auth:sanctum'])->except(['ByProduct' , 'create']);
         $this->middleware(['role:admin'])->only(['index' , 'delete' , 'changeStatus']);
 
     }
@@ -67,7 +67,7 @@ class CommntController extends Controller
             ]);
           }
         $comment->update([
-            'is_active' =>1,
+            'is_active' => $request->input('is_active'),
         ]);
         return response()->json([
             'data' => [],
