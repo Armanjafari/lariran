@@ -48,7 +48,7 @@ class Basket
     }
     public function all()
     {
-        $products = Full::find(array_keys($this->storage->all())); // test
+        $products = Full::find(array_keys($this->storage->all()));
         foreach ($products as $product) {
             $product->quantity = $this->get($product)['quantity'];
         }
