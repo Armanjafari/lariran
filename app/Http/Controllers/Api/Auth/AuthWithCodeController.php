@@ -66,7 +66,7 @@ class AuthWithCodeController extends Controller
         }
         $code = Code::where('code', $request->input('code'))->where('phone_number', $request->input('phone_number'))->firstOr(function(){
             return response()->json([
-                'data' => ['code' => 'کد وارد شده نامعتبر میباشد'],
+                'data' => ['code' => ['کد وارد شده نامعتبر میباشد']],
                 'status' => 'error',
             ]);
         });
@@ -79,7 +79,7 @@ class AuthWithCodeController extends Controller
             ]);
         }
         return response()->json([
-            'data' => ['code' => 'کد و یا شماره تلفن وارد شده نامعتبر میباشد'],
+            'data' => ['code' => ['کد و یا شماره تلفن وارد شده نامعتبر میباشد']],
             'status' => 'error',
         ]);
     }
