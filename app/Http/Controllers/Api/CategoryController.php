@@ -123,7 +123,6 @@ class CategoryController extends Controller
 
             // dd($products);
             $pro = [];
-            $proz = new Full();
             foreach ($products as $product) {
                 $product->load('fulls');
                 foreach ($product->fulls as $full) {
@@ -133,41 +132,48 @@ class CategoryController extends Controller
             $ids = [];
             foreach ($pro as $value) {
                 array_push($ids, $value->id);
-                
             }
             $proz = Full::whereIn('id', array_values($ids));
-            // $proz = $proz->fill($pro);
-            // dd($proz);
-            // foreach ($proz->get() as $full) {
-            //     $full->price = $full->currency->value * $full->price;
-            //     // dd($full);
-            // }
+
+            $newway = [];
+            foreach ($proz->get() as $key => $full) {
+                $tt = [];
+                $tt['id'] = $full->product_id;
+                $tt['title'] = $full->product->title;
+                $tt['persian_title'] = $full->product->persian_title;
+                $tt['slug'] = $full->product->slug;
+                $tt['stock'] = $full->stock;
+                $tt['image'] = $full->product->images->first()->address ?? null;
+                $tt['price'] = $full->price * $full->currency->value;
+                $tt['show_price'] = $full->show_price * $full->currency->value;
+                $tt['percent'] = $full->percentage();
+                array_push($newway, $tt);
+            }
+            $newway = collect($newway);
             if (isset($request->min)) {
-                $proz = $proz->having('price', '>=', $request->min);
+                $newway = $newway->where('price', '>=', $request->min);
             }
             if (isset($request->max)) {
-                $proz = $proz->having('price', '<=', $request->max);
+                $newway = $newway->where('price', '<=', $request->max);
             }
-            if($request->stock){
-                $proz = $proz->having('stock', '>', 0);
+            if ($request->stock) {
+                $newway = $newway->where('stock', '>', 0);
             }
-
             if ($request->input('sort') == 1) {
-                $proz->orderBy('price', 'asc'); // $variety->price 
+                $newway = $newway->sortDesc('price');
             } elseif ($request->input('sort') == 2) {
-                $proz = $proz->orderBy('price', 'desc');
-            } elseif($request->input('sort') == 3 || !$request->input('sort')){
-                $proz = $proz->orderBy('created_at', 'desc');
+                $newway = $newway->sortBy('price');
+            } elseif ($request->input('sort') == 3 || !$request->input('sort')) {
+                $newway = $newway->sortBy('created_at');
             }
 
 
             // $proz->get()->unique('product_id');
             // $proz = $proz->get()->toArray();
-            $proz = $proz->get()->unique('product_id');
-            // dd($proz);
-            $paginator = new LengthAwarePaginator($proz, count($proz), 10);
+            $newway = $newway->unique('id');
+            $newway = collect($newway->values());
+            $paginator = new LengthAwarePaginator($newway, count($newway), 10);
             return new ProductForCategoriesCollection($paginator); // $category->products()->paginate(10)
         }
-
     }
 }

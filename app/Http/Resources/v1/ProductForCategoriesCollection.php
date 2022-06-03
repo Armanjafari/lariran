@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\v1;
 
+use App\Services\Convert\convertEnglishToPersian;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ProductForCategoriesCollection extends ResourceCollection
@@ -12,20 +13,22 @@ class ProductForCategoriesCollection extends ResourceCollection
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
+
+
     public function toArray($request)
     {
         return [
             'data' => $this->collection->transform(function ($variety) {
                 return [
-                    'id' => $variety->product_id,
-                    'title' => $variety->product->title,
-                    'persian_title' => $variety->product->persian_title,
-                    'slug' => $variety->product->slug,
-                    'stock' => $variety->stock,
-                    'image' => $variety->product->images->first()->address ?? null,
-                    'price' =>  $variety->convertEnglishToPersian($variety->price * $variety->currency->value),
-                    'show_price' =>  $variety->convertEnglishToPersian($variety->show_price * $variety->currency->value),
-                    'percent' => $variety->percentage(),
+                    'id' => $variety['id'],
+                    'title' => $variety['title'],
+                    'persian_title' => $variety['persian_title'],
+                    'slug' => $variety['slug'],
+                    'stock' => $variety['stock'],
+                    'image' => $variety['image'] ?? null,
+                    'price' =>  convertEnglishToPersian::convertEnglishToPersian($variety['price']),
+                    'show_price' => convertEnglishToPersian::convertEnglishToPersian($variety['show_price']),
+                    'percent' => $variety['percent'],
                 ];
             }),
         ];
