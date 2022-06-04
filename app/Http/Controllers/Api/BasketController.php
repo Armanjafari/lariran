@@ -67,11 +67,20 @@ class BasketController extends Controller
     }
     public function update(Request $request, Full $product)
     {
+        $validator = Validator::make($request->all(), [
+            'quantity' => 'required|integer',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
         try {
             $this->basket->update($product, $request->quantity);
             return response()->json([
                 'data' => [
-                    'basket' => ' سبر خرید ویرایش شد '
+                    'basket' => ' سبد خرید ویرایش شد '
                 ],
                 'status' => 'success',
             ]);

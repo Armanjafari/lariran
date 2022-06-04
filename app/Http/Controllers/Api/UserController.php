@@ -75,6 +75,14 @@ class UserController extends Controller
     }
     public function delete(Shiping $address)
     {
+        if (!auth()->id() == $address->user_id) {
+            return response()->json([
+                'data' => [
+                    'shipping' => 'آدرس وارد شده صحیح نمیباشد'
+                ],
+                'status' => 'error',
+            ]);
+        }
         $address->delete();
         return response()->json([
             'data' => [],
