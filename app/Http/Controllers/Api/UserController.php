@@ -70,7 +70,7 @@ class UserController extends Controller
     }
     public function index()
     {
-        $shippings = Shiping::all();
+        $shippings = auth()->user()->shipings;
         return new ShippingCollection($shippings);
     }
     public function delete(Shiping $address)

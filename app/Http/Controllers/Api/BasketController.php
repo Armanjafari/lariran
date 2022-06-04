@@ -21,7 +21,7 @@ class BasketController extends Controller
     private $transaction;
     public function __construct(Basket $basket, Transaction $transaction)
     {
-        $this->middleware('auth:sanctum')->only(['checkoutForm', 'checkout']);
+        $this->middleware('auth:sanctum')->only(['checkoutForm', 'checkout' , 'checkCost']);
         $this->basket = $basket;
         $this->transaction = $transaction;
     }
