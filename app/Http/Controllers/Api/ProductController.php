@@ -39,7 +39,7 @@ class ProductController extends Controller
                 'status' => 'error',
             ]);
         }
-        $request->slug = str_replace(' ','-', $request->slug);
+        $request->slug = str_replace(' ', '-', $request->slug);
         $validator2 = Validator::make(['slug' => $request->slug], [
             'slug' => 'unique:products,slug',
         ]);
@@ -56,7 +56,7 @@ class ProductController extends Controller
             'title' => $request->input('title'),
             'persian_title' => $request->input('persian_title'),
             'category_id' => $request->input('category_id'),
-            'slug' => str_replace(' ','-', $request->slug),
+            'slug' => str_replace(' ', '-', $request->slug),
             'brand_id' => $request->input('brand_id'),
             'option_id' => $request->input('option_id') ?? null,
             'description' => $request->input('description'),
@@ -89,7 +89,7 @@ class ProductController extends Controller
                 'status' => 'error',
             ]);
         }
-        $request->slug = str_replace(' ','-', $request->slug);
+        $request->slug = str_replace(' ', '-', $request->slug);
         $validator2 = Validator::make(['slug' => $request->slug], [
             'slug' => 'unique:products,slug,' . $product->id,
         ]);
@@ -105,7 +105,7 @@ class ProductController extends Controller
             'title' => $request->input('title'),
             'persian_title' => $request->input('persian_title'),
             'category_id' => $request->input('category_id'),
-            'slug' => str_replace(' ','-', $request->slug),
+            'slug' => str_replace(' ', '-', $request->slug),
             'brand_id' => $request->input('brand_id'),
             'option_id' => $request->input('option_id') ?? null,
             'description' => $request->input('description'),
@@ -119,9 +119,23 @@ class ProductController extends Controller
         ], 200);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::orderBy('created_at' , 'desc')->paginate(10);
+        if ($request->has('s')) {
+            $query = $request->s;
+            $products = Product::where('persian_title', 'LIKE', '%' . $query . '%')
+                ->orWhere('persian_title', 'LIKE', '%' . $query)
+                ->orWhere('persian_title', 'LIKE', $query . '%')
+                ->orWhere('title', 'LIKE', '%' . $query . '%')
+                ->orWhere('title', 'LIKE', $query . '%')
+                ->orWhere('title', 'LIKE', '%' . $query)->paginate(10);
+            // dd($products[0]->id);
+            return response()->json([
+                'data' => new ProductCollection($products),
+                'status' => 'success',
+            ]); // TODO make a pagination for here
+        }
+        $products = Product::orderBy('created_at', 'desc')->paginate(10);
         return new ProductCollection($products);
     }
     public function delete(Product $product)
@@ -139,7 +153,7 @@ class ProductController extends Controller
     }
     public function relateds(Product $product)
     {
-        $products = Product::limit(10)->where('category_id', '=', $product->category_id)->where('id' , '!=' , $product->id)->get();
+        $products = Product::limit(10)->where('category_id', '=', $product->category_id)->where('id', '!=', $product->id)->get();
         return new ProductCollection($products);
     }
     public function imageCreate(Request $request, Product $product)
@@ -196,6 +210,6 @@ class ProductController extends Controller
     }
     public function productImages(Product $product)
     {
-        return new ImageCollection($product->images()->where('type' , null)->get());
+        return new ImageCollection($product->images()->where('type', null)->get());
     }
 }

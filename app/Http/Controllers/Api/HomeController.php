@@ -27,7 +27,7 @@ class HomeController extends Controller
             // dd($products[0]->id);
         return response()->json([
             'data' => new ProductCollection($products),
-            'status' => 'error',
+            'status' => 'success',
         ]); // TODO make a pagination for here
     }
 }

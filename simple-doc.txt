@@ -213,7 +213,7 @@ params[]
 
 returns : [image collection]
 --------- // img for desc
-[POST] https//api.lariran.com/api/v1/product/{product_id}/image/desc/create #example https//api.lariran.com/api/v1/product/2/image/desc/create
+[POST] https//api.lariran.com/api/v1/product/image/desc/create #example https//api.lariran.com/api/v1/product/image/desc/create
 
 params[image]
 
