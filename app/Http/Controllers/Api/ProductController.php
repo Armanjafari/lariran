@@ -165,7 +165,7 @@ class ProductController extends Controller
             'status' => 'success',
         ], 200);
     }
-    public function imageDescCreate(Request $request, Product $product)
+    public function imageDescCreate(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'image' => 'image|mimes:jpeg,jpg,png|max:1024'
@@ -177,13 +177,9 @@ class ProductController extends Controller
             ]);
         }
         $image = $request->file('image');
-        $destination = '/images/' . now()->year . '/' . now()->month . '/' . now()->day . '/';
+        $destination = '/desc-ckeditor/';
         $filename = date('mdYHis') . uniqid() . '.' . $image->getClientOriginalExtension();
         $image->move(public_path($destination), $filename);
-        $product->images()->create([
-            'address' => $destination . $filename,
-            'type' => 'desc',
-        ]);
         return response()->json([
             'data' => ['image' => $destination . $filename],
             'status' => 'success',
