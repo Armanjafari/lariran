@@ -78,7 +78,7 @@ class CommntController extends Controller
     }
     public function ByProduct(Product $product)
     {
-        $comments = $product->comments()->paginate(10);
+        $comments = $product->comments()->where('is_active' , 1)->paginate(10);
         return new CommentCollection($comments); 
     }
     public function ByUser()

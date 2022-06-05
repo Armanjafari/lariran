@@ -8,11 +8,13 @@ use App\Exceptions\QuantityExceededException;
 use App\Http\Resources\v1\BasketCollection;
 use App\Models\Full;
 use App\Models\Shiping;
+use App\Models\User;
 use App\Support\Basket\Basket;
 use App\Support\Cost\Contracts\CostInterface;
 use App\Support\Payment\Transaction;
 use App\Support\Storage\Contracts\StorageInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class BasketController extends Controller
@@ -101,6 +103,7 @@ class BasketController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'method' => 'required',
+            'user_id' => 'required|integer|exists:users,id',
             'shipping' => 'required|exists:shipings,id',
             'gateway' => 'required_if:method,online'
         ]);
@@ -116,7 +119,9 @@ class BasketController extends Controller
                 'status' => 'error',
             ]);
         }
-        if (!auth()->id() == Shiping::find($request->shipping)->user_id) {
+        $user = User::find($request->user_id);
+        Auth::login($user);
+        if (!$user->id == Shiping::find($request->shipping)->user_id) {
             return response()->json([
                 'data' => [
                     'shipping' => 'آدرس وارد شده صحیح نمیباشد'
