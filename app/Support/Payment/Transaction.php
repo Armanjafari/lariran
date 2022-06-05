@@ -69,7 +69,7 @@ class Transaction
 
     private function normalizeQuantity($order)
     {
-        foreach ($order->products as $product) {
+        foreach ($order->fulls as $product) {
             $product->decrementStock($product->pivot->quantity);
         }
     }
