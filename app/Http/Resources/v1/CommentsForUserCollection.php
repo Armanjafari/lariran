@@ -4,7 +4,7 @@ namespace App\Http\Resources\v1;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class CommentCollection extends ResourceCollection
+class CommentsForUserCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -20,6 +20,7 @@ class CommentCollection extends ResourceCollection
                     'id' => $comment->id,
                     'desc' => $comment->desc,
                     'score' => $comment->score,
+                    'product' => new ProductResource($comment->product),
                     'user' => new UserResource($comment->user),
                     'created_at' => $comment->created_at,
                 ];

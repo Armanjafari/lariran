@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\CommentCollection;
+use App\Http\Resources\v1\CommentsForAdminCollection;
+use App\Http\Resources\v1\CommentsForUserCollection;
 use App\Models\Comment;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -13,7 +15,7 @@ class CommntController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum'])->except(['ByProduct' , 'create']);
+        $this->middleware(['auth:sanctum'])->except(['ByProduct']);
         $this->middleware(['role:admin'])->only(['index' , 'delete' , 'changeStatus']);
 
     }
@@ -30,7 +32,7 @@ class CommntController extends Controller
                 'status' => 'error',
             ]);
           }
-        $brand = auth()->user()->comments()->create([
+        $comment = auth()->user()->comments()->create([
             'desc' => $request->input('desc'),
             'score' => $request->input('score'),
             'product_id' => $request->input('product_id'),
@@ -44,7 +46,7 @@ class CommntController extends Controller
     public function index()
     {
         $comments = Comment::paginate(10);
-        return new CommentCollection($comments);
+        return new CommentsForAdminCollection($comments);
     }
 
     public function delete(Comment $comment)
@@ -81,6 +83,6 @@ class CommntController extends Controller
     }
     public function ByUser()
     {
-        return new CommentCollection(auth()->user()->comments); 
+        return new CommentsForUserCollection(auth()->user()->comments); 
     }
 }
