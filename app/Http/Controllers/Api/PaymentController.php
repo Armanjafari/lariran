@@ -16,18 +16,20 @@ class PaymentController extends Controller
     public function verify(Request $request)
     {
         return $this->transaction->verify()
-        ? $this->sendSuccessResponse()
-        : $this->sendErrorResponse();
+        ? $this->sendSuccessResponse($request)
+        : $this->sendErrorResponse($request);
     }
-    private function sendErrorResponse()
+    private function sendErrorResponse(Request $request)
     {
+        dd($request->all());
         return response()->json([
             'data' => 'تراکنش با خطا مواجه شد',
             'status' => 'error',
         ]);
     }
-    private function sendSuccessResponse()
+    private function sendSuccessResponse(Request $request)
     {
+        dd($request->all());
         return response()->json([
             'data' => 'تراکنش با موفقیت انجام شد',
             'status' => 'success',
