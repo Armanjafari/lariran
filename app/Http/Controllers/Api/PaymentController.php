@@ -16,23 +16,16 @@ class PaymentController extends Controller
     public function verify(Request $request)
     {
         return $this->transaction->verify()
-        ? $this->sendSuccessResponse($request)
-        : $this->sendErrorResponse($request);
+        ? $this->sendSuccessResponse()
+        : $this->sendErrorResponse();
     }
-    private function sendErrorResponse(Request $request)
+    private function sendErrorResponse()
     {
-        dd($request->all());
-        return response()->json([
-            'data' => 'تراکنش با خطا مواجه شد',
-            'status' => 'error',
-        ]);
+        return redirect('https://lariran.com/payment/callback/transaction/failed');
     }
-    private function sendSuccessResponse(Request $request)
+    private function sendSuccessResponse()
     {
-        dd($request->all());
-        return response()->json([
-            'data' => 'تراکنش با موفقیت انجام شد',
-            'status' => 'success',
-        ]);
+        return redirect('https://lariran.com/payment/callback/transaction/success');
+
     }
 }

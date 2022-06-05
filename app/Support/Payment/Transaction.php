@@ -58,7 +58,12 @@ class Transaction
     {
         // TODO basket is not dynamic !
         $result = $this->gatewayFactory()->verify($this->request);
-        if ($result['status'] != 0) return false;
+        if ($result['status'] != 0) {
+            $result['order']->payment()->update([
+                'status' => 0,
+            ]);
+            return false;
+        }
         $this->confirmPayment($result);
         $this->normalizeQuantity($result['order']);
         // $this->normalizeWallet($result['order']);
@@ -75,6 +80,7 @@ class Transaction
     }
     private function confirmPayment($result)
     {
+        $result['order']->payment->result()->create($this->request->all());
         return $result['order']->payment->confirm($result['refNum'], $result['gateway']);
     }
     private function makeOrder()

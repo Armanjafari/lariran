@@ -36,4 +36,8 @@ class Payment extends Model
         }
         return $post_price;
     }
+    public function result()
+    {
+        return $this->hasOne(Result::class);
+    }
 }
