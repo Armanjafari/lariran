@@ -29,7 +29,7 @@ class OrderController extends Controller
     public function changeStatus(Request $request, Order $order)
     {
         $validator = Validator::make($request->all(), [
-            'status' => 'required|int|between:-2,101',
+            'status' => 'required|int',
         ]);
         if ($validator->fails()) {
             return response()->json([
