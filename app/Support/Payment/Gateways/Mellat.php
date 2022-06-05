@@ -129,21 +129,21 @@ class Mellat implements GatewayInterface
                 } else {
                     //-- در درخواست واریز وجه مشکل به وجود آمد. درخواست بازگشت وجه داده شود.
                     $client->call('bpReversalRequest', $parameters, $namespace);
-                    return $this->transactionFailed($result);
+                    return $this->transactionFailed($result , $request->input('SaleOrderId'));
                 }
             } else {
                 //-- وریفای به مشکل خورد٬ نمایش پیغام خطا و بازگشت زدن مبلغ
                 $client->call('bpReversalRequest', $parameters, $namespace);
-                return $this->transactionFailed($result);
+                return $this->transactionFailed($result , $request->input('SaleOrderId'));
                 echo 'Error : ' . $result;
             }
         } else {
             //-- پرداخت با خطا همراه بوده
             if ($request->input('ResCode') == '17') {
                 // return 17;
-                return $this->transactionFailed($request->input('ResCode'));
+                return $this->transactionFailed($request->input('ResCode') , $request->input('SaleOrderId'));
             }
-            return $this->transactionFailed($request->input('ResCode'));
+            return $this->transactionFailed($request->input('ResCode') , $request->input('SaleOrderId'));
         }
     }
     public function getName(): string
@@ -163,10 +163,11 @@ class Mellat implements GatewayInterface
     {
         return Order::where('code', $resNum)->firstOrFail();
     }
-    private function transactionFailed($status)
+    private function transactionFailed($status , $sale)
     {
         return [
-            'status' => (int)$status
+            'status' => (int)$status,
+            'sale' => (int)$sale,
         ];
     }
 }

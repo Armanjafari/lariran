@@ -59,7 +59,8 @@ class Transaction
         // TODO basket is not dynamic !
         $result = $this->gatewayFactory()->verify($this->request);
         if ($result['status'] != 0) {
-            $result['order']->payment()->update([
+            $order = Order::where('code', $result['sale'])->firstOrFail();
+            $order->payment()->update([
                 'status' => 0,
             ]);
             return false;
