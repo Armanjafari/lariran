@@ -18,7 +18,7 @@ class OrderController extends Controller
     }
     public function index()
     {
-        $orders = Order::paginate(10);
+        $orders = Order::orderby('desc')->paginate(10);
         $orders->load('fulls.product.images');
         return new OrderCollection($orders);
     }

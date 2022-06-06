@@ -18,6 +18,7 @@ class Product extends Model
         'slug',
         'weight',
         'status',
+        'views',
         'keywords',
     ];
     public function category()

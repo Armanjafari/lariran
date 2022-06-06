@@ -129,7 +129,6 @@ class ProductController extends Controller
                 ->orWhere('title', 'LIKE', '%' . $query . '%')
                 ->orWhere('title', 'LIKE', $query . '%')
                 ->orWhere('title', 'LIKE', '%' . $query)->paginate(10);
-            // dd($products[0]->id);
             return response()->json([
                 'data' => new ProductCollection($products),
                 'status' => 'success',

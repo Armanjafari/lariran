@@ -8,6 +8,7 @@ use App\Http\Resources\v1\CategoryResource;
 use App\Http\Resources\v1\ProductForCategoriesCollection;
 use App\Models\Category;
 use App\Models\Full;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
@@ -106,22 +107,22 @@ class CategoryController extends Controller
                 'status' => 'error',
             ]);
         }
-        if (($request->input('sort') >= 1 && $request->input('sort') <= 3) || !$request->input('sort')) {
-            $products = $category->products;
-            // dd($products);
-            // array_push($products, $category->products);
+        $products = $category->products;
+        foreach ($category->child as $category) {
+            $products = $products->push($category->products()->get());
             foreach ($category->child as $category) {
                 $products = $products->push($category->products()->get());
                 foreach ($category->child as $category) {
                     $products = $products->push($category->products()->get());
-                    foreach ($category->child as $category) {
-                        $products = $products->push($category->products()->get());
-                    }
                 }
             }
-            $products = Arr::flatten($products);
+        }
+        $products = Arr::flatten($products);
 
-            // dd($products);
+        foreach ($products as $product) {
+            $product->load('fulls');
+        }
+        if (($request->input('sort') >= 1 && $request->input('sort') <= 3)) {
             $pro = [];
             foreach ($products as $product) {
                 $product->load('fulls');
@@ -166,14 +167,49 @@ class CategoryController extends Controller
             } elseif ($request->input('sort') == 3 || !$request->input('sort')) {
                 $newway = $newway->sortByDesc('created_at');
             }
-
-
-            // $proz->get()->unique('product_id');
-            // $proz = $proz->get()->toArray();
             $newway = $newway->unique('id');
             $newway = collect($newway->values());
             $paginator = new LengthAwarePaginator($newway, count($newway), 10);
             return new ProductForCategoriesCollection($paginator); // $category->products()->paginate(10)
+        } else {
+            $products = collect($products);
+            $products = $products->sortByDesc('views');
+            // dd($products);
+            $fulls = [];
+            foreach ($products as $product) {
+                if (!is_null($product->fulls)) {
+                    
+                    array_push($fulls, $product->fulls->first());
+                }
+            }
+            $newway = [];
+            foreach ($fulls as $full) {
+                if (!is_null($full)) {
+                    $tt = [];
+                    $tt['id'] = $full->product_id;
+                    $tt['title'] = $full->product->title;
+                    $tt['persian_title'] = $full->product->persian_title;
+                    $tt['slug'] = $full->product->slug;
+                    $tt['stock'] = $full->stock;
+                    $tt['image'] = $full->product->images->first()->address ?? null;
+                    $tt['price'] = $full->price * $full->currency->value;
+                    $tt['show_price'] = $full->show_price * $full->currency->value;
+                    $tt['percent'] = $full->percentage();
+                    array_push($newway, $tt);
+                }
+            }
+            $newway = collect($newway);
+            if (isset($request->min)) {
+                $newway = $newway->where('price', '>=', $request->min);
+            }
+            if (isset($request->max)) {
+                $newway = $newway->where('price', '<=', $request->max);
+            }
+            if ($request->stock) {
+                $newway = $newway->where('stock', '>', 0);
+            }
+            $paginator = new LengthAwarePaginator($newway, count($newway), 10);
+            return new ProductForCategoriesCollection($paginator);
         }
     }
 }
