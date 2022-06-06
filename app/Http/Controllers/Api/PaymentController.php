@@ -34,7 +34,6 @@ class PaymentController extends Controller
     }
     private function sessionInvladiate()
     {
-        Session::flush();
         Auth::logout();
     }
 }
