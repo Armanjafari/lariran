@@ -664,3 +664,23 @@ returns : [comment collection with pagination links]
 params[]
 
 returns : [comment collection]
+
+---------------------
+### Favorites ###
+[GET] https//api.lariran.com/api/v1/favorite/add/
+
+params[product_id] 
+
+returns : [favorite message , true or false]
+---------
+[GET] https//api.lariran.com/api/v1/favorite/ByUser/
+
+params[]
+
+returns : [favorite collection]
+---------
+[GET] https//api.lariran.com/api/v1/favorite/product/1
+
+params[]
+
+returns : [true or false]

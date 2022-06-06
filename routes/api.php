@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CommntController;
 use App\Http\Controllers\Api\CurrencyController;
+use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\api\HomeController;
 use App\Http\Controllers\Api\LandingController;
 use App\Http\Controllers\Api\OptionController;
@@ -164,7 +165,11 @@ Route::prefix('v1')->group(function () {
     // Route::put('update/{Order}', [OrderController::class, 'update'])->name('order.update');
     Route::post('{user}/orders', [OrderController::class, 'user'])->name('order.user');
 
-
+    Route::prefix('favorite')->group(function () {
+        Route::get('add', [FavoriteController::class, 'add'])->name('favorite.add');
+        Route::get('index', [FavoriteController::class, 'index'])->name('favorite.index');
+        Route::get('product/{product}', [FavoriteController::class, 'product'])->name('favorite.by.product');
+    });
 
     Route::prefix('comment')->group(function () {
         Route::get('/', [CommntController::class, 'index'])->name('comment.index');
