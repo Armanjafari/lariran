@@ -68,7 +68,6 @@ class FavoriteController extends Controller
         return response()->json([
             'data' => [false],
             'status' => 'success',
-
         ]);
     }
 }

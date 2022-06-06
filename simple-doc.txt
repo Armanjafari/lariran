@@ -679,7 +679,7 @@ params[]
 
 returns : [favorite collection]
 ---------
-[GET] https//api.lariran.com/api/v1/favorite/product/1
+[GET] https//api.lariran.com/api/v1/favorite/product/{prouct_id} #example https//api.lariran.com/api/v1/favorite/product/2
 
 params[]
 
