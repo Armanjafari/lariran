@@ -20,7 +20,7 @@ class BrandResource extends JsonResource
                 'id' => $this->id,
                 'name' => $this->name,
                 'persian_name' => $this->persian_name,
-                'image' => new ImageResource($this->image),
+                'image' => $this->image->address ?? null,
             ];
         } else {
             return [

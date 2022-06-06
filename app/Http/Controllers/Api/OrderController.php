@@ -24,7 +24,7 @@ class OrderController extends Controller
     }
     public function user(User $user)
     {
-        $orders = $user->orders;
+        $orders = $user->orders()->orderBy('created_at','desc')->get();
         return new OrderCollection($orders);
     }
     public function changeStatus(Request $request, Order $order)

@@ -22,7 +22,7 @@ class BrandCollection extends ResourceCollection
                         'id' => $brand->id,
                         'name' => $brand->name,
                         'persian_name' => $brand->persian_name,
-                        'image' => new ImageResource($brand->image),
+                        'image' => $brand->image->address ?? null,
                     ];
                 } else {
                     return [
