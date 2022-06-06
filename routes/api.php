@@ -174,6 +174,8 @@ Route::prefix('v1')->group(function () {
         Route::get('ByProduct/{product}', [CommntController::class, 'ByProduct'])->name('comment.by.Product');
         Route::get('/ByUser', [CommntController::class, 'ByUser'])->name('comment.by.user');
     });
+    Route::get('/product/mostVisited', [HomeController::class, 'mostVisited'])->name('product.most.visited');
+    Route::get('/product/newest', [HomeController::class, 'newest'])->name('product.newest');
 });
 Route::prefix('v2')->group(function () {
     Route::prefix('authWithCode')->group(function () {

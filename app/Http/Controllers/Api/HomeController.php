@@ -24,10 +24,17 @@ class HomeController extends Controller
             ->orWhere('title', 'LIKE', '%' . $query . '%')
             ->orWhere('title', 'LIKE', $query . '%')
             ->orWhere('title', 'LIKE', '%' . $query)->paginate(10);
-            // dd($products[0]->id);
-        return response()->json([
-            'data' => new ProductCollection($products),
-            'status' => 'success',
-        ]); // TODO make a pagination for here
+        // dd($products[0]->id);
+        return new ProductCollection($products);
+    }
+    public function newest()
+    {
+        $products = Product::limit(10)->orderBy('created_at', 'desc')->get();
+        return new ProductCollection($products);
+    }
+    public function mostVisited()
+    {
+        $products = Product::limit(10)->orderBy('views', 'desc')->get();
+        return new ProductCollection($products);
     }
 }

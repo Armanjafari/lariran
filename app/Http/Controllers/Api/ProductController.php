@@ -148,6 +148,8 @@ class ProductController extends Controller
     }
     public function single(Product $product)
     {
+        $product->views += 1;
+        $product->save();
         return new ProductResource($product);
     }
     public function relateds(Product $product)
