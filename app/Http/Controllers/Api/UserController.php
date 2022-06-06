@@ -83,11 +83,21 @@ class UserController extends Controller
                 'status' => 'error',
             ]);
         }
-        $address->delete();
-        return response()->json([
-            'data' => [],
-            'status' => 'success',
-        ],200);
+        try {
+            $address->delete();
+            return response()->json([
+                'data' => [],
+                'status' => 'success',
+            ],200);
+            
+        } catch (\Throwable $th) {
+            return response()->json([
+                'data' => ['شما قبلا با این ادرس سفارشی ثبت کرده اید لطفا به جای حذف از ویرایش استفاده کنید'],
+                'status' => 'error',
+            ],200);
+        }
+        
+
     }
     public function single(Shiping $address)
     {

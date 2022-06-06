@@ -24,7 +24,8 @@ class OrderController extends Controller
     }
     public function user(User $user)
     {
-        return new OrderCollection($user);
+        $orders = $user->orders;
+        return new OrderCollection($orders);
     }
     public function changeStatus(Request $request, Order $order)
     {
