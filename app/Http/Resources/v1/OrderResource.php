@@ -23,7 +23,11 @@ class OrderResource extends JsonResource
             'amount' => $this->payment->amount,
             'shiping' => new ShippingResource($this->shiping),
             'ref_num' => $this->payment->ref_num,
-            'status' => __('orders.' . $this->payment->status),
+            'created_at' => $this->created_at,
+            'status' => [
+                'id' => $this->payment->status,
+                'name' => __('orders.' . $this->payment->status)],
+            'products' => new ProductForOrderCollection($this->fulls),
         ];
     }
     public function with($request)

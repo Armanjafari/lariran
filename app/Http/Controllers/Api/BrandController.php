@@ -86,6 +86,11 @@ class BrandController extends Controller
         $brands = Brand::paginate(10);
         return new BrandCollection($brands);
     }
+    public function all()
+    {
+        $brands = Brand::all();
+        return new BrandCollection($brands);
+    }
     private function deleteImage(Brand $brand)
     {
         $image = $brand->image;

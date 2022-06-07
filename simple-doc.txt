@@ -123,6 +123,12 @@ params[]
 
 returns : [product collection with pagination links]
 ---------
+[GET] https//api.lariran.com/api/v1/brand/all
+
+params[]
+
+returns : [brand collection]
+---------
 [POST] https//api.lariran.com/api/v1/brand/create
 
 params[name,persian_name , optional => image]
