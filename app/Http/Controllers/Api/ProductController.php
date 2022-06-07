@@ -122,15 +122,17 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->has('s')) {
-            $query = $request->s;
-            $products = Product::where('persian_title', 'LIKE', '%' . $query . '%')
-                ->orWhere('persian_title', 'LIKE', '%' . $query)
-                ->orWhere('persian_title', 'LIKE', $query . '%')
-                ->orWhere('title', 'LIKE', '%' . $query . '%')
-                ->orWhere('title', 'LIKE', $query . '%')
-                ->orWhere('title', 'LIKE', '%' . $query)->paginate(10);
+            if (!is_null($request->input('s'))) {
+                $query = $request->s;
+                $products = Product::where('persian_title', 'LIKE', '%' . $query . '%')
+                    ->orWhere('persian_title', 'LIKE', '%' . $query)
+                    ->orWhere('persian_title', 'LIKE', $query . '%')
+                    ->orWhere('title', 'LIKE', '%' . $query . '%')
+                    ->orWhere('title', 'LIKE', $query . '%')
+                    ->orWhere('title', 'LIKE', '%' . $query)->paginate(10);
 
-            return new ProductCollection($products);
+                return new ProductCollection($products);
+            }
         }
         $products = Product::orderBy('created_at', 'desc')->paginate(10);
         return new ProductCollection($products);

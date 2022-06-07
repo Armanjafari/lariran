@@ -18,7 +18,7 @@ class ProductForOrderCollection extends ResourceCollection
             $this->collection->transform(function ($variety) { // 'data' =>
                 if (!is_null($variety->color_id)) {
                     return [
-                        'id' => $variety->id,
+                        'id' => $variety->product->id,
                         'price' =>  $variety->pivot->price,
                         'waranty_id' =>  new WarantyResource($variety->waranty),
                         'color_id' =>  new ColorResource($variety->color),
@@ -30,7 +30,7 @@ class ProductForOrderCollection extends ResourceCollection
                     ];
                 } else {
                     return [
-                        'id' => $variety->id,
+                        'id' => $variety->product->id,
                         'price' =>  $variety->pivot->price,
                         'waranty_id' =>  new WarantyResource($variety->waranty),
                         'color_id' =>  null,
