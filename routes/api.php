@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CommntController;
 use App\Http\Controllers\Api\CurrencyController;
 use App\Http\Controllers\Api\FavoriteController;
-use App\Http\Controllers\api\HomeController;
+use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\LandingController;
 use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\OrderController;

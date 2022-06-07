@@ -673,7 +673,7 @@ params[product_id]
 
 returns : [favorite message , true or false]
 ---------
-[GET] https//api.lariran.com/api/v1/favorite/ByUser/
+[GET] https//api.lariran.com/api/v1/favorite/index/
 
 params[]
 
