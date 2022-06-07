@@ -18,7 +18,7 @@ class BrandController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum', 'role:admin'])->except(['index', 'single']);
+        $this->middleware(['auth:sanctum', 'role:admin'])->except(['index', 'single','all']);
     }
     public function create(Request $request)
     {
