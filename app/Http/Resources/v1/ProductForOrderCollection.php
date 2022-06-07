@@ -24,6 +24,7 @@ class ProductForOrderCollection extends ResourceCollection
                         'color_id' =>  new ColorResource($variety->color),
                         'image' => $variety->product->images->first()->address ?? null,
                         'persian_title' => $variety->product->persian_title ?? null,
+                        'slug' => $variety->product->slug ?? null,
                         'product_id' => $variety->product->id ?? null,
                         'quantity' => $variety->pivot->quantity
                     ];
@@ -35,6 +36,7 @@ class ProductForOrderCollection extends ResourceCollection
                         'color_id' =>  null,
                         'image' => $variety->product->images->first()->address ?? null,
                         'persian_title' => $variety->product->persian_title,
+                        'slug' => $variety->product->slug ?? null,
                         'product_id' => $variety->product->id,
                         'quantity' => $variety->pivot->quantity
                     ];

@@ -83,6 +83,7 @@ class CommntController extends Controller
     }
     public function ByUser()
     {
-        return new CommentsForUserCollection(auth()->user()->comments); 
+        $comments = auth()->user()->comments;
+        return new CommentsForUserCollection($comments); 
     }
 }
