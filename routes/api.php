@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\SliderController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WarantyController;
 use App\Http\Controllers\Api\VarietyController;
+use App\Http\Controllers\BrandForLandigPageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -182,6 +183,11 @@ Route::prefix('v1')->group(function () {
     });
     Route::get('mostVisited/', [HomeController::class, 'mostVisited'])->name('product.most.visited');
     Route::get('newest/', [HomeController::class, 'newest'])->name('product.newest');
+
+    Route::prefix('brandLanding')->group(function () {
+        Route::get('/', [BrandForLandigPageController::class, 'index'])->name('brand.landing.index');
+        Route::post('create', [BrandForLandigPageController::class, 'create'])->name('brand.landing.create');
+        Route::delete('delete/{brand}', [BrandForLandigPageController::class, 'delete'])->name('brand.landing.delete');
 });
 Route::prefix('v2')->group(function () {
     Route::prefix('authWithCode')->group(function () {

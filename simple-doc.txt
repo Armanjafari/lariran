@@ -690,3 +690,25 @@ returns : [favorite collection]
 params[]
 
 returns : [true or false]
+
+
+
+---------------------
+### BrandLanding ###
+[GET] https//api.lariran.com/api/v1/brandLanding
+
+params[]
+
+returns : [brandLanding collection]
+---------
+[POST] https//api.lariran.com/api/v1/brandLanding/create
+
+params[brand_id]
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/brandLanding/delete/{brandLanding_id} #example https//api.lariran.com/api/v1/brandLanding/delete/2
+
+params[] 
+
+returns : [success message]
