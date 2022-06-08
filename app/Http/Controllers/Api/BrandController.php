@@ -171,7 +171,7 @@ class BrandController extends Controller
             } elseif ($request->input('sort') == 2) {
                 $newway = $newway->sortBy('price');
             } elseif ($request->input('sort') == 3 || !$request->input('sort')) {
-                $newway = $newway->sortByDesc('created_at');
+                $newway = $newway->sortBy('created_at');
             }
 
             $newway = $newway->unique('id');
