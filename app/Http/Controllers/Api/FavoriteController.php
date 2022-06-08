@@ -26,9 +26,9 @@ class FavoriteController extends Controller
                 'status' => 'error',
             ]);
         }
-        $favorite = Favorite::where('user_id', auth()->id())->where('product_id', $request->input('product_id'))->get();
+        $favorite = auth()->user()->favorites()->where('product_id', $request->input('product_id'))->get();
         if (!$favorite->isEmpty()) {
-            auth()->user()->favorites()->where('product_id', $request->input('product_id'))->delete();
+            auth()->user()->favorites()->detach($request->input('product_id'));
             return response()->json([
                 'data' => [
                     'محصول از علاقه مندی ها حذف شد',
@@ -38,9 +38,7 @@ class FavoriteController extends Controller
             ]);
         }
 
-        auth()->user()->favorites()->create([
-            'product_id' => $request->input('product_id'),
-        ]);
+        auth()->user()->favorites()->attach($request->input('product_id'));
         return response()->json([
             'data' => [
                 'محصول به علاقه مندی ها اضافه شد',
@@ -52,7 +50,6 @@ class FavoriteController extends Controller
     public function index()
     {
         $favorites = auth()->user()->favorites;
-        // dd($favorites);
         return new FavoriteCollection($favorites);
     }
     public function product(Product $product)

@@ -16,8 +16,7 @@ class CommntController extends Controller
     public function __construct()
     {
         $this->middleware(['auth:sanctum'])->except(['ByProduct']);
-        $this->middleware(['role:admin'])->only(['index' , 'delete' , 'changeStatus']);
-
+        $this->middleware(['role:admin'])->only(['index', 'delete', 'changeStatus']);
     }
     public function create(Request $request)
     {
@@ -25,23 +24,30 @@ class CommntController extends Controller
             'desc' => 'required|min:2|max:500',
             'score' => 'required|integer|min:1|max:5',
             'product_id' => 'required|integer|exists:products,id',
-          ]);
-          if ($validator->fails()) {
+        ]);
+        if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
                 'status' => 'error',
             ]);
-          }
-        $comment = auth()->user()->comments()->create([
-            'desc' => $request->input('desc'),
-            'score' => $request->input('score'),
-            'product_id' => $request->input('product_id'),
-            'is_active' => 0,
-        ]);
-        return response()->json([
-            'data' => [],
-            'status' => 'success',
-        ]);
+        }
+        try {
+            $comment = auth()->user()->comments()->create([
+                'desc' => $request->input('desc'),
+                'score' => $request->input('score'),
+                'product_id' => $request->input('product_id'),
+                'is_active' => 0,
+            ]);
+            return response()->json([
+                'data' => [],
+                'status' => 'success',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'data' => [['شما قبلا برای این محصول کامنت ثبت کرده اید']],
+                'status' => 'error',
+            ]);
+        }
     }
     public function index()
     {
@@ -55,19 +61,19 @@ class CommntController extends Controller
         return response()->json([
             'data' => [],
             'status' => 'success',
-        ],200);
+        ], 200);
     }
-    public function changeStatus(Request $request , Comment $comment)
+    public function changeStatus(Request $request, Comment $comment)
     {
         $validator = Validator::make($request->all(), [
             'is_active' => 'required|integer|min:0|max:1',
-          ]);
-          if ($validator->fails()) {
+        ]);
+        if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
                 'status' => 'error',
             ]);
-          }
+        }
         $comment->update([
             'is_active' => $request->input('is_active'),
         ]);
@@ -78,12 +84,12 @@ class CommntController extends Controller
     }
     public function ByProduct(Product $product)
     {
-        $comments = $product->comments()->where('is_active' , 1)->paginate(10);
-        return new CommentCollection($comments); 
+        $comments = $product->comments()->where('is_active', 1)->paginate(10);
+        return new CommentCollection($comments);
     }
     public function ByUser()
     {
         $comments = auth()->user()->comments;
-        return new CommentsForUserCollection($comments); 
+        return new CommentsForUserCollection($comments);
     }
 }

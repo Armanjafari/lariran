@@ -164,8 +164,8 @@ class CategoryController extends Controller
                 $newway = $newway->sortByDesc('price');
             } elseif ($request->input('sort') == 2) {
                 $newway = $newway->sortBy('price');
-            } elseif ($request->input('sort') == 3 || !$request->input('sort')) {
-                $newway = $newway->sortBy('created_at');
+            } elseif ($request->input('sort') == 3) {
+                $newway = $newway->sortByDesc('created_at');
             }
             $newway = $newway->unique('id');
             $newway = collect($newway->values());

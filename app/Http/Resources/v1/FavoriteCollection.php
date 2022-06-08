@@ -18,7 +18,7 @@ class FavoriteCollection extends ResourceCollection
             'data' => $this->collection->transform(function ($favorite) {
                     return [
                         'id' => $favorite->id,
-                        'product' => new ProductResource($favorite->product),
+                        'product' => new ProductResource($favorite),
                     ];
             }),
         ];

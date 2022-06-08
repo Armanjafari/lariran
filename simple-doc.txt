@@ -225,13 +225,13 @@ params[image]
 
 returns : [returns image address]
 ---------
-[GET] https//api.lariran.com/api/v1/product/mostVisited/
+[GET] https//api.lariran.com/api/v1/mostVisited/
 
 params[]
 
 returns : [product collection]
 ---------
-[GET] https//api.lariran.com/api/v1/product/newest/
+[GET] https//api.lariran.com/api/v1/newest/
 
 params[]
 
