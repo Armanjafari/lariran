@@ -196,7 +196,7 @@ class ProductController extends Controller
         $filename = date('mdYHis') . uniqid() . '.' . $image->getClientOriginalExtension();
         $image->move(public_path($destination), $filename);
         return response()->json([
-            'data' => ['image' => $destination . $filename],
+            'data' => ['image' => 'https://api.lariran.com' . $destination . $filename],
             'status' => 'success',
         ], 200);
     }
