@@ -58,7 +58,7 @@ class OrderController extends Controller
             ]);
         }
         $order->payment()->update([
-            $request->input('tracking_code'),
+            'trackingCode' => $request->input('tracking_code'),
         ]);
         return response()->json([
             'data' => [],
