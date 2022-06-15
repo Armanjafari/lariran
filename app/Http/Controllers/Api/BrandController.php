@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\BrandCollection;
 use App\Http\Resources\v1\BrandResource;
-use App\Http\Resources\v1\ProductCollection;
 use App\Http\Resources\v1\ProductForCategoriesCollection;
 use App\Models\Brand;
 use App\Models\Full;
@@ -18,7 +17,7 @@ class BrandController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum', 'role:admin'])->except(['index', 'single','all']);
+        $this->middleware(['auth:sanctum', 'role:admin'])->except(['index', 'single', 'all', 'products']);
     }
     public function create(Request $request)
     {
@@ -94,7 +93,7 @@ class BrandController extends Controller
     private function deleteImage(Brand $brand)
     {
         $image = $brand->image;
-        File::delete(public_path() . $image->address);
+        File::delete($image->address);
         $image->delete();
     }
     public function delete(Brand $brand)
