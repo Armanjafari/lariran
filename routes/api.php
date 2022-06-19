@@ -54,7 +54,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/', [BrandController::class, 'index'])->name('brand.index');
         Route::get('all', [BrandController::class, 'all'])->name('brand.all');
         Route::post('create', [BrandController::class, 'create'])->name('brand.create');
-        Route::put('update/{brand}', [BrandController::class, 'update'])->name('brand.update');
+        Route::post('update/{brand}', [BrandController::class, 'update'])->name('brand.update');
         Route::delete('delete/{brand}', [BrandController::class, 'delete'])->name('brand.delete');
         Route::get('/{brand}', [BrandController::class, 'single'])->name('brand.single');
         Route::get('/{brand}/products', [BrandController::class, 'products'])->name('brand.products');

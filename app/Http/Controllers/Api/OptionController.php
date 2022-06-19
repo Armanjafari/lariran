@@ -61,11 +61,20 @@ class OptionController extends Controller
     }
     public function delete(Option $option)
     {
-        $option->delete();
-        return response()->json([
-            'data' => [],
-            'status' => 'success',
-        ],200);
+        try {
+            $option->delete();
+            return response()->json([
+                'data' => [],
+                'status' => 'success',
+            ],200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'data' => [
+                    'option' => ['محصول یا مقداری به این اپشن ارتباط دارد ابتدا ارتباطات را تغییر دهید'],
+                ],
+                'status' => 'error',
+            ], 200);
+        }
     }
     public function optionValue(Option $option)
     {

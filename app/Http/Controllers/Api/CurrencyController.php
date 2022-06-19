@@ -69,11 +69,20 @@ class CurrencyController extends Controller
     }
     public function delete(Currency $currency)
     {
-        $currency->delete();
-        return response()->json([
-            'data' => [],
-            'status' => 'success',
-        ],200);
+        try {
+            $currency->delete();
+            return response()->json([
+                'data' => [],
+                'status' => 'success',
+            ],200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'data' => [
+                    'currency' => ['محصولی به این واحد ارتباط دارد ابتدا محصول را به واحد دیگری ارتباط دهید'],
+                ],
+                'status' => 'error',
+            ], 200);
+        }
     }
     public function single(Currency $currency)
     {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\FileHasExistsException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\CategoryCollection;
 use App\Http\Resources\v1\CategoryResource;
@@ -82,11 +83,21 @@ class CategoryController extends Controller
     }
     public function delete(Category $category)
     {
-        $category->delete();
-        return response()->json([
-            'data' => [],
-            'status' => 'success',
-        ], 200);
+        try {
+            $category->delete();
+            return response()->json([
+                'data' => [],
+                'status' => 'success',
+            ], 200);
+        } catch (FileHasExistsException $e) {
+            return response()->json([
+                'data' => [
+                    'category' => ['محصولی برای این دسته بندی وجود دارد ابتدا محصول را به دسته بندی دیگری ارتباط دهید'],
+                ],
+                'status' => 'error',
+            ], 200);
+        }
+
     }
     public function single(Category $category)
     {

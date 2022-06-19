@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\FileHasExistsException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,5 +20,15 @@ class Brand extends Model
     public function image()
     {
         return $this->morphOne(Image::class , 'imageable');
+    }
+    public function delete()
+    {
+        $this->load('products');
+        if (!$this->products->first()) 
+        {
+            return parent::delete();
+        } else {
+            throw new FileHasExistsException('a relation exists');
+        }
     }
 }

@@ -65,11 +65,20 @@ class AttributeController extends Controller
     }
     public function delete(Attribute $attribute)
     {
-        $attribute->delete();
-        return response()->json([
-            'data' => [],
-            'status' => 'success',
-        ],200);
+        try {
+            $attribute->delete();
+            return response()->json([
+                'data' => [],
+                'status' => 'success',
+            ],200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'data' => [
+                    'attribute' => ['مقداری برای این ویژگی وجود دارد ابتدا مقدار را حذف کنید'],
+                ],
+                'status' => 'error',
+            ], 200);
+        }
     }
     public function category(Category $category)
     {

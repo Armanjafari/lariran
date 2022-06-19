@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\FileHasExistsException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\BrandCollection;
 use App\Http\Resources\v1\BrandResource;
@@ -98,14 +99,25 @@ class BrandController extends Controller
     }
     public function delete(Brand $brand)
     {
-        if (!is_null($brand->image)) {
-        $this->deleteImage($brand);
+        try {
+            if (!is_null($brand->image)) {
+                $this->deleteImage($brand);
+                }
+                $brand->delete();
+                return response()->json([
+                    'data' => [],
+                    'status' => 'success',
+                ], 200);
+        } catch (FileHasExistsException $e) {
+            return response()->json([
+                'data' => [
+                    'brand' => ['محصولی برای این برند وجود دارد ابتدا محصول را به برند دیگری ارتباط دهید'],
+                ],
+                'status' => 'error',
+            ], 200);
         }
-        $brand->delete();
-        return response()->json([
-            'data' => [],
-            'status' => 'success',
-        ], 200);
+        
+
     }
     public function single(Brand $brand)
     {

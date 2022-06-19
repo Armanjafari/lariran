@@ -69,11 +69,20 @@ class ColorController extends Controller
     }
     public function delete(Color $optionValue)
     {
-        $optionValue->delete();
-        return response()->json([
-            'data' => [],
-            'status' => 'success',
-        ],200);
+        try {
+            $optionValue->delete();
+            return response()->json([
+                'data' => [],
+                'status' => 'success',
+            ],200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'data' => [
+                    'optionValue' => ['محصولی به این مقدار ارتباط دارد ابتدا محصول را حذف کنید'],
+                ],
+                'status' => 'error',
+            ], 200);
+        }
     }
     public function single(Color $optionValue)
     {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\FileHasExistsException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,5 +16,19 @@ class Attribute extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+    public function values()
+    {
+        return $this->hasMany(AttributeValue::class);
+    }
+    public function delete()
+    {
+        $this->load('values');
+        if (!$this->values->first()) 
+        {
+            return parent::delete();
+        } else {
+            throw new FileHasExistsException('a relation exists');
+        }
     }
 }

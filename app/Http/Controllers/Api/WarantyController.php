@@ -61,11 +61,21 @@ class WarantyController extends Controller
     }
     public function delete(Waranty $waranty)
     {
-        $waranty->delete();
-        return response()->json([
-            'data' => [],
-            'status' => 'success',
-        ],200);
+        try {
+            $waranty->delete();
+            return response()->json([
+                'data' => [],
+                'status' => 'success',
+            ],200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'data' => [
+                    'waranty' => ['محصولی به این گارانتی ارتباط دارد ابتدا محصول را به گارانتی دیگری ارتباط دهید'],
+                ],
+                'status' => 'error',
+            ], 200);
+        }
+
     }
     public function single(Waranty $waranty)
     {
