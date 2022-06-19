@@ -93,13 +93,14 @@ class BrandController extends Controller
     private function deleteImage(Brand $brand)
     {
         $image = $brand->image;
-        File::delete($image->address);
+        File::delete(public_path() . $image->address);
         $image->delete();
     }
     public function delete(Brand $brand)
     {
+        if (!is_null($brand->image)) {
         $this->deleteImage($brand);
-        $brand->image->delete();
+        }
         $brand->delete();
         return response()->json([
             'data' => [],
