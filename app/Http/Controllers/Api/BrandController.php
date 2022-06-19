@@ -100,7 +100,7 @@ class BrandController extends Controller
     public function delete(Brand $brand)
     {
         try {
-            if (!is_null($brand->image)) {
+            if (!is_null($brand->image->address ?? null)) {
                 $this->deleteImage($brand);
                 }
                 $brand->delete();
