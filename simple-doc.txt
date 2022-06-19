@@ -135,7 +135,7 @@ params[name,persian_name , optional => image]
 
 returns : [success message]
 ---------
-[PUT] https//api.lariran.com/api/v1/brand/update/{brand_id} #example https//api.lariran.com/api/v1/brand/update/2
+[POST] https//api.lariran.com/api/v1/brand/update/{brand_id} #example https//api.lariran.com/api/v1/brand/update/2
 
 params[name,persian_name , optional => image]
 

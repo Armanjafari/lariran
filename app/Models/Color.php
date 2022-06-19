@@ -25,7 +25,7 @@ class Color extends Model
     public function delete()
     {
         $this->load('fulls');
-        if (!$this->products->first()) 
+        if (!is_null($this->fulls->first() ?? null)) 
         {
             return parent::delete();
         } else {

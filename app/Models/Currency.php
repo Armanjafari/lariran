@@ -21,7 +21,7 @@ class Currency extends Model
     public function delete()
     {
         $this->load('products');
-        if (!$this->products->first()) 
+        if (!is_null($this->products->first() ?? null)) 
         {
             return parent::delete();
         } else {
