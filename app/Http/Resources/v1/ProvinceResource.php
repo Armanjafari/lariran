@@ -19,4 +19,10 @@ class ProvinceResource extends JsonResource
             'name' => $this->name,
         ];
     }
+    public function with($request)
+    {
+        return [
+            'status' => 'success',
+        ];
+    }
 }

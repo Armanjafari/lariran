@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\v1\VareityForAdminCollection;
 use App\Http\Resources\v1\VarietyCollection;
 use App\Http\Resources\v1\VarietyResource;
 use App\Models\Full;
@@ -95,8 +96,8 @@ class VarietyController extends Controller
     }
     public function index(Product $product)
     {
-        $vareities = $product->fulls()->paginate(10);
-        return new VarietyCollection($vareities);
+        $vareities = $product->fulls;
+        return new VareityForAdminCollection($vareities);
     }
     public function delete(Full $variety)
     {

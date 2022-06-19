@@ -22,4 +22,10 @@ class CommentResource extends JsonResource
             'created_at' => $this->created_at,
         ];
     }
+    public function with($request)
+    {
+        return [
+            'status' => 'success',
+        ];
+    }
 }

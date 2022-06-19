@@ -20,4 +20,10 @@ class CityResource extends JsonResource
             'province' => new ProvinceResource($this->province),
         ];
     }
+    public function with($request)
+    {
+        return [
+            'status' => 'success',
+        ];
+    }
 }

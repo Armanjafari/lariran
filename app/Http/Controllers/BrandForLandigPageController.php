@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\BrandForLandingPageCollection;
+use App\Http\Resources\v1\BrandForLandingPageCollection;
 use App\Models\BrandLanding;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

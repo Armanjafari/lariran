@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\v1;
 
-use App\Http\Resources\v1\BrandResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class BrandForLandingPageCollection extends ResourceCollection
@@ -23,6 +22,12 @@ class BrandForLandingPageCollection extends ResourceCollection
                     'brand' => new BrandResource($brand->brand),
                 ];
             }),
+        ];
+    }
+    public function with($request)
+    {
+        return [
+            'status' => 'success',
         ];
     }
 }

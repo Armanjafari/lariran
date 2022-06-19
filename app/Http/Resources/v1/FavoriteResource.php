@@ -19,4 +19,10 @@ class FavoriteResource extends JsonResource
             'product' => new ProductResource($this->product),
         ];
     }
+    public function with($request)
+    {
+        return [
+            'status' => 'success',
+        ];
+    }
 }

@@ -148,6 +148,7 @@ class CategoryController extends Controller
                 $tt['price'] = $full->price * $full->currency->value;
                 $tt['show_price'] = $full->show_price * $full->currency->value;
                 $tt['percent'] = $full->percentage();
+                $tt['created_at'] = $full->created_at;
                 array_push($newway, $tt);
             }
             $newway = collect($newway);
@@ -195,6 +196,7 @@ class CategoryController extends Controller
                     $tt['price'] = $full->price * $full->currency->value;
                     $tt['show_price'] = $full->show_price * $full->currency->value;
                     $tt['percent'] = $full->percentage();
+                    $tt['created_at'] = $full->created_at;
                     array_push($newway, $tt);
                 }
             }

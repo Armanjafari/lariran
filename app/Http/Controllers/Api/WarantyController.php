@@ -56,7 +56,7 @@ class WarantyController extends Controller
     }
     public function index()
     {
-        $waranties = Waranty::paginate(10);
+        $waranties = Waranty::all();
         return new WarantyCollection($waranties);
     }
     public function delete(Waranty $waranty)

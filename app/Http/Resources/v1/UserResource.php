@@ -25,4 +25,10 @@ class UserResource extends JsonResource
             //         "persian_name"=> $this->roles->persian_name ?? null,]
         ]; // TODO fix this shit (roles)
     }
+    public function with($request)
+    {
+        return [
+            'status' => 'success',
+        ];
+    }
 }

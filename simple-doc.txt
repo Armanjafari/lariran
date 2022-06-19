@@ -82,7 +82,7 @@ returns : [product collection]
 
 params[]
 
-returns : [option collection with pagination links]
+returns : [option collection]
 ---------
 [GET] https//api.lariran.com/api/v1/option/OptionValue/{option_id}
 
@@ -117,7 +117,7 @@ params[]
 
 returns : [brand collection with pagination links]
 ---------
-[GET] https//api.lariran.com/api/v1/brand/products
+[GET] https//api.lariran.com/api/v1/brand/{brand_id}/products #example https//api.lariran.com/api/v1/brand/2/products
 
 params[]
 
@@ -245,7 +245,7 @@ returns : [product collection]
 
 params[]
 
-returns : [waranty collection with pagination links]
+returns : [waranty collection]
 ---------
 [POST] https//api.lariran.com/api/v1/waranty/create
 

@@ -56,7 +56,7 @@ class OptionController extends Controller
     }
     public function index()
     {
-        $options = Option::paginate(10);
+        $options = Option::all();
         return new OptionCollection($options);
     }
     public function delete(Option $option)
