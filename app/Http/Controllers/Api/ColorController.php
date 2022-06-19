@@ -64,7 +64,7 @@ class ColorController extends Controller
     }
     public function index()
     {
-        $colors = Color::paginate(10);
+        $colors = Color::all();
         return new ColorCollection($colors);
     }
     public function delete(Color $optionValue)
