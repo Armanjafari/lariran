@@ -71,10 +71,11 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         auth()->user()->tokens()->delete();
-        Auth::logout();
+        session()->invalidate();
+        auth()->guard('web')->logout();
         return response()->json([
             'data' => 'Tokens Revoked',
             'status' => 'success'

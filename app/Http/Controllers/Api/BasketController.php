@@ -9,6 +9,7 @@ use App\Http\Resources\v1\BasketCollection;
 use App\Models\Full;
 use App\Models\Shiping;
 use App\Models\User;
+use App\Services\Convert\convertEnglishToPersian;
 use App\Support\Basket\Basket;
 use App\Support\Cost\Contracts\CostInterface;
 use App\Support\Payment\Transaction;
@@ -183,7 +184,7 @@ class BasketController extends Controller
         }
 
         $full_basket = $cost->getSummary();
-        $full_basket['مجموع'] = $cost->getTotalCosts();
+        $full_basket['مجموع'] = convertEnglishToPersian::convertEnglishToPersian($cost->getTotalCosts());
         return response()->json([
             'data' => $full_basket,
             'status' => 'success',
