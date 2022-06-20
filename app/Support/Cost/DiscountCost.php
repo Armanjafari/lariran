@@ -1,6 +1,7 @@
 <?php
 namespace App\Support\Cost;
 
+use App\Services\Convert\convertEnglishToPersian;
 use App\Support\Cost\Contracts\CostInterface;
 use App\Support\Discount\DiscountManager;
 
@@ -27,6 +28,6 @@ class DiscountCost implements CostInterface
     }
     public function getSummary()
     {
-        return array_merge($this->cost->getSummary() , [$this->persianDescription() => $this->getCost()]);
+        return array_merge($this->cost->getSummary() , [$this->persianDescription() => convertEnglishToPersian::convertEnglishToPersian((int)$this->getCost())]);
     }
 }

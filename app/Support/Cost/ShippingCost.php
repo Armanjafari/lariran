@@ -2,6 +2,7 @@
 namespace App\Support\Cost;
 
 use App\Models\Shiping;
+use App\Services\Convert\convertEnglishToPersian;
 use App\Support\Cost\Contracts\CostInterface;
 use GhaniniaIR\Shipping\Shipping;
 use Illuminate\Http\Request;
@@ -46,6 +47,6 @@ class ShippingCost implements CostInterface
     }
     public function getSummary()
     {
-        return array_merge($this->cost->getSummary() , [$this->persianDescription() => $this->getCost()]);
+        return array_merge($this->cost->getSummary() , [$this->persianDescription() => convertEnglishToPersian::convertEnglishToPersian((int)$this->getCost())]);
     }
 }

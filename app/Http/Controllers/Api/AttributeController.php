@@ -7,6 +7,7 @@ use App\Http\Resources\v1\AttributeCollection;
 use App\Models\Attribute;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
 class AttributeController extends Controller
@@ -83,6 +84,16 @@ class AttributeController extends Controller
     public function category(Category $category)
     {
         $attributes = $category->attributes;
+        foreach ($category->child as $category) {
+            $products = $attributes->push($category->attributes()->get());
+            foreach ($category->child as $category) {
+                $attributes = $attributes->push($category->attributes()->get());
+                foreach ($category->child as $category) {
+                    $attributes = $attributes->push($category->attributes()->get());
+                }
+            }
+        }
+        $attributes = Arr::flatten($attributes);
         return new AttributeCollection($attributes);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Support\Cost;
 
+use App\Services\Convert\convertEnglishToPersian;
 use App\Support\Basket\Basket;
 use App\Support\Cost\Contracts\CostInterface;
 
@@ -26,6 +27,6 @@ class BasketCost implements CostInterface
     }
     public function getSummary()
     {
-        return [$this->persianDescription() => $this->getCost()];
+        return [$this->persianDescription() => convertEnglishToPersian::convertEnglishToPersian((int)$this->getCost())];
     }
 }
