@@ -36,4 +36,8 @@ class Category extends Model
             throw new FileHasExistsException('a relation exists');
         }
     }
+    public function image()
+    {
+        return $this->morphOne(Image::class , 'imageable');
+    }
 }

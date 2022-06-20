@@ -22,6 +22,7 @@ class CategoryCollection extends ResourceCollection
                     'name' => $category->name,
                     'persian_name' => $category->persian_name,
                     'parent_id' => $category->parent_id,
+                    'image' => $category->image->address ?? null,
                 ];
             }),
         ];

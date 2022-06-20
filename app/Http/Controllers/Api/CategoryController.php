@@ -13,6 +13,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
@@ -27,6 +28,7 @@ class CategoryController extends Controller
             'name' => 'required|unique:categories,name|string|max:255|min:2',
             'persian_name' => 'required|min:2',
             'parent_id' => 'integer',
+            'image' => 'image|mimes:jpeg,jpg,png|max:512'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -34,16 +36,14 @@ class CategoryController extends Controller
                 'status' => 'error',
             ]);
         }
-        // $request->validate([
-        //     'name' => 'required|unique:categories,name|string|max:255|min:2',
-        //     'persian_name' => 'required|min:2',
-        //     'parent_id' => 'integer',
-        // ]);
-        Category::create([
+        $category = Category::create([
             'name' => $request->input('name'),
             'persian_name' => $request->input('persian_name'),
             'parent_id' => $request->input('parent_id') ?? 0,
         ]);
+        if ($request->hasFile('image') && !is_null($request->image)) {
+            $this->image($request, $category);
+        }
         return response()->json([
             'data' => [],
             'status' => 'success',
@@ -54,7 +54,8 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|min:2|unique:categories,name,' . $category->id,
             'persian_name' => 'required|min:2',
-            'parent_id' => 'required|integer'
+            'parent_id' => 'required|integer',
+            'image' => 'image|mimes:jpeg,jpg,png|max:512'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -67,10 +68,24 @@ class CategoryController extends Controller
             'persian_name' => $request->input('persian_name'),
             'parent_id' => $request->input('parent_id'),
         ]);
+        if ($request->hasFile('image') && !is_null($request->image)) {
+            $this->deleteImage($category);
+            $this->image($request, $category);
+        }
         return response()->json([
             'data' => [],
             'status' => 'success',
         ], 200);
+    }
+    private function image(Request $request, Category $category)
+    {
+        $image = $request->file('image');
+        $destination = '/cate$category/';
+        $filename = date('mdYHis') . uniqid() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path($destination), $filename);
+        $category->image()->create([
+            'address' => $destination . $filename
+        ]);
     }
     public function index()
     {
@@ -81,9 +96,18 @@ class CategoryController extends Controller
         //     'data' => $categories,
         // ]);
     }
+    private function deleteImage(Category $category)
+    {
+        $image = $category->image;
+        File::delete(public_path() . $image->address);
+        $image->delete();
+    }
     public function delete(Category $category)
     {
         try {
+            if (!is_null($category->image->address ?? null)) {
+                $this->deleteImage($category);
+            }
             $category->delete();
             return response()->json([
                 'data' => [],
@@ -97,7 +121,6 @@ class CategoryController extends Controller
                 'status' => 'error',
             ], 200);
         }
-
     }
     public function single(Category $category)
     {
@@ -190,7 +213,7 @@ class CategoryController extends Controller
             $fulls = [];
             foreach ($products as $product) {
                 if (!is_null($product->fulls)) {
-                    
+
                     array_push($fulls, $product->fulls->first());
                 }
             }

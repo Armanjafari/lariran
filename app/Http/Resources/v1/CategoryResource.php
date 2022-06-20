@@ -20,6 +20,7 @@ class CategoryResource extends JsonResource
             'name' => $this->name,
             'persian_name' => $this->persian_name,
             'parent_id' => $this->parent_id,
+            'image' => $this->image->address ?? null,
         ];
     }
     public function with($request)
