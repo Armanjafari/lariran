@@ -46,7 +46,7 @@ params[name,persian_name,parent_id]
 
 returns : [success message]
 ---------
-[PUT] https//api.lariran.com/api/v1/category/update/{category_id} #example https//api.lariran.com/api/v1/category/update/2
+[POST] https//api.lariran.com/api/v1/category/update/{category_id} #example https//api.lariran.com/api/v1/category/update/2
 
 params[name,persian_name,parent_id] // optional
 

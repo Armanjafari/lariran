@@ -139,12 +139,21 @@ class ProductController extends Controller
     }
     public function delete(Product $product)
     {
-        // $this->deleteImage($product); TODO code has been changed this should be fixed !
+        $this->deleteAllImages($product);
         $product->delete();
         return response()->json([
             'data' => [],
             'status' => 'success',
         ], 200);
+    }
+    private function deleteAllImages(Product $product)
+    {
+        if (is_null($product->images))
+            return false;
+        foreach ($product->images as $image) {
+            $image->delete();
+        }
+        return true;
     }
     public function single(Product $product)
     {
