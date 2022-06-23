@@ -33,7 +33,7 @@ class ShippingCost implements CostInterface
         if (!$this->request->has('shipping')) {
             return 0;
         }
-        return 0 ; // temporary
+        // return 0 ; // temporary
         $dst = Shiping::find($this->request->shipping)->city->province->id;
         return (int)(Shipping::pishtaz(5,$dst,$this->weight,$this->price)->getPrice() / 10);
     }
