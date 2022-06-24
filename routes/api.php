@@ -187,7 +187,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('brandLanding')->group(function () {
         Route::get('/', [BrandForLandigPageController::class, 'index'])->name('brand.landing.index');
         Route::post('create', [BrandForLandigPageController::class, 'create'])->name('brand.landing.create');
-        Route::delete('delete/{brand}', [BrandForLandigPageController::class, 'delete'])->name('brand.landing.delete');
+        Route::delete('delete/{brandLanding}', [BrandForLandigPageController::class, 'delete'])->name('brand.landing.delete');
     });
 });
 Route::prefix('v2')->group(function () {
