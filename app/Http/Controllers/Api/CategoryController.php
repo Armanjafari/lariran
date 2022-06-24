@@ -28,7 +28,7 @@ class CategoryController extends Controller
             'name' => 'required|unique:categories,name|string|max:255|min:2',
             'persian_name' => 'required|min:2',
             'parent_id' => 'integer',
-            'image' => 'image|mimes:jpeg,jpg,png|max:512'
+            'image' => 'image|mimes:jpeg,webp,jpg,png|max:512'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -55,7 +55,7 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255|min:2|unique:categories,name,' . $category->id,
             'persian_name' => 'required|min:2',
             'parent_id' => 'required|integer',
-            'image' => 'image|mimes:jpeg,jpg,png|max:512'
+            'image' => 'image|mimes:jpeg,webp,jpg,png|max:512'
         ]);
         if ($validator->fails()) {
             return response()->json([

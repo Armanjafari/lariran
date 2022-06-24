@@ -25,7 +25,7 @@ class BrandController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:brands,name|string|max:255|min:2',
             'persian_name' => 'required|min:2',
-            'image' => 'image|mimes:jpeg,jpg,png|max:512'
+            'image' => 'image|mimes:jpeg,webp,jpg,png|max:512'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -50,7 +50,7 @@ class BrandController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|min:2|unique:brands,name,' . $brand->id,
             'persian_name' => 'required|min:2',
-            'image' => 'image|mimes:jpeg,jpg,png|max:512'
+            'image' => 'image|mimes:jpeg,webp,jpg,png|max:512'
         ]);
         if ($validator->fails()) {
             return response()->json([
