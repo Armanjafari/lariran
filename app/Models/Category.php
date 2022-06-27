@@ -28,8 +28,7 @@ class Category extends Model
     }
     public function delete()
     {
-        $this->load('products');
-        $products = $this->products;
+        $products = Product::where('category_id' , $this->id)->get();
         if ($products->isEmpty()) 
         {
             return parent::delete();
