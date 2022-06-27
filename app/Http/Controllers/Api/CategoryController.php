@@ -99,7 +99,7 @@ class CategoryController extends Controller
     private function deleteImage(Category $category)
     {
         $image = $category->image;
-        if (is_null($image)) {
+        if ($image->isEmpty()) {
             return false;
         }
         File::delete(public_path() . $image->address);
@@ -108,9 +108,7 @@ class CategoryController extends Controller
     public function delete(Category $category)
     {
         try {
-            if (!is_null($category->image->address ?? null)) {
-                $this->deleteImage($category);
-            }
+            $this->deleteImage($category);
             $category->delete();
             return response()->json([
                 'data' => [],
@@ -119,7 +117,7 @@ class CategoryController extends Controller
         } catch (FileHasExistsException $e) {
             return response()->json([
                 'data' => [
-                    'category' => ['محصولی برای این دسته بندی وجود دارد ابتدا محصول را به دسته بندی دیگری ارتباط دهید'],
+                    'category' => ['محصول یا فرزندی برای این دسته بندی وجود دارد ابتدا محصول یا فرزند را به دسته بندی دیگری ارتباط دهید'],
                 ],
                 'status' => 'error',
             ], 200);

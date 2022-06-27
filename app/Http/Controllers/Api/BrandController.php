@@ -94,7 +94,7 @@ class BrandController extends Controller
     private function deleteImage(Brand $brand)
     {
         $image = $brand->image;
-        if (is_null($image)) {
+        if ($image->isEmpty()) {
             return false;
         }
         File::delete(public_path() . $image->address);
@@ -103,9 +103,7 @@ class BrandController extends Controller
     public function delete(Brand $brand)
     {
         try {
-            if (!is_null($brand->image->address ?? null)) {
-                $this->deleteImage($brand);
-            }
+            $this->deleteImage($brand);
             $brand->delete();
             return response()->json([
                 'data' => [],
