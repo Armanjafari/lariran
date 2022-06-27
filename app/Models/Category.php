@@ -20,7 +20,7 @@ class Category extends Model
     }
     public function child()
     {
-        return $this->hasMany(Category::class , 'parent_id', 'id');
+        return $this->hasMany(Category::class, 'parent_id', 'id');
     }
     public function attributes()
     {
@@ -28,16 +28,18 @@ class Category extends Model
     }
     public function delete()
     {
-        $products = Product::where('category_id' , $this->id)->get();
-        if ($products->isEmpty()) 
-        {
-            return parent::delete();
+        $this->load('products', 'child');
+        $products = $this->products;
+        $child = $this->child;
+        if ($products->isEmpty()) {
+            if ($child->isEmpty())
+                return parent::delete();
         } else {
             throw new FileHasExistsException('a relation exists');
         }
     }
     public function image()
     {
-        return $this->morphOne(Image::class , 'imageable');
+        return $this->morphOne(Image::class, 'imageable');
     }
 }
