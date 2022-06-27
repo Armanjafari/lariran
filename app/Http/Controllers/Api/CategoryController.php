@@ -99,6 +99,9 @@ class CategoryController extends Controller
     private function deleteImage(Category $category)
     {
         $image = $category->image;
+        if (is_null($image)) {
+            return false;
+        }
         File::delete(public_path() . $image->address);
         $image->delete();
     }
