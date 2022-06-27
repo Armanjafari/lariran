@@ -25,7 +25,7 @@ class Brand extends Model
     {
         $this->load('products');
         $products = $this->products;
-        if (is_null($products)) 
+        if ($products->isEmpty()) 
         {
             return parent::delete();
         } else {

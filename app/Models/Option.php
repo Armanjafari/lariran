@@ -25,9 +25,8 @@ class Option extends Model
         $this->load('products', 'values');
         $products = $this->products;
         $values = $this->values;
-        if ($products->isEmpty()) {
-            if ($values->isEmpty())
-                return parent::delete();
+        if ($products->isEmpty() && $values->isEmpty()) {
+            return parent::delete();
         } else {
             throw new FileHasExistsException('a relation exists');
         }

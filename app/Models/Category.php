@@ -31,8 +31,7 @@ class Category extends Model
         $this->load('products', 'child');
         $products = $this->products;
         $child = $this->child;
-        if ($products->isEmpty()) {
-            if ($child->isEmpty())
+        if ($products->isEmpty() && $child->isEmpty()) {
                 return parent::delete();
         } else {
             throw new FileHasExistsException('a relation exists');
