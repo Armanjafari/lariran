@@ -84,7 +84,7 @@ class UserController extends Controller
             ]);
         }
         try {
-            $address->delete();
+            // $address->delete(); TODO do something with this
             return response()->json([
                 'data' => [],
                 'status' => 'success',

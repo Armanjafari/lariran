@@ -24,7 +24,8 @@ class Attribute extends Model
     public function delete()
     {
         $this->load('values');
-        if (!is_null($this->values->first() ?? null)) 
+        $values = $this->values; 
+        if ($values->isEmpty()) 
         {
             return parent::delete();
         } else {

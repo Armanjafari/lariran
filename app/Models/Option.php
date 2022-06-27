@@ -22,11 +22,12 @@ class Option extends Model
     }
     public function delete()
     {
-        $this->load('products' , 'values');
-        if (!$this->products->first()) 
-        {
-            if (!$this->values->first()) 
-            return parent::delete();
+        $this->load('products', 'values');
+        $products = $this->products;
+        $values = $this->values;
+        if ($products->isEmpty()) {
+            if ($values->isEmpty())
+                return parent::delete();
         } else {
             throw new FileHasExistsException('a relation exists');
         }

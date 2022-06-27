@@ -32,4 +32,8 @@ class Brand extends Model
             throw new FileHasExistsException('a relation exists');
         }
     }
+    public function landing()
+    {
+        return $this->hasOne(BrandLanding::class);
+    }
 }

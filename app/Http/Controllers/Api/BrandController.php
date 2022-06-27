@@ -105,12 +105,12 @@ class BrandController extends Controller
         try {
             if (!is_null($brand->image->address ?? null)) {
                 $this->deleteImage($brand);
-                }
-                $brand->delete();
-                return response()->json([
-                    'data' => [],
-                    'status' => 'success',
-                ], 200);
+            }
+            $brand->delete();
+            return response()->json([
+                'data' => [],
+                'status' => 'success',
+            ], 200);
         } catch (FileHasExistsException $e) {
             return response()->json([
                 'data' => [
@@ -118,9 +118,13 @@ class BrandController extends Controller
                 ],
                 'status' => 'error',
             ], 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            $brand->landing->delete();
+            return response()->json([
+                'data' => [],
+                'status' => 'success',
+            ], 200);
         }
-        
-
     }
     public function single(Brand $brand)
     {
