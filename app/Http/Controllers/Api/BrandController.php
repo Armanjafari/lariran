@@ -94,7 +94,7 @@ class BrandController extends Controller
     private function deleteImage(Brand $brand)
     {
         $image = $brand->image;
-        if ($image->isEmpty()) {
+        if (is_null($image)) {
             return false;
         }
         File::delete(public_path() . $image->address);
