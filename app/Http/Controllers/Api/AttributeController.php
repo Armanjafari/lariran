@@ -89,7 +89,7 @@ class AttributeController extends Controller
                 break;
             }
             $category = Category::where('id' , $category->parent_id)->get();
-            $attributes->push($category->attributes()->get());
+            $attributes->push($category->attributes);
         }
         $attributes = Arr::flatten($attributes);
         return new AttributeCollection($attributes);
