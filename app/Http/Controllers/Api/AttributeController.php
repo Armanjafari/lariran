@@ -88,7 +88,7 @@ class AttributeController extends Controller
             if ($category->parent_id == 0){
                 break;
             }
-            $category = Category::where('id' , $category->parent_id);
+            $category = Category::with('attributes')->where('id' , $category->parent_id)->first();
             $attributes->push($category->attributes()->get());
         }
         $attributes = Arr::flatten($attributes);
