@@ -84,14 +84,12 @@ class AttributeController extends Controller
     public function category(Category $category)
     {
         $attributes = $category->attributes;
-        foreach ($category->child as $category) {
-            $products = $attributes->push($category->attributes()->get());
-            foreach ($category->child as $category) {
-                $attributes = $attributes->push($category->attributes()->get());
-                foreach ($category->child as $category) {
-                    $attributes = $attributes->push($category->attributes()->get());
-                }
+        while ($category->parent_id != 0) {
+            if ($category->parent_id == 0){
+                break;
             }
+            $category = Category::where('id' , $category->parent_id)->get();
+            $attributes->push($category->attributes()->get());
         }
         $attributes = Arr::flatten($attributes);
         return new AttributeCollection($attributes);
