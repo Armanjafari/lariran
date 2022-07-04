@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,3 +19,5 @@ Route::get('/', function () {
         'Programmer' => 'Hello :)'
     ]);
 });
+Route::any('sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
+

@@ -37,4 +37,9 @@ class HomeController extends Controller
         $products = Product::limit(10)->orderBy('views', 'desc')->get();
         return new ProductCollection($products);
     }
+    public function sitemap()
+    {
+        $products = Product::all();
+        return view('sitemap' , compact('products'));
+    }
 }
