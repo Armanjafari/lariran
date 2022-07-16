@@ -9,6 +9,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -43,15 +44,33 @@ class HomeController extends Controller
     public function sitemap()
     {
         $products = Product::all();
-        return view('sitemap' , compact('products'));
+        return view('sitemap', compact('products'));
     }
     public function torob(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'page_unique' => 'integer|exists:products,id',
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+        if ($request->has('page_unique')) {
+            return $this->torobSingle($request);
+        }
         $products = Product::all();
         $fulls = [];
         foreach ($products as $product) {
             $fullstmp = $product->fulls->sortBy('price');
-            array_push($fulls, $fullstmp->first());
+            foreach ($fullstmp as $full) {
+                if ((int)$full->stock) {
+                    array_push($fulls, $full);
+                    break;
+                }
+            }
         }
         $fulls = Arr::flatten($fulls);
         // dd($fulls[0]->product);
@@ -59,8 +78,25 @@ class HomeController extends Controller
         $fulls = new LengthAwarePaginator($fulls, $count, 100);
         return response()->json([
             'count' => $count,
-            'products' => new torobPrdocutsCollection($fulls),
             'max_pages' => $fulls->lastPage(),
+            'products' => new torobPrdocutsCollection($fulls),
+        ]);
+    }
+    private function torobSingle(Request $request)
+    {
+        $product = Product::with('fulls')->Where('id',  $request->page_unique)->get();
+        $fullstmp = $product->fulls->sortBy('price');
+        $fulls = [];
+        foreach ($fullstmp as $full) {
+            if ((int)$full->stock) {
+                array_push($fulls, $full);
+                break;
+            }
+        }
+        return response()->json([
+            'count' => 1,
+            'max_pages' => 1,
+            'products' => new torobPrdocutsCollection($fulls),
         ]);
     }
 }
