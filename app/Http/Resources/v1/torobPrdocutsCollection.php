@@ -15,13 +15,14 @@ class torobPrdocutsCollection extends ResourceCollection
     public function toArray($request)
     {
         return $this->collection->transform(function ($vareity) {
+            if ((int)$vareity->stock) {
                 return [
                     'title' => $vareity->product->persian_title,
                     'subtitle' => $vareity->product->title,
                     'page_unique' => $vareity->product->id,
                     'current_price' => $vareity->price * $vareity->currency->value,
                     'old_price' => $vareity->show_price * $vareity->currency->value,
-                  // instock  'old_price' => $vareity->show_price * $vareity->currency->value,
+                    'availability' => 'instock',
                     'category_name' => $vareity->product->category->name,
                     'image_link' => 'https://api.lariran.com/' . $vareity->product->images->first()->address ?? '',
                     'page_url' => 'https://lariran.com/product/' . $vareity->product->id . '/' . $vareity->product->slug,
@@ -29,6 +30,23 @@ class torobPrdocutsCollection extends ResourceCollection
                     
 
                 ];
+            }else {
+                return [
+                    'title' => $vareity->product->persian_title,
+                    'subtitle' => $vareity->product->title,
+                    'page_unique' => $vareity->product->id,
+                    'current_price' => $vareity->price * $vareity->currency->value,
+                    'old_price' => $vareity->show_price * $vareity->currency->value,
+                    'availability' => 'outofstock',
+                    'category_name' => $vareity->product->category->name,
+                    'image_link' => 'https://api.lariran.com/' . $vareity->product->images->first()->address ?? '',
+                    'page_url' => 'https://lariran.com/product/' . $vareity->product->id . '/' . $vareity->product->slug,
+                    'guarantee' => $vareity->waranty->name,
+                    
+
+                ];
+            }
+                
             });
     }
 }
