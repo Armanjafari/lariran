@@ -66,6 +66,11 @@ class HomeController extends Controller
         foreach ($products as $product) {
             $fullstmp = $product->fulls->sortBy('price');
             foreach ($fullstmp as $full) {
+                $last = $fullstmp->last();
+                if ($full == $last) {
+                    array_push($fulls, $full);
+                    break;
+                }
                 if ((int)$full->stock) {
                     array_push($fulls, $full);
                     break;
@@ -84,10 +89,15 @@ class HomeController extends Controller
     }
     private function torobSingle(Request $request)
     {
-        $product = Product::with('fulls')->Where('id',  $request->page_unique)->get();
+        $product = Product::with('fulls')->Where('id',  $request->page_unique)->first();
         $fullstmp = $product->fulls->sortBy('price');
         $fulls = [];
         foreach ($fullstmp as $full) {
+            $last = $fullstmp->last();
+            if ($full == $last) {
+                array_push($fulls, $full);
+                break;
+            }
             if ((int)$full->stock) {
                 array_push($fulls, $full);
                 break;
