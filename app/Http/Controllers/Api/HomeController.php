@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\ProductCollection;
+use App\Http\Resources\v1\torobPrdocutsCollection;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 
 class HomeController extends Controller
 {
@@ -41,5 +44,22 @@ class HomeController extends Controller
     {
         $products = Product::all();
         return view('sitemap' , compact('products'));
+    }
+    public function torob(Request $request)
+    {
+        $products = Product::all();
+        $fulls = [];
+        foreach ($products as $product) {
+            $fullstmp = $product->fulls->sortBy('price');
+            array_push($fulls, $fullstmp->first());
+        }
+        $fulls = Arr::flatten($fulls);
+        // dd($fulls[0]->product);
+        $count = count($fulls);
+        $fulls = new LengthAwarePaginator($fulls, $count, 100);
+        return response()->json([
+            'count' => $count,
+            new torobPrdocutsCollection($fulls)
+        ]);
     }
 }

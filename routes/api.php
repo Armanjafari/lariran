@@ -189,6 +189,7 @@ Route::prefix('v1')->group(function () {
         Route::post('create', [BrandForLandigPageController::class, 'create'])->name('brand.landing.create');
         Route::delete('delete/{brandLanding}', [BrandForLandigPageController::class, 'delete'])->name('brand.landing.delete');
     });
+    Route::post('torob/products', [HomeController::class, 'torob'])->name('torob.api');
 });
 Route::prefix('v2')->group(function () {
     Route::prefix('authWithCode')->group(function () {

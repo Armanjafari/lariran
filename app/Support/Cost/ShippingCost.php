@@ -23,7 +23,7 @@ class ShippingCost implements CostInterface
     public function setVariables()
     {
         foreach ($this->cost->basket->all() as $full) {
-            $this->weight += $full->product->weight  ?? 0;
+            $this->weight += $full->product->weight ?? 0 * $full->quantity ;
             $this->price += ($full->price * $full->currency->value) * 10;
         }
         
