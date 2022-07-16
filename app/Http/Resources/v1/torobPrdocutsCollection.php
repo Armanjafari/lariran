@@ -14,8 +14,7 @@ class torobPrdocutsCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return [
-            'products' => $this->collection->transform(function ($vareity) {
+        return $this->collection->transform(function ($vareity) {
                 return [
                     'title' => $vareity->product->persian_title,
                     'subtitle' => $vareity->product->title,
@@ -30,7 +29,6 @@ class torobPrdocutsCollection extends ResourceCollection
                     
 
                 ];
-            }),
-        ];
+            });
     }
 }

@@ -59,7 +59,8 @@ class HomeController extends Controller
         $fulls = new LengthAwarePaginator($fulls, $count, 100);
         return response()->json([
             'count' => $count,
-            new torobPrdocutsCollection($fulls)
+            'products' => new torobPrdocutsCollection($fulls),
+            'max_pages' => $fulls->lastPage(),
         ]);
     }
 }
