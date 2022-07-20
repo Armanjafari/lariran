@@ -7,8 +7,10 @@ use App\Http\Resources\v1\CityCollection;
 use App\Http\Resources\v1\ProvinceCollection;
 use App\Http\Resources\v1\ShippingCollection;
 use App\Http\Resources\v1\ShippingResource;
+use App\Http\Resources\v1\UserCollection;
 use App\Models\Province;
 use App\Models\Shiping;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,6 +19,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware(['auth:sanctum'])->except(['province' , 'city']);
+        $this->middleware(['auth:sanctum' , 'role:admin'])->only('list');
 
     }
     public function create(Request $request)
@@ -113,5 +116,10 @@ class UserController extends Controller
     {
         $cities = $province->cities;
         return new CityCollection($cities);
+    }
+    public function list()
+    {
+        $users = User::with('orders')->paginate(50);
+        return new UserCollection($users);
     }
 }

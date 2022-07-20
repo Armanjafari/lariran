@@ -50,6 +50,7 @@ class HomeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'page_unique' => 'integer|exists:products,id',
+            'page_url' => 'url',
 
         ]);
         if ($validator->fails()) {
@@ -60,8 +61,11 @@ class HomeController extends Controller
         }
         if ($request->has('page_unique')) {
             return $this->torobSingle($request);
+        }else if($request->has('page_url')){
+            return $this->torobPageUrl($request);
+
         }
-        $products = Product::all();
+        $products = Product::orderBy('created_at', 'desc')->all();
         $fulls = [];
         foreach ($products as $product) {
             $fullstmp = $product->fulls->sortBy('price');
@@ -108,5 +112,38 @@ class HomeController extends Controller
             'max_pages' => 1,
             'products' => new torobPrdocutsCollection($fulls),
         ]);
+    }
+    private function torobPageUrl(Request $request)
+    {
+        $url = parse_url($request->page_url);
+
+        $seprated = explode('/',$url['path']);
+        $id = $seprated[2];
+        if ($url['scheme'] != 'https' || $url['host'] != 'lariran.com' || !is_numeric($id)) {
+            return response()->json([
+                'data' => 'فرمت آدرس اشتباه میباشد',
+                'status' => 'error',
+            ]);
+        }
+        $product = Product::with('fulls')->findOrFail($id);
+        $fullstmp = $product->fulls->sortBy('price');
+        $fulls = [];
+        foreach ($fullstmp as $full) {
+            $last = $fullstmp->last();
+            if ($full == $last) {
+                array_push($fulls, $full);
+                break;
+            }
+            if ((int)$full->stock) {
+                array_push($fulls, $full);
+                break;
+            }
+        }
+        return response()->json([
+            'count' => 1,
+            'max_pages' => 1,
+            'products' => new torobPrdocutsCollection($fulls),
+        ]);
+
     }
 }

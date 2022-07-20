@@ -712,3 +712,13 @@ returns : [success message]
 params[] 
 
 returns : [success message]
+
+
+---------------------
+### Users ###
+[GET] https//api.lariran.com/api/v1/users  // admin permission needed
+
+params[]
+
+returns : [User collection with orders and pagination links]
+---------
