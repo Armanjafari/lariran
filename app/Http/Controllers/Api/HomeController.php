@@ -65,7 +65,7 @@ class HomeController extends Controller
             return $this->torobPageUrl($request);
 
         }
-        $products = Product::orderBy('created_at', 'desc')->all();
+        $products = Product::orderBy('created_at', 'desc')->get();
         $fulls = [];
         foreach ($products as $product) {
             $fullstmp = $product->fulls->sortBy('price');
