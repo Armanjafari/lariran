@@ -11,7 +11,7 @@ class OrderPostalProvider implements Provider{
     public function __construct($phone_number,$postal_code)
     {
         $this->phone_number = $phone_number;
-        $this->status = $postal_code;
+        $this->postal_code = $postal_code;
     }
     public function send()
     {  

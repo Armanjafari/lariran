@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\v1\SendSmsCode;
 use App\Models\Code;
 use App\Models\User;
 use App\Services\Notifications\Notification;
@@ -89,13 +90,21 @@ class AuthWithCodeController extends Controller
     {
         $notif = new SmsProvider($phone_number);
         $notif->send();
+        // SendSmsCode::dispatch($phone_number);
     }
     public function register(Request $request)
     {
-        $request->validate([
+        
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'phone_number' => 'required|unique:users,phone_number',
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
         $user = User::create([
             'name' => $request->input('name'),
             'phone_number' => $request->input('phone_number'),
