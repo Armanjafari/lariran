@@ -65,6 +65,7 @@ class OrderController extends Controller
             'trackingCode' => $request->input('tracking_code'),
         ]);
         $notif = new OrderPostalProvider($order->user->phone_number,$request->input('tracking_code'));
+        $notif->send();
         return response()->json([
             'data' => [],
             'status' => 'success',

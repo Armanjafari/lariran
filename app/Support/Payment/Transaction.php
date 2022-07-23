@@ -71,8 +71,8 @@ class Transaction
         $this->normalizeQuantity($result['order']);
         $notif = new OrderAdminProvider($result['order']->payment->amount);
         $notif->send();
-        $notif = new OrderUserProvider($result['order']->user->phone_number, $result['order']->id);
-        $notif->send();
+        $notif2 = new OrderUserProvider($result['order']->user->phone_number, $result['order']->id);
+        $notif2->send();
         // $this->normalizeWallet($result['order']);
         // $this->sendSms($result['order']);
         $this->basket->clear();
