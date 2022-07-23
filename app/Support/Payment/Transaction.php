@@ -4,6 +4,8 @@ namespace App\Support\Payment;
 
 use App\Models\Order;
 use App\Models\Payment;
+use App\Services\Notifications\Providers\OrderAdminProvider;
+use App\Services\Notifications\Providers\OrderUserProvider;
 use App\Support\Basket\Basket;
 use App\Support\Cost\Contracts\CostInterface;
 use App\Support\Payment\Gateways\Mellat;
@@ -67,6 +69,10 @@ class Transaction
         }
         $this->confirmPayment($result);
         $this->normalizeQuantity($result['order']);
+        $notif = new OrderAdminProvider($result['order']->payment->amount);
+        $notif->send();
+        $notif = new OrderUserProvider($result['order']->id , $result['order']->user->phone_number);
+        $notif->send();
         // $this->normalizeWallet($result['order']);
         // $this->sendSms($result['order']);
         $this->basket->clear();
