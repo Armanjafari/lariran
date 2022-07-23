@@ -15,7 +15,7 @@ class OrderAdminProvider implements Provider{
     {  
         $client = new Client(['headers' => ['Authorization' =>'AccessKey ' . config('services.sms.farazsms.api_key')],
         'json' => [
-            'pattern_code' => 'kcbjbtnp0lh2i4c',
+            'pattern_code' => 'ksa9g23j1bej3fd',
             'originator' => '+983000505',
             'recipient' => '+989177375015',
             'values' => [

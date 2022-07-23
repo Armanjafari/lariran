@@ -17,7 +17,7 @@ class OrderUserProvider implements Provider{
     {  
         $client = new Client(['headers' => ['Authorization' =>'AccessKey ' . config('services.sms.farazsms.api_key')],
         'json' => [
-            'pattern_code' => 'kcbjbtnp0lh2i4c',
+            'pattern_code' => 'x0oawsfg01x5b82',
             'originator' => '+983000505',
             'recipient' => $this->phone_number,
             'values' => [
