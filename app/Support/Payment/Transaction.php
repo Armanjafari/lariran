@@ -69,10 +69,12 @@ class Transaction
         }
         $this->confirmPayment($result);
         $this->normalizeQuantity($result['order']);
-        $notif = new OrderAdminProvider($result['order']->payment->amount);
+        $notif = new OrderAdminProvider($result['order']->payment->amount, '+989177375015');
         $notif->send();
         $notif2 = new OrderUserProvider($result['order']->user->phone_number, $result['order']->id);
         $notif2->send();
+        $notif3 = new OrderAdminProvider($result['order']->payment->amount, '+989176507221');
+        $notif3->send();
         // $this->normalizeWallet($result['order']);
         // $this->sendSms($result['order']);
         $this->basket->clear();
