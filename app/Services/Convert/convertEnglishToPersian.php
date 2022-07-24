@@ -11,5 +11,12 @@ class convertEnglishToPersian{
         $english = [0,  1,  2,  3,  4,  5,  6,  7,  8,  9];
         return str_replace($english, $persian, $input);
     }
+    public static function convertPersianToEnglish($input)
+    {
+        // $input = number_format($input);
+        $english = [0,  1,  2,  3,  4,  5,  6,  7,  8,  9];
+        $persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        return str_replace($persian, $english, $input);
+    }
 }
 ?>

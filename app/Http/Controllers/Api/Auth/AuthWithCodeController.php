@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\v1\SendSmsCode;
 use App\Models\Code;
 use App\Models\User;
+use App\Services\Convert\convertEnglishToPersian;
 use App\Services\Notifications\Notification;
 use App\Services\Notifications\Providers\SmsProvider;
 use Illuminate\Http\Request;
@@ -34,21 +35,22 @@ class AuthWithCodeController extends Controller
                 'status' => 'error',
             ]);
         }
-        $user = User::where('phone_number', $request->input('phone_number'))->first();
+        $phone_number = $this->convertor($request->input('phone_number'));
+        $user = User::where('phone_number', $phone_number)->first();
         if (!$user) {
             return response()->json([
                 'data' => [
                     'action' => 'register',
-                    'phone_number' => $request->input('phone_number'),
+                    'phone_number' => $phone_number,
                 ],
                 'status' => 'success',
             ]);
         }
-        $this->sendSms($request->input('phone_number'));
+        $this->sendSms($phone_number);
         return response()->json([
             'data' => [
                 'action' => 'login',
-                'phone_number' => $request->input('phone_number'),
+                'phone_number' => $phone_number,
             ],
             'status' => 'success',
         ]);
@@ -60,19 +62,20 @@ class AuthWithCodeController extends Controller
             'phone_number' => 'required|exists:users,phone_number',
             'code' => 'required',
         ]);
+        $phone_number = $this->convertor($request->input('phone_number'));
         if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
                 'status' => 'error',
             ]);
         }
-        $code = Code::where('code', $request->input('code'))->where('phone_number', $request->input('phone_number'))->firstOr(function(){
+        $code = Code::where('code', $request->input('code'))->where('phone_number', $phone_number)->firstOr(function(){
             return response()->json([
                 'data' => ['code' => ['کد وارد شده نامعتبر میباشد']],
                 'status' => 'error',
             ]);
         });
-        $user = User::where('phone_number', $request->input('phone_number'))->first();
+        $user = User::where('phone_number', $phone_number)->first();
         $status = Code::ValidateCode($request->input('code'));
         if ($status) {
             return response()->json([
@@ -105,17 +108,23 @@ class AuthWithCodeController extends Controller
                 'status' => 'error',
             ]);
         }
+        $phone_number = $this->convertor($request->input('phone_number'));
         $user = User::create([
             'name' => $request->input('name'),
-            'phone_number' => $request->input('phone_number'),
+            'phone_number' => $phone_number,
         ]);
-        $this->sendSms($request->input('phone_number'));
+        $this->sendSms($phone_number);
         return response()->json([
             'data' => [
                 'action' => 'login',
-                'phone_number' => $request->input('phone_number'),
+                'phone_number' => $phone_number,
             ],
             'status' => 'success',
         ]);
+    }
+    private function convertor($phone_number)
+    {
+        return convertEnglishToPersian::convertPersianToEnglish($phone_number);
+
     }
 }
