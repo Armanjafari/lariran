@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\v1;
 
+use App\Services\Convert\convertEnglishToPersian;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Morilog\Jalali\Jalalian;
 
@@ -19,11 +20,11 @@ class OrderCollection extends ResourceCollection
             'data' => $this->collection->transform(function($order){
                 return [
                     'id' => $order->id,
-                    'amount_without_shipping_price' => $order->amount,
+                    'amount_without_shipping_price' => convertEnglishToPersian::convertEnglishToPersian($order->amount),
                     'user' => new UserResource($order->user),
                     'gateway' => $order->payment->gateway ?? null,
                     'tracking_code' => $order->payment->trackingCode ?? null,
-                    'amount' => $order->payment->amount,
+                    'amount' => convertEnglishToPersian::convertEnglishToPersian($order->payment->amount),
                     'shiping' => new ShippingResource($order->shiping),
                     'ref_num' => $order->payment->ref_num,
                     'created_at' => Jalalian::forge($order->created_at)->format('%A, %d %B %y'),

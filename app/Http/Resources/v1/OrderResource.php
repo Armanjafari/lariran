@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\v1;
 
+use App\Services\Convert\convertEnglishToPersian;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
@@ -16,11 +17,11 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'amount_without_shipping_price' => $this->amount,
+            'amount_without_shipping_price' => convertEnglishToPersian::convertEnglishToPersian($this->amount),
             'user' => new UserResource($this->user),
             'gateway' => $this->payment->gateway ?? null,
             'tracking_code' => $this->payment->trackingCode ?? null,
-            'amount' => $this->payment->amount,
+            'amount' => convertEnglishToPersian::convertEnglishToPersian($this->payment->amount),
             'shiping' => new ShippingResource($this->shiping),
             'ref_num' => $this->payment->ref_num,
             'created_at' => $this->created_at,
