@@ -119,7 +119,7 @@ class UserController extends Controller
     }
     public function list()
     {
-        $users = User::with('orders')->paginate(50);
+        $users = User::with('orders')->orderBy('created_at', 'desc')->paginate(50);
         return new UserCollection($users);
     }
 }
