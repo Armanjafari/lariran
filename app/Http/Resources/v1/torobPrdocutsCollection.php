@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\v1;
 
+use ErrorException;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class torobPrdocutsCollection extends ResourceCollection
@@ -16,35 +17,71 @@ class torobPrdocutsCollection extends ResourceCollection
     {
         return $this->collection->transform(function ($vareity) {
             if ((int)$vareity->stock) {
-                return [
-                    'title' => $vareity->product->persian_title,
-                    'subtitle' => $vareity->product->title,
-                    'page_unique' => $vareity->product->id,
-                    'current_price' => $vareity->price * $vareity->currency->value,
-                    'old_price' => $vareity->show_price * $vareity->currency->value,
-                    'availability' => 'instock',
-                    'category_name' => $vareity->product->category->name,
-                    'image_link' => 'https://api.lariran.com/' . $vareity->product->images->first()->address ?? '',
-                    'page_url' => 'https://lariran.com/product/' . $vareity->product->id . '/' . $vareity->product->slug,
-                    'guarantee' => $vareity->waranty->name,
-                    
+                try {
+                    return [
+                        'title' => $vareity->product->persian_title,
+                        'subtitle' => $vareity->product->title,
+                        'page_unique' => $vareity->product->id,
+                        'current_price' => $vareity->price * $vareity->currency->value,
+                        'old_price' => $vareity->show_price * $vareity->currency->value,
+                        'availability' => 'instock',
+                        'category_name' => $vareity->product->category->name,
+                        'image_link' => 'https://api.lariran.com/' . $vareity->product->images->first()->address ?? '',
+                        'page_url' => 'https://lariran.com/product/' . $vareity->product->id . '/' . $vareity->product->slug,
+                        'guarantee' => $vareity->waranty->name,
+                        
+    
+                    ];
+                } catch (ErrorException $th) {
+                    return [
+                        'title' => $vareity->product->persian_title,
+                        'subtitle' => $vareity->product->title,
+                        'page_unique' => $vareity->product->id,
+                        'current_price' => $vareity->price * $vareity->currency->value,
+                        'old_price' => $vareity->show_price * $vareity->currency->value,
+                        'availability' => 'instock',
+                        'category_name' => $vareity->product->category->name,
+                        'image_link' => '',
+                        'page_url' => 'https://lariran.com/product/' . $vareity->product->id . '/' . $vareity->product->slug,
+                        'guarantee' => $vareity->waranty->name,
+                        
+    
+                    ];
+                }
 
-                ];
             }else {
-                return [
-                    'title' => $vareity->product->persian_title,
-                    'subtitle' => $vareity->product->title,
-                    'page_unique' => $vareity->product->id,
-                    'current_price' => $vareity->price * $vareity->currency->value,
-                    'old_price' => $vareity->show_price * $vareity->currency->value,
-                    'availability' => 'outofstock',
-                    'category_name' => $vareity->product->category->name,
-                    'image_link' => 'https://api.lariran.com/' . $vareity->product->images->first()->address ?? '',
-                    'page_url' => 'https://lariran.com/product/' . $vareity->product->id . '/' . $vareity->product->slug,
-                    'guarantee' => $vareity->waranty->name,
-                    
+                try {
+                    return [
+                        'title' => $vareity->product->persian_title,
+                        'subtitle' => $vareity->product->title,
+                        'page_unique' => $vareity->product->id,
+                        'current_price' => $vareity->price * $vareity->currency->value,
+                        'old_price' => $vareity->show_price * $vareity->currency->value,
+                        'availability' => 'outofstock',
+                        'category_name' => $vareity->product->category->name,
+                        'image_link' => 'https://api.lariran.com/' . $vareity->product->images->first()->address ?? '',
+                        'page_url' => 'https://lariran.com/product/' . $vareity->product->id . '/' . $vareity->product->slug,
+                        'guarantee' => $vareity->waranty->name,
+                        
+    
+                    ];
+                } catch (ErrorException $th) {
+                    return [
+                        'title' => $vareity->product->persian_title,
+                        'subtitle' => $vareity->product->title,
+                        'page_unique' => $vareity->product->id,
+                        'current_price' => $vareity->price * $vareity->currency->value,
+                        'old_price' => $vareity->show_price * $vareity->currency->value,
+                        'availability' => 'outofstock',
+                        'category_name' => $vareity->product->category->name,
+                        'image_link' => '',
+                        'page_url' => 'https://lariran.com/product/' . $vareity->product->id . '/' . $vareity->product->slug,
+                        'guarantee' => $vareity->waranty->name,
+                        
+    
+                    ];
+                }
 
-                ];
             }
                 
             });
