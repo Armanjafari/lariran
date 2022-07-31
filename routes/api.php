@@ -131,6 +131,8 @@ Route::prefix('v1')->group(function () {
         Route::get('category/{category}', [AttributeController::class, 'category'])->name('attribute.category');
         Route::put('update/{attribute}', [AttributeController::class, 'update'])->name('attribute.update');
         Route::delete('delete/{attribute}', [AttributeController::class, 'delete'])->name('attribute.delete');
+
+        Route::get('byCategory', [AttributeController::class, 'byCategory'])->name('attribute.by.category');
     });
     Route::prefix('attributeValue')->group(function () {
         Route::get('/', [AttributeValueController::class, 'index'])->name('attribute.value.index');

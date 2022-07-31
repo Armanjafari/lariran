@@ -448,7 +448,12 @@ params[]
 
 returns : [attribute collection with pagination links]
 ---------
+[GET] https//api.lariran.com/api/v1/attribute/byCategory
 
+params[category_id]
+
+returns : [attribute collection with pagination links]
+---------
 
 
 
