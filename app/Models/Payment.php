@@ -18,10 +18,15 @@ class Payment extends Model
     }
     public function confirm(string $refNum, string $gateway = null)
     {
-        $this->ref_num = $refNum;
-        $this->gateway = $gateway;
-        $this->status  = 1;
-        $this->save();
+        $this->update([
+            'ref_num' => $refNum,
+            'gateway' => $gateway,
+            'status' => 1,
+        ]);
+        // $this->ref_num = $refNum;
+        // $this->gateway = $gateway;
+        // $this->status  = 1;
+        // $this->save();
     }
     public function order()
     {
