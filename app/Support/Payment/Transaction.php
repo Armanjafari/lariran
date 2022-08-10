@@ -12,6 +12,7 @@ use App\Support\Payment\Gateways\Mellat;
 use App\Support\Payment\Gateways\Saman;
 use App\Support\Payment\Gateways\Pasargad;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Transaction
@@ -58,9 +59,12 @@ class Transaction
     }
     public function verify()
     {
+        if (!(Auth::check())) {
+            return false;
+        }
         // TODO basket is not dynamic !
         $result = $this->gatewayFactory()->verify($this->request);
-        if ($result['status'] != 0) {
+        if ((int)$result['status'] != 0) {
             $order = Order::where('code', $result['sale'])->firstOrFail();
             $order->payment()->update([
                 'status' => 0,
