@@ -59,13 +59,14 @@ class Transaction
     }
     public function verify()
     {
-        if (!(Auth::check())) {
-            return false;
-        }
+
         // TODO basket is not dynamic !
         $result = $this->gatewayFactory()->verify($this->request);
         if ((int)$result['status'] != 0) {
             $order = Order::where('code', $result['sale'])->firstOrFail();
+            if ($order->payment->status == 1 || $order->payment->status == 2 || $order->payment->status == 3) {
+                return false;
+            }
             $order->payment()->update([
                 'status' => 0,
             ]);
