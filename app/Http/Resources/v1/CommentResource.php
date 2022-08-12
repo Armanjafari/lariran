@@ -3,6 +3,7 @@
 namespace App\Http\Resources\v1;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Morilog\Jalali\Jalalian;
 
 class CommentResource extends JsonResource
 {
@@ -19,7 +20,7 @@ class CommentResource extends JsonResource
             'desc' => $this->desc,
             'score' => $this->score,
             'user' => new UserResource($this->user),
-            'created_at' => $this->created_at,
+            'created_at' => Jalalian::forge($this->created_at)->format('%A, %d %B %y'),
         ];
     }
     public function with($request)

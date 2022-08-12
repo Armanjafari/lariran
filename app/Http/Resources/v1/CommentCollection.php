@@ -3,6 +3,7 @@
 namespace App\Http\Resources\v1;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Morilog\Jalali\Jalalian;
 
 class CommentCollection extends ResourceCollection
 {
@@ -21,7 +22,7 @@ class CommentCollection extends ResourceCollection
                     'desc' => $comment->desc,
                     'score' => $comment->score,
                     'user' => new UserResource($comment->user),
-                    'created_at' => $comment->created_at,
+                    'created_at' => Jalalian::forge($comment->created_at)->format('%A, %d %B %y'),
                 ];
             }),
         ];
