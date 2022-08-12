@@ -18,8 +18,27 @@ class OrderController extends Controller
         $this->middleware('auth:sanctum');
         $this->middleware('role:admin')->only(['index', 'changeStatus','changeTrackingCode']);
     }
-    public function index()
+    public function index(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            's' => 'integer',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+        if ($request->has('s')) {
+            if (!is_null($request->input('s'))) {
+                $query = $request->s;
+                $orders = Order::where('id', 'LIKE', '%' . $query . '%')
+                    ->orWhere('id', 'LIKE', '%' . $query)
+                    ->orWhere('id', 'LIKE', $query . '%')->paginate(10);
+
+                return new OrderCollection($orders);
+            }
+        }
         $orders = Order::orderBy('created_at','desc')->paginate(10);
         $orders->load('fulls.product.images');
         return new OrderCollection($orders);

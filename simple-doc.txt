@@ -165,7 +165,7 @@ returns : [product collection]
 ### Product ###
 [GET] https//api.lariran.com/api/v1/product
 
-params[]
+params[optional=>s]
 
 returns : [product collection with pagination links]
 ---------
@@ -587,7 +587,7 @@ returns : [redirects to shapark]
 ### Order ###
 [POST] https//api.lariran.com/api/v1/orders // admin permission needed
 
-params[]
+params[optional=>s]
 
 returns : [orders collection]
 ---------
@@ -723,7 +723,7 @@ returns : [success message]
 ### Users ###
 [GET] https//api.lariran.com/api/v1/users  // admin permission needed
 
-params[]
+params[optional=>s]
 
 returns : [User collection with orders and pagination links]
 ---------

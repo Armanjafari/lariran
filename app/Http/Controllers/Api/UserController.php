@@ -117,8 +117,24 @@ class UserController extends Controller
         $cities = $province->cities;
         return new CityCollection($cities);
     }
-    public function list()
+    public function list(Request $request)
     {
+        if ($request->has('s')) {
+            if (!is_null($request->input('s'))) {
+                $query = $request->s;
+                $users = User::where('phone_number', 'LIKE', '%' . $query . '%')
+                    ->orWhere('phone_number', 'LIKE', '%' . $query)
+                    ->orWhere('phone_number', 'LIKE', $query . '%')
+                    ->orWhere('name', 'LIKE', '%' . $query . '%')
+                    ->orWhere('name', 'LIKE', $query . '%')
+                    ->orWhere('name', 'LIKE', '%' . $query)
+                    ->orWhere('id', 'LIKE', '%' . $query . '%')
+                    ->orWhere('id', 'LIKE', $query . '%')
+                    ->orWhere('id', 'LIKE', '%' . $query)->paginate(50);
+
+                return new UserCollection($users);
+            }
+        }
         $users = User::with('orders')->orderBy('created_at', 'desc')->paginate(50);
         return new UserCollection($users);
     }
