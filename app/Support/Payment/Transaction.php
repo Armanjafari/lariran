@@ -5,6 +5,7 @@ namespace App\Support\Payment;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Services\Notifications\Providers\OrderAdminProvider;
+use App\Services\Notifications\Providers\OrderSuccessProvider;
 use App\Services\Notifications\Providers\OrderUserProvider;
 use App\Support\Basket\Basket;
 use App\Support\Cost\Contracts\CostInterface;
@@ -75,11 +76,11 @@ class Transaction
         $this->confirmPayment($result);
         $this->normalizeQuantity($result['order']);
         try {
-            $notif = new OrderAdminProvider($result['order']->payment->amount, '+989177375015');
+            $notif = new OrderAdminProvider($result['order']->payment->amount, '+989177375015', $result['order']->id);
             $notif->send();
-            $notif2 = new OrderUserProvider($result['order']->user->phone_number, $result['order']->id);
+            $notif2 = new OrderSuccessProvider($result['order']->user->phone_number,$result['order']->user->name, $result['order']->id);
             $notif2->send();
-            $notif3 = new OrderAdminProvider($result['order']->payment->amount, '+989176507221');
+            $notif3 = new OrderAdminProvider($result['order']->payment->amount, '+989176507221', $result['order']->id);
             $notif3->send();
         } catch (\Throwable $th) {
         }

@@ -7,7 +7,8 @@ use App\Http\Resources\v1\OrderCollection;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\Notifications\Providers\OrderPostalProvider;
-use App\Services\Notifications\Providers\OrderStatusProvider;
+use App\Services\Notifications\Providers\OrderStoreConfirmationProvider;
+use App\Services\Notifications\Providers\OrderSuccessProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -62,8 +63,15 @@ class OrderController extends Controller
         $order->payment()->update([
             'status' => $request->input('status'),
         ]);
-        $notif = new OrderStatusProvider($order->user->phone_number, __('orders.' . $request->input('status')));
-        $notif->send();
+        if ((int)$request->input('status') == 2) {
+            $notif = new OrderStoreConfirmationProvider($order->user->phone_number,$order->id , $order->user->name);
+            $notif->send();
+        }else if((int)$request->input('status') == 1){
+            $notif = new OrderSuccessProvider($order->user->phone_number,$order->id , $order->user->name);
+            $notif->send();
+        }
+        // $notif = new OrderStatusProvider($order->user->phone_number, __('orders.' . $request->input('status')));
+        // $notif->send();
         return response()->json([
             'data' => [],
             'status' => 'success',
@@ -83,7 +91,7 @@ class OrderController extends Controller
         $order->payment()->update([
             'trackingCode' => $request->input('tracking_code'),
         ]);
-        $notif = new OrderPostalProvider($order->user->phone_number,$request->input('tracking_code'));
+        $notif = new OrderPostalProvider($order->user->phone_number,$request->input('tracking_code') , $order->user->name , $order->id);
         $notif->send();
         return response()->json([
             'data' => [],
