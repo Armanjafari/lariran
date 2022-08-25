@@ -11,7 +11,7 @@ class OrderSuccessProvider implements Provider
     private $phone_number;
     private $orderid;
     private $name;
-    public function __construct($phone_number, $name , $orderid)
+    public function __construct($phone_number, $orderid, $name)
     {
         $this->phone_number = $phone_number;
         $this->orderid = $orderid;
