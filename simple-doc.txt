@@ -587,7 +587,7 @@ returns : [redirects to shapark]
 ### Order ###
 [POST] https//api.lariran.com/api/v1/orders // admin permission needed
 
-params[optional=>s]
+params[optional=>s,status]
 
 returns : [orders collection]
 ---------

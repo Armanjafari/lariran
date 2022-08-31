@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\v1\OrderAdminByStatusCollection;
 use App\Http\Resources\v1\OrderCollection;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\User;
 use App\Services\Notifications\Providers\OrderPostalProvider;
 use App\Services\Notifications\Providers\OrderStoreConfirmationProvider;
@@ -23,6 +25,7 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             's' => 'integer',
+            'status' => 'integer',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -40,6 +43,13 @@ class OrderController extends Controller
                 return new OrderCollection($orders);
             }
         }
+        if ($request->has('status')) {
+            if (!is_null($request->input('status'))) {
+                $payments = Payment::where('status' , (int)$request->input('status'))->paginate(10);
+                return new OrderAdminByStatusCollection($payments);
+            }
+        }
+ 
         $orders = Order::orderBy('created_at','desc')->paginate(10);
         $orders->load('fulls.product.images');
         return new OrderCollection($orders);
