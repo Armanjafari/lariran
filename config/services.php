@@ -34,6 +34,9 @@ return [
             'terminal_id' => env('MELLAT_TERMINAL_ID'),
             'username' => env('MELLAT_USERNAME'),
             'user_password' => env('MELLAT_USER_PASSWORD'),
+        ],
+        'sepehr' => [
+            'terminal_id' => env('SEPEHR_TERMINAL_ID'),
         ]
     ],
     'sms' => [

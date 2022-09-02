@@ -6,12 +6,10 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Services\Notifications\Providers\OrderAdminProvider;
 use App\Services\Notifications\Providers\OrderSuccessProvider;
-use App\Services\Notifications\Providers\OrderUserProvider;
 use App\Support\Basket\Basket;
 use App\Support\Cost\Contracts\CostInterface;
 use App\Support\Payment\Gateways\Mellat;
-use App\Support\Payment\Gateways\Saman;
-use App\Support\Payment\Gateways\Pasargad;
+use App\Support\Payment\Gateways\Sepehr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -52,9 +50,8 @@ class Transaction
     private function gatewayFactory()
     {
         $gateway = [
-            'saman' => Saman::class,
             'mellat' => Mellat::class,
-            'pasargad' => Pasargad::class
+            'sepehr' => Sepehr::class,
         ][$this->request->gateway];
         return resolve($gateway);
     }
@@ -65,7 +62,7 @@ class Transaction
         $result = $this->gatewayFactory()->verify($this->request);
         if ((int)$result['status'] != 0) {
             $order = Order::where('code', $result['sale'])->firstOrFail();
-            if ($order->payment->status == 1 || $order->payment->status == 2 || $order->payment->status == 3) {
+            if ($order->payment->status == 1 || $order->payment->status == 2 || $order->payment->status == 3 || $order->payment->status == 10) {
                 return false;
             }
             $order->payment()->update([
@@ -78,7 +75,7 @@ class Transaction
         try {
             $notif = new OrderAdminProvider($result['order']->payment->amount, '+989177375015', $result['order']->id);
             $notif->send();
-            $notif2 = new OrderSuccessProvider($result['order']->user->phone_number,$result['order']->user->name, $result['order']->id);
+            $notif2 = new OrderSuccessProvider($result['order']->user->phone_number, $result['order']->user->name, $result['order']->id);
             $notif2->send();
             $notif3 = new OrderAdminProvider($result['order']->payment->amount, '+989176507221', $result['order']->id);
             $notif3->send();
@@ -99,7 +96,20 @@ class Transaction
     }
     private function confirmPayment($result)
     {
-        $result['order']->payment->result()->create($this->request->all());
+        if ($result->gateway == 'mellat') {
+            $result['order']->payment->result()->create($this->request->all());
+        }else if ($result->gateway == 'sepehr'){
+            $result['order']->payment->result()->create([
+                'RefID' => $this->request->input('tracenumber'),
+                'SaleOrderId' => $this->request->input('invoiceid'),
+                'SaleReferenceId' => $this->request->input('rrn'),
+                'CardHolderInfo' => $this->request->input('issuerbank'),
+                'CardHolderPan' => $this->request->input('cardnumber'),
+                'FinalAmount' => $this->request->input('amount'),
+                'ResCode' => 0,
+
+            ]);
+        }
         return $result['order']->payment->confirm($result['refNum'], $result['gateway']);
     }
     private function makeOrder()
