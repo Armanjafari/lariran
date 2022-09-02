@@ -27,7 +27,6 @@ class Sepehr implements GatewayInterface
     private function redirectToBank($order, $amount)
     {
         $terminalId        = config('services.payment.sepehr.terminal_id');
-        $amount         = $amount * 10;
         // $additionalData    = auth()->user()->phone_number; 
         $amount             = $amount * 10; // Rial
         $invoiceNumber         = $order->code; // شماره سفارشی که در دیتابیس ذخیره می کنید
@@ -64,6 +63,7 @@ class Sepehr implements GatewayInterface
 
             echo '<form id="paymentUTLfrm" action="' . $AddressIpgPay . '" method="POST">
             <input type="hidden" id="TerminalID" name="TerminalID" value="' . $terminalId . '">
+            <input type="hidden" id="AccessToken" name="AccessToken" value="' . $AccessToken . '">
             <input type="hidden" id="Amount" name="Amount" value="' . $amount . '">
             <input type="hidden" id="callbackURL" name="callbackURL" value="' . $redirectAddress . '">
             <input type="hidden" id="InvoiceID" name="InvoiceID" value="' . $invoiceNumber . '">
