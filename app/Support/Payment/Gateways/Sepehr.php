@@ -26,7 +26,7 @@ class Sepehr implements GatewayInterface
     }
     private function redirectToBank($order, $amount)
     {
-        $terminalId        = config('services.payment.mellat.terminal_id');
+        $terminalId        = config('services.payment.sepehr.terminal_id');
         $amount         = $amount * 10;
         // $additionalData    = auth()->user()->phone_number; 
         $amount             = $amount * 10; // Rial
@@ -76,7 +76,7 @@ class Sepehr implements GatewayInterface
     {
 
 
-        $terminal = config('services.payment.mellat.terminal_id'); // شماره ترمینال (TID)
+        $terminal = config('services.payment.sepehr.terminal_id'); // شماره ترمینال (TID)
 
         $invoiceNumber = $request->input('invoiceid');
         $digitalreceipt = $request->input('digitalreceipt');
