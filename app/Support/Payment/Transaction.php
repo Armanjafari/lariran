@@ -96,9 +96,9 @@ class Transaction
     }
     private function confirmPayment($result)
     {
-        if ($result->gateway == 'mellat') {
+        if ($result['gateway'] == 'mellat') {
             $result['order']->payment->result()->create($this->request->all());
-        }else if ($result->gateway == 'sepehr'){
+        }else if ($result['gateway'] == 'sepehr'){
             $result['order']->payment->result()->create([
                 'RefID' => $this->request->input('tracenumber'),
                 'SaleOrderId' => $this->request->input('invoiceid'),
