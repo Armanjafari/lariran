@@ -100,12 +100,12 @@ class Transaction
             $result['order']->payment->result()->create($this->request->all());
         }else if ($result['gateway'] == 'sepehr'){
             $result['order']->payment->result()->create([
-                'RefID' => $this->request->input('tracenumber') ?? 'itwasnull',
-                'SaleOrderId' => $this->request->input('invoiceid') ?? 'itwasnull',
-                'SaleReferenceId' => $this->request->input('rrn') ?? 'itwasnull',
-                'CardHolderInfo' => $this->request->input('issuerbank') ?? 'itwasnull',
-                'CardHolderPan' => $this->request->input('cardnumber') ?? 'itwasnull',
-                'FinalAmount' => $this->request->input('amount') ?? 'itwasnull',
+                'RefId' => $this->request->input('tracenumber'),
+                'SaleOrderId' => $this->request->input('invoiceid'),
+                'SaleReferenceId' => $this->request->input('rrn'),
+                'CardHolderInfo' => $this->request->input('issuerbank'),
+                'CardHolderPan' => $this->request->input('cardnumber'),
+                'FinalAmount' => $this->request->input('amount'),
                 'ResCode' => 0,
 
             ]);
