@@ -45,7 +45,7 @@ class OrderController extends Controller
         }
         if ($request->has('status')) {
             if (!is_null($request->input('status'))) {
-                $payments = Payment::where('status' , (int)$request->input('status'))->paginate(10);
+                $payments = Payment::where('status' , (int)$request->input('status'))->orderBy('created_at','desc')->paginate(10);
                 return new OrderAdminByStatusCollection($payments);
             }
         }
