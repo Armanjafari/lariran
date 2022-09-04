@@ -75,7 +75,7 @@ class Transaction
         try {
             $notif = new OrderAdminProvider($result['order']->payment->amount, '+989177375015', $result['order']->id);
             $notif->send();
-            $notif2 = new OrderSuccessProvider($result['order']->user->phone_number, $result['order']->user->name, $result['order']->id);
+            $notif2 = new OrderSuccessProvider($result['order']->user->phone_number, $result['order']->id, $result['order']->user->name);
             $notif2->send();
             $notif3 = new OrderAdminProvider($result['order']->payment->amount, '+989176507221', $result['order']->id);
             $notif3->send();

@@ -63,11 +63,8 @@ class Sepehr implements GatewayInterface
 
             echo '<form id="paymentUTLfrm" action="' . $AddressIpgPay . '" method="POST">
             <input type="hidden" id="TerminalID" name="TerminalID" value="' . $terminalId . '">
-            <input type="hidden" id="AccessToken" name="AccessToken" value="' . $AccessToken . '">
-            <input type="hidden" id="Amount" name="Amount" value="' . $amount . '">
-            <input type="hidden" id="callbackURL" name="callbackURL" value="' . $redirectAddress . '">
-            <input type="hidden" id="InvoiceID" name="InvoiceID" value="' . $invoiceNumber . '">
-            <input type="hidden" id="Payload" name="Payload" value="">
+            <input type="hidden" id="AccessToken" name="token" value="' . $AccessToken . '">
+            <input type="hidden" id="getMethod" name="getMethod" value="1">
             <script>document.forms["paymentUTLfrm"].submit()</script>
         </form>';
         } else echo "با خطا مواجه شد به عقب برگشته و درگاه دیگری انتخاب کنید";
