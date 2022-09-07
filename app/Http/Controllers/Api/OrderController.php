@@ -24,7 +24,6 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            's' => 'integer',
             'status' => 'integer',
         ]);
         if ($validator->fails()) {
@@ -34,7 +33,7 @@ class OrderController extends Controller
             ]);
         }
         if ($request->has('s')) {
-            if (!is_null($request->input('s'))) {
+            if (!is_null($request->input('s')) && !empty($request->input('s'))) {
                 $query = $request->s;
                 $orders = Order::where('id', 'LIKE', '%' . $query . '%')
                     ->orWhere('id', 'LIKE', '%' . $query)
