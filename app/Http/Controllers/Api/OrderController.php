@@ -19,10 +19,10 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
-        $this->middleware('role:admin')->only(['index', 'changeStatus','changeTrackingCode']);
+        $this->middleware('role:admin')->only(['index', 'changeStatus', 'changeTrackingCode']);
     }
     public function index(Request $request)
-    {
+    { // TODO fix this bad code
         $validator = Validator::make($request->all(), [
             'status' => 'integer',
         ]);
@@ -31,6 +31,20 @@ class OrderController extends Controller
                 'data' => $validator->errors(),
                 'status' => 'error',
             ]);
+        }
+        if ($request->has('status')) {
+            if (!is_null($request->input('status')) && !empty($request->input('status'))) {
+                $payments = Payment::where('status', (int)$request->input('status'))->orderBy('created_at', 'desc')->get();
+                if ($request->has('s')) {
+                    if (!is_null($request->input('s')) && !empty($request->input('s'))) {
+                        $query = $request->input('s');
+                        $payments = Payment::where('status', (int)$request->input('status'))
+                            ->whereRelation('order', 'id', 'LIKE', '%' . $query . '%')
+                            ->orderBy('created_at', 'desc')->get();
+                    }
+                }
+                return new OrderAdminByStatusCollection($payments);
+            }
         }
         if ($request->has('s')) {
             if (!is_null($request->input('s')) && !empty($request->input('s'))) {
@@ -42,20 +56,14 @@ class OrderController extends Controller
                 return new OrderCollection($orders);
             }
         }
-        if ($request->has('status')) {
-            if (!is_null($request->input('status'))) {
-                $payments = Payment::where('status' , (int)$request->input('status'))->orderBy('created_at','desc')->paginate(10);
-                return new OrderAdminByStatusCollection($payments);
-            }
-        }
- 
-        $orders = Order::orderBy('created_at','desc')->paginate(10);
+
+        $orders = Order::orderBy('created_at', 'desc')->paginate(10);
         $orders->load('fulls.product.images');
         return new OrderCollection($orders);
     }
     public function user(User $user)
     {
-        $orders = $user->orders()->orderBy('created_at','desc')->get();
+        $orders = $user->orders()->orderBy('created_at', 'desc')->get();
         return new OrderCollection($orders);
     }
     public function changeStatus(Request $request, Order $order)
@@ -73,10 +81,10 @@ class OrderController extends Controller
             'status' => $request->input('status'),
         ]);
         if ((int)$request->input('status') == 2) {
-            $notif = new OrderStoreConfirmationProvider($order->user->phone_number,$order->id , $order->user->name);
+            $notif = new OrderStoreConfirmationProvider($order->user->phone_number, $order->id, $order->user->name);
             $notif->send();
-        }else if((int)$request->input('status') == 1){
-            $notif = new OrderSuccessProvider($order->user->phone_number,$order->id , $order->user->name);
+        } else if ((int)$request->input('status') == 1) {
+            $notif = new OrderSuccessProvider($order->user->phone_number, $order->id, $order->user->name);
             $notif->send();
         }
         // $notif = new OrderStatusProvider($order->user->phone_number, __('orders.' . $request->input('status')));
@@ -100,7 +108,7 @@ class OrderController extends Controller
         $order->payment()->update([
             'trackingCode' => $request->input('tracking_code'),
         ]);
-        $notif = new OrderPostalProvider($order->user->phone_number,$request->input('tracking_code') , $order->user->name , $order->id);
+        $notif = new OrderPostalProvider($order->user->phone_number, $request->input('tracking_code'), $order->user->name, $order->id);
         $notif->send();
         return response()->json([
             'data' => [],
