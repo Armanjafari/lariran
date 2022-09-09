@@ -34,13 +34,13 @@ class OrderController extends Controller
         }
         if ($request->has('status')) {
             if (!is_null($request->input('status')) && !empty($request->input('status'))) {
-                $payments = Payment::where('status', (int)$request->input('status'))->orderBy('created_at', 'desc')->get();
+                $payments = Payment::where('status', (int)$request->input('status'))->orderBy('created_at', 'desc')->get(10);
                 if ($request->has('s')) {
                     if (!is_null($request->input('s')) && !empty($request->input('s'))) {
                         $query = $request->input('s');
                         $payments = Payment::where('status', (int)$request->input('status'))
                             ->whereRelation('order', 'id', 'LIKE', '%' . $query . '%')
-                            ->orderBy('created_at', 'desc')->get();
+                            ->orderBy('created_at', 'desc')->paginate(10);
                     }
                 }
                 return new OrderAdminByStatusCollection($payments);
