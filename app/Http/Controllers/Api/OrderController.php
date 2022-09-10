@@ -34,32 +34,43 @@ class OrderController extends Controller
         }
         if ($request->has('status')) {
             if (!is_null($request->input('status')) && is_numeric($request->input('status'))) {
-                $payments = Payment::where('status', (int)$request->input('status'))->orderBy('created_at', 'desc')->paginate(10);
+                $payments = Payment::where('status', (int)$request->input('status'))->orderBy('created_at', 'desc');
                 if ($request->has('s')) {
                     if (!is_null($request->input('s')) && !empty($request->input('s'))) {
                         $query = $request->input('s');
                         $payments = Payment::where('status', (int)$request->input('status'))
                             ->whereRelation('order', 'id', 'LIKE', '%' . $query . '%')
-                            ->orderBy('created_at', 'desc')->paginate(10);
+                            ->orderBy('created_at', 'desc');
                     }
                 }
-                return new OrderAdminByStatusCollection($payments);
+                if ($request->has('from') && $request->has('to')) {
+                    if (!is_null($request->input('from')) && !empty($request->input('from')) && !is_null($request->input('to')) && !empty($request->input('to'))) {
+                        $from = date($request->input('from'));
+                        $to = date('Y/m/d', strtotime($request->input('to') . " +1 day"));
+                        $payments->whereBetween('created_at', [$from, $to])->orderBy('created_at', 'desc');
+                    }
+                }
+                return new OrderAdminByStatusCollection($payments->paginate(10));
             }
         }
+
+        $orders = Order::orderBy('created_at', 'desc');
+        // TODO this line throw an exception after changing the place of code without any reason !!! $orders->load('fulls.product.images');
         if ($request->has('s')) {
             if (!is_null($request->input('s')) && !empty($request->input('s'))) {
                 $query = $request->s;
-                $orders = Order::where('id', 'LIKE', '%' . $query . '%')
-                    ->orWhere('id', 'LIKE', '%' . $query)
-                    ->orWhere('id', 'LIKE', $query . '%')->paginate(10);
-
-                return new OrderCollection($orders);
+                $orders = Order::where('id', 'LIKE', '%' . $query . '%');
+            }
+        }
+        if ($request->has('from') && $request->has('to')) {
+            if (!is_null($request->input('from')) && !empty($request->input('from')) && !is_null($request->input('to')) && !empty($request->input('to'))) {
+                $from = date($request->input('from'));
+                $to = date('Y/m/d', strtotime($request->input('to') . " +1 day"));
+                $orders->whereBetween('created_at', [$from, $to])->orderBy('created_at', 'desc');
             }
         }
 
-        $orders = Order::orderBy('created_at', 'desc')->paginate(10);
-        $orders->load('fulls.product.images');
-        return new OrderCollection($orders);
+        return new OrderCollection($orders->paginate(10));
     }
     public function user(User $user)
     {
