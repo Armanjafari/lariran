@@ -54,12 +54,12 @@ class OrderController extends Controller
             }
         }
 
-        $orders = Order::orderBy('created_at', 'desc');
+        $orders = Order::with('payment.result')->orderBy('created_at', 'desc');
         // TODO this line throw an exception after changing the place of code without any reason !!! $orders->load('fulls.product.images');
         if ($request->has('s')) {
             if (!is_null($request->input('s')) && !empty($request->input('s'))) {
                 $query = $request->s;
-                $orders = Order::where('id', 'LIKE', '%' . $query . '%');
+                $orders = Order::with('payment.result')->where('id', 'LIKE', '%' . $query . '%');
             }
         }
         if ($request->has('from') && $request->has('to')) {
