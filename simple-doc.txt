@@ -727,3 +727,9 @@ params[optional=>s]
 
 returns : [User collection with orders and pagination links]
 ---------
+[POST] https//api.lariran.com/api/v1/user/update/name
+
+params[name]
+
+returns : [success message]
+---------

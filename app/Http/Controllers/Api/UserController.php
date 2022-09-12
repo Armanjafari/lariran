@@ -18,9 +18,9 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth:sanctum'])->except(['province' , 'city']);
-        $this->middleware(['auth:sanctum' , 'role:admin'])->only('list');
-
+        $this->middleware(['auth:sanctum'])->except(['province', 'city']);
+        $this->middleware(['auth:sanctum', 'role:admin'])->only('list');
+        $this->middleware(['throttle:5,5'])->only('updateName');
     }
     public function create(Request $request)
     {
@@ -28,13 +28,13 @@ class UserController extends Controller
             'address' => 'required',
             'postal_code' => 'required|integer',
             'city_id' => 'required|integer|exists:cities,id',
-          ]);
-          if ($validator->fails()) {
+        ]);
+        if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
                 'status' => 'error',
             ]);
-          }
+        }
         //   auth()->user()->shipings()-
         Shiping::create([
             'address' => $request->input('address'),
@@ -47,19 +47,19 @@ class UserController extends Controller
             'status' => 'success',
         ]);
     }
-    public function update(Request $request , Shiping $address)
+    public function update(Request $request, Shiping $address)
     {
         $validator = Validator::make($request->all(), [
             'address' => 'required',
             'postal_code' => 'required',
             'city_id' => 'required|exists:cities,id',
-          ]);
-          if ($validator->fails()) {
+        ]);
+        if ($validator->fails()) {
             return response()->json([
                 'data' => $validator->errors(),
                 'status' => 'error',
             ]);
-          }
+        }
         $address->update([
             'address' => $request->input('address'),
             'postal_code' => $request->input('postal_code'),
@@ -69,7 +69,7 @@ class UserController extends Controller
         return response()->json([
             'data' => [],
             'status' => 'success',
-        ],200);
+        ], 200);
     }
     public function index()
     {
@@ -91,16 +91,13 @@ class UserController extends Controller
             return response()->json([
                 'data' => [],
                 'status' => 'success',
-            ],200);
-            
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'data' => ['شما قبلا با این ادرس سفارشی ثبت کرده اید لطفا به جای حذف از ویرایش استفاده کنید'],
                 'status' => 'error',
-            ],200);
+            ], 200);
         }
-        
-
     }
     public function single(Shiping $address)
     {
@@ -137,5 +134,24 @@ class UserController extends Controller
         }
         $users = User::with('orders')->orderBy('created_at', 'desc')->paginate(50);
         return new UserCollection($users);
+    }
+    public function updateName(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|min:3|max:60',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
+        auth()->user()->update([
+            'name' => $request->input('name'),
+        ]);
+        return response()->json([
+            'data' => [],
+            'status' => 'success',
+        ], 200);
     }
 }

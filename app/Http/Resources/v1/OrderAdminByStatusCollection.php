@@ -28,7 +28,7 @@ class OrderAdminByStatusCollection extends ResourceCollection
                     'shiping' => new ShippingResource($payment->order->shiping),
                     'ref_num' => $payment->ref_num,
                     'created_at' => Jalalian::forge($payment->order->created_at)->format('%A, %d %B %y'),
-                    'payment_tracker_code' => $payment->result->SaleOrderId,
+                    'payment_tracker_code' => $payment->result->SaleOrderId ?? null,
                     'status' => [
                         'id' => $payment->status,
                         'name' => __('orders.' . $payment->status)],
