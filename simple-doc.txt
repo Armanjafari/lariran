@@ -735,7 +735,7 @@ returns : [success message]
 
 
 ---------------------
-### Sender ###
+### Senders ###
 [GET] https//api.lariran.com/api/v1/sender
 
 params[]

@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Validator;
 
 class SenderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum', 'role:admin']);
+    }
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
