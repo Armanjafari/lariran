@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\SenderController;
 use App\Http\Controllers\Api\SliderController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WarantyController;
@@ -194,6 +195,13 @@ Route::prefix('v1')->group(function () {
         Route::delete('delete/{brandLanding}', [BrandForLandigPageController::class, 'delete'])->name('brand.landing.delete');
     });
     Route::post('torob/products', [HomeController::class, 'torob'])->name('torob.api');
+    Route::prefix('sender')->group(function () {
+        Route::get('/', [SenderController::class, 'index'])->name('sender.index');
+        Route::post('create', [SenderController::class, 'create'])->name('sender.create');
+        Route::post('update/{sender}', [SenderController::class, 'update'])->name('sender.update');
+        Route::delete('delete/{sender}', [SenderController::class, 'delete'])->name('sender.delete');
+        Route::get('/{sender}', [SenderController::class, 'single'])->name('sender.single');
+    });
 });
 Route::prefix('v2')->group(function () {
     Route::prefix('authWithCode')->group(function () {

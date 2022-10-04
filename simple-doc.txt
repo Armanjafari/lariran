@@ -732,4 +732,39 @@ returns : [User collection with orders and pagination links]
 params[name]
 
 returns : [success message]
+
+
+---------------------
+### Sender ###
+[GET] https//api.lariran.com/api/v1/sender
+
+params[]
+
+returns : [sender collection with pagination links]
 ---------
+[POST] https//api.lariran.com/api/v1/sender/create
+
+params[name, address, phone_number, postal_code]
+
+returns : [success message]
+---------
+[POST] https//api.lariran.com/api/v1/sender/update/{sender_id} #example https//api.lariran.com/api/v1/sender/update/2
+
+params[name, address, phone_number, postal_code]
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/sender/delete/{sender_id} #example https//api.lariran.com/api/v1/sender/delete/2
+
+params[] 
+
+returns : [success message]
+---------
+[GET] https//api.lariran.com/api/v1/sender/{sender_id} #example https//api.lariran.com/api/v1/sender/2
+
+params[] 
+
+returns : [sender]
+---------
+
+
