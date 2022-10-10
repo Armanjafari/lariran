@@ -32,6 +32,7 @@ class ProductController extends Controller
             'weight' => 'required|integer',
             'keywords' => 'string',
             'status' => 'integer',
+            'show_weight' => 'integer',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -63,6 +64,7 @@ class ProductController extends Controller
             'weight' => $request->input('weight') ?? 0,
             'keywords' => $request->input('keywords') ?? '',
             'status' => $request->input('status') ?? 1,
+            'show_weight' => $request->input('show_weight') ?? '',
         ]);
         return response()->json([
             'data' => [],
@@ -82,6 +84,7 @@ class ProductController extends Controller
             'weight' => 'required|integer',
             'keywords' => 'string',
             'status' => 'integer',
+            'show_weight' => 'integer',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -112,6 +115,7 @@ class ProductController extends Controller
             'weight' => $request->input('weight') ?? 0,
             'keywords' => $request->input('keywords') ?? '',
             'status' => $request->input('status') ?? 1,
+            'show_weight' => $request->input('show_weight') ?? '',
         ]);
         return response()->json([
             'data' => [],

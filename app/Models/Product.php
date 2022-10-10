@@ -20,6 +20,7 @@ class Product extends Model
         'status',
         'views',
         'keywords',
+        'show_weight',
     ];
     public function category()
     {
