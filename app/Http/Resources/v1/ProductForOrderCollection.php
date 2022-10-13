@@ -26,7 +26,8 @@ class ProductForOrderCollection extends ResourceCollection
                         'persian_title' => $variety->product->persian_title ?? null,
                         'slug' => $variety->product->slug ?? null,
                         'product_id' => $variety->product->id ?? null,
-                        'quantity' => $variety->pivot->quantity
+                        'quantity' => $variety->pivot->quantity,
+                        'show_weight' => $variety->product->show_weight,
                     ];
                 } else {
                     return [
@@ -38,7 +39,9 @@ class ProductForOrderCollection extends ResourceCollection
                         'persian_title' => $variety->product->persian_title,
                         'slug' => $variety->product->slug ?? null,
                         'product_id' => $variety->product->id,
-                        'quantity' => $variety->pivot->quantity
+                        'quantity' => $variety->pivot->quantity,
+                        'show_weight' => $variety->product->show_weight,
+
                     ];
                 }
             });
