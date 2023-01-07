@@ -238,7 +238,7 @@ class ProductController extends Controller
             $sub['Code'] = $full->id;
             $sub['Name'] = $full->product->persian_title . ' ' . $full->color->title;
             $sub['ItemType'] = 0;
-            $sub['SellPrice'] = $full->price;
+            $sub['SellPrice'] = $full->price * $full->currency->value;
             $sub['NodeFamily'] = ': ' . $full->product->category->persian_name;
             $sub['ProductCode'] = $full->product->id;
             array_push($products,$sub);
