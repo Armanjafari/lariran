@@ -7,9 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\ImageCollection;
 use App\Http\Resources\v1\ProductCollection;
 use App\Http\Resources\v1\ProductResource;
+use App\Models\Full;
 use App\Models\Image;
 use App\Models\Product;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -225,5 +228,28 @@ class ProductController extends Controller
     public function productImages(Product $product)
     {
         return new ImageCollection($product->images()->where('type', null)->get());
+    }
+    public function addAll(Request $request)
+    {
+        $fulls = Full::all();
+        $sub = [];
+        $products = [];
+        foreach ($fulls as $full) {
+            $sub['Code'] = $full->id;
+            $sub['Name'] = $full->product->persian_title . ' ' . $full->color->title;
+            $sub['ItemType'] = 0;
+            $sub['SellPrice'] = $full->price;
+            $sub['NodeFamily'] = ': ' . $full->product->category->persian_name;
+            $sub['ProductCode'] = $full->product->id;
+            array_push($products,$sub);
+            
+        }
+        // dd($products);
+        $client = Http::post('https://api.hesabfa.com/v1/item/batchsave' , [
+            'apiKey' => config('services.hesabfa.api_key'),
+            'loginToken' => config('services.hesabfa.login_token'),
+            'items' => $products
+        ,
+        ]);
     }
 }

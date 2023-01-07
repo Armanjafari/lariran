@@ -44,5 +44,9 @@ return [
             'api_key' => env('FARAZ_SMS_API_KEY'),
         ]
     ],
+    'hesabfa' => [
+        'login_token' => env('HESABFA_LOGIN_TOKEN'),
+        'api_key' => env('HESABFA_API_KEY'),
+    ],
 
 ];
