@@ -765,6 +765,44 @@ returns : [success message]
 params[] 
 
 returns : [sender]
+
+
+
+---------------------
+### Coupon ###
+[GET] https//api.lariran.com/api/v1/coupon
+
+params[]
+
+returns : [coupon collection with pagination links]
 ---------
+[POST] https//api.lariran.com/api/v1/coupon/create
 
+params[code, percent, limit, expire_time, type_id , type=>[User,Product]]
 
+returns : [success message]
+---------
+[POST] https//api.lariran.com/api/v1/coupon/update/{coupon_id} #example https//api.lariran.com/api/v1/coupon/update/2
+
+params[code, percent, limit, expire_time, type=>[User,Product]]
+
+returns : [success message]
+---------
+[DELETE] https//api.lariran.com/api/v1/coupon/delete/{coupon_id} #example https//api.lariran.com/api/v1/coupon/delete/2
+
+params[] 
+
+returns : [success message]
+---------
+[POST] https//api.lariran.com/api/v1/coupon/store/
+
+params[] 
+
+returns : [success message]
+---------
+[POST] https//api.lariran.com/api/v1/coupon/forget/
+
+params[] 
+
+returns : [success message]
+---------

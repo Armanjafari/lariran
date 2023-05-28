@@ -9,6 +9,14 @@ use Carbon\Carbon;
 class Coupon extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'percent',
+        'code',
+        'limit',
+        'expire_time',
+        'couponable_id',
+        'couponable_type',
+    ];
     public function isExpired()
     {
         return Carbon::now()->isAfter(Carbon::parse($this->expire_time));

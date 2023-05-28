@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CommntController;
+use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\CurrencyController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\HomeController;
@@ -202,6 +203,13 @@ Route::prefix('v1')->group(function () {
         Route::post('update/{sender}', [SenderController::class, 'update'])->name('sender.update');
         Route::delete('delete/{sender}', [SenderController::class, 'delete'])->name('sender.delete');
         Route::get('/{sender}', [SenderController::class, 'single'])->name('sender.single');
+    });
+
+    Route::prefix('coupon')->group( function () {
+        Route::get('', [CouponController::class , 'index'])->name('coupon.index');
+        Route::post('create', [CouponController::class , 'create'])->name('coupon.create');
+        Route::post('store', [CouponController::class , 'store'])->name('coupon.store');
+        Route::get('remove', [CouponController::class , 'remove'])->name('coupon.remove');
     });
 });
 Route::prefix('v2')->group(function () {
