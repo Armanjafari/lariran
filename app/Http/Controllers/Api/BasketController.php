@@ -16,6 +16,7 @@ use App\Support\Payment\Transaction;
 use App\Support\Storage\Contracts\StorageInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 
 class BasketController extends Controller
@@ -45,11 +46,14 @@ class BasketController extends Controller
             ]);
 
         }
+        // dd($cookie);
+        $cookie = Cookie::get('laravel_session');
         try {
             $this->basket->add($product, 1);
             return response()->json([
                 'data' => [
-                    'basket' => 'محصول به سبد خرید اضافه شد'
+                    'basket' => 'محصول به سبد خرید اضافه شد',
+                    'cookie' => $cookie,
                 ],
                 'status' => 'success',
             ]);
@@ -57,7 +61,8 @@ class BasketController extends Controller
         } catch (QuantityExceededException $e) {
             return response()->json([
                 'data' => [
-                    'basket' => 'محصول موجود نمیباشد'
+                    'basket' => 'محصول موجود نمیباشد',
+                    'cookie' => $cookie,
                 ],
                 'status' => 'error',
             ]);
@@ -80,18 +85,21 @@ class BasketController extends Controller
                 'status' => 'error',
             ]);
         }
+        $cookie = Cookie::get('laravel_session');
         try {
             $this->basket->update($product, $request->quantity);
             return response()->json([
                 'data' => [
-                    'basket' => ' سبد خرید ویرایش شد '
+                    'basket' => ' سبد خرید ویرایش شد ',
+                    'cookie' => $cookie,
                 ],
                 'status' => 'success',
             ]);
         } catch (QuantityExceededException $e) {
             return response()->json([
                 'data' => [
-                    'basket' => 'مقدار مورد نظر بیش از موجودی انبار میباشد'
+                    'basket' => 'مقدار مورد نظر بیش از موجودی انبار میباشد',
+                    'cookie' => $cookie,
                 ],
                 'status' => 'error',
             ]);

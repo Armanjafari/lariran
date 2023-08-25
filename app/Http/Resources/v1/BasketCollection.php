@@ -5,6 +5,7 @@ namespace App\Http\Resources\v1;
 use App\Services\Convert\convertEnglishToPersian;
 use App\Support\Cost\Contracts\CostInterface;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Cookie;
 
 class BasketCollection extends ResourceCollection
 {
@@ -59,6 +60,7 @@ class BasketCollection extends ResourceCollection
     {
         return [
             'status' => 'success',
+            'cookie' => Cookie::get('laravel_session'),
         ];
     }
 }
