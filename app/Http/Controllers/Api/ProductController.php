@@ -6,11 +6,15 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\ImageCollection;
 use App\Http\Resources\v1\ProductCollection;
+use App\Http\Resources\v1\ProductForCategoriesCollection;
 use App\Http\Resources\v1\ProductResource;
+use App\Models\Category;
 use App\Models\Full;
 use App\Models\Image;
 use App\Models\Product;
 use GuzzleHttp\Client;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -137,10 +141,15 @@ class ProductController extends Controller
                     ->orWhere('title', 'LIKE', '%' . $query . '%')
                     ->orWhere('title', 'LIKE', $query . '%')
                     ->orWhere('title', 'LIKE', '%' . $query)->paginate(10);
-
                 return new ProductCollection($products);
             }
         }
+        if ($request->has('category_id')) {
+            if (!is_null($request->input('category_id'))) {
+                return $this->byCategory($request);
+            }
+        }
+
         $products = Product::orderBy('created_at', 'desc')->paginate(10);
         return new ProductCollection($products);
     }
@@ -229,27 +238,59 @@ class ProductController extends Controller
     {
         return new ImageCollection($product->images()->where('type', null)->get());
     }
-    public function addAll(Request $request)
+    private function byCategory(Request $request)
     {
-        $fulls = Full::all();
-        $sub = [];
-        $products = [];
-        foreach ($fulls as $full) {
-            $sub['Code'] = $full->id;
-            $sub['Name'] = $full->product->persian_title . ' ' . $full->color->title;
-            $sub['ItemType'] = 0;
-            $sub['SellPrice'] = $full->price * $full->currency->value;
-            $sub['NodeFamily'] = ': ' . $full->product->category->persian_name;
-            $sub['ProductCode'] = $full->product->id;
-            array_push($products,$sub);
-            
-        }
+        $category = Category::find($request->category_id);
+        $products = $category->products;
         // dd($products);
-        $client = Http::post('https://api.hesabfa.com/v1/item/batchsave' , [
-            'apiKey' => config('services.hesabfa.api_key'),
-            'loginToken' => config('services.hesabfa.login_token'),
-            'items' => $products
-        ,
-        ]);
+        // foreach ($category->child as $category) {
+        //     $products = $products->push($category->products()->get());
+        //     foreach ($category->child as $category) {
+        //         $products = $products->push($category->products()->get());
+        //         foreach ($category->child as $category) {
+        //             $products = $products->push($category->products()->get());
+        //         }
+        //     }
+        // }
+        // $products = Arr::flatten($products);
+        // dd($products);
+        foreach ($products as $product) {
+            $product->load('fulls');
+        }
+        $products = collect($products);
+        $fulls = [];
+        foreach ($products as $product) {
+            if (!is_null($product->fulls)) {
+
+                array_push($fulls, $product->fulls->first());
+            }
+        }
+        // dd($fulls);
+        $newway = [];
+        foreach ($fulls as $full) {
+            if (!is_null($full)) {
+                $tt = [];
+                $tt['id'] = $full->product_id;
+                $tt['title'] = $full->product->title;
+                $tt['persian_title'] = $full->product->persian_title;
+                $tt['slug'] = $full->product->slug;
+                $tt['stock'] = $full->stock;
+                $tt['image'] = $full->product->images->first()->address ?? null;
+                $tt['price'] = $full->price * $full->currency->value;
+                $tt['show_price'] = $full->show_price * $full->currency->value;
+                $tt['percent'] = $full->percentage();
+                $tt['created_at'] = $full->created_at;
+                array_push($newway, $tt);
+            }
+        }
+        $newway = collect($newway);
+        if ($request->has('stock') && (!is_null($request->input('stock')))) {
+            $newway = $newway->where('stock', '>', 0);
+        }
+        $paginator = new LengthAwarePaginator($newway, count($newway), 10);
+        return new ProductForCategoriesCollection($paginator);
+
+        $products = $category->products;
+        return new ProductCollection($products);
     }
 }
