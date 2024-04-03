@@ -10,6 +10,8 @@ use App\Support\Cost\ShippingCost;
 use App\Support\Discount\DiscountManager;
 use App\Support\Storage\Contracts\StorageInterface;
 use App\Support\Storage\SessionStorage;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -40,6 +42,21 @@ class AppServiceProvider extends ServiceProvider
             $shippingCost = new ShippingCost($basketCost, $request);
             $discountCost = new DiscountCost($shippingCost, $app->make(DiscountManager::class));
             return $discountCost;
+        });
+
+
+        Collection::macro('paginate', function($perPage, $page = null, $pageName = 'page') {
+            $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
+            return new LengthAwarePaginator(
+                $this->forPage($page, $perPage), // $items
+                $this->count(),                  // $total
+                $perPage,
+                $page,
+                [                                // $options
+                    'path' => LengthAwarePaginator::resolveCurrentPath(),
+                    'pageName' => $pageName,
+                ]
+            );
         });
     }
 }

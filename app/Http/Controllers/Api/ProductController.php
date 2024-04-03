@@ -156,10 +156,7 @@ class ProductController extends Controller
             }
         }
         $products = Product::orderBy('created_at', 'desc')->get();
-        // dd('here');
-        $paginator = new LengthAwarePaginator($products, count($products), 10);
-        // return new ProductByCategoriesCollection($paginator);
-        return new ProductCollection($paginator);
+        return new ProductCollection($products->paginate(10));
     }
     public function delete(Product $product)
     {
@@ -312,10 +309,10 @@ class ProductController extends Controller
             $newway = $newway->where('stock', '>', 0);
         }
         // dd($tt['category_id']);
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $paginator = new LengthAwarePaginator($newway, count($newway), 10,$currentPage);
 
-        return new ProductByCategoriesCollection($paginator);
+
+
+        return new ProductByCategoriesCollection($newway->paginate(10));
 
         //  $products = $category->products;
         //  return new ProductCollection($products);
