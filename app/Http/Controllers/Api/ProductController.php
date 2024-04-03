@@ -312,7 +312,9 @@ class ProductController extends Controller
             $newway = $newway->where('stock', '>', 0);
         }
         // dd($tt['category_id']);
-        $paginator = new LengthAwarePaginator($newway, count($newway), 10);
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $paginator = new LengthAwarePaginator($newway, count($newway), 10,$currentPage);
+
         return new ProductByCategoriesCollection($paginator);
 
         //  $products = $category->products;
