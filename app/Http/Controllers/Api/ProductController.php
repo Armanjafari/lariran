@@ -4,10 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\v1\AttributeCollection;
+use App\Http\Resources\v1\BrandResource;
+use App\Http\Resources\v1\CategoryResource;
 use App\Http\Resources\v1\ImageCollection;
+use App\Http\Resources\v1\OptionResource;
+use App\Http\Resources\v1\ProductByCategoriesCollection;
 use App\Http\Resources\v1\ProductCollection;
 use App\Http\Resources\v1\ProductForCategoriesCollection;
 use App\Http\Resources\v1\ProductResource;
+use App\Http\Resources\v1\VarietyCollection;
 use App\Models\Category;
 use App\Models\Full;
 use App\Models\Image;
@@ -149,9 +155,11 @@ class ProductController extends Controller
                 return $this->byCategory($request);
             }
         }
-
-        $products = Product::orderBy('created_at', 'desc')->paginate(10);
-        return new ProductCollection($products);
+        $products = Product::orderBy('created_at', 'desc')->get();
+        // dd('here');
+        $paginator = new LengthAwarePaginator($products, count($products), 10);
+        // return new ProductByCategoriesCollection($paginator);
+        return new ProductCollection($paginator);
     }
     public function delete(Product $product)
     {
@@ -274,12 +282,28 @@ class ProductController extends Controller
                 $tt['title'] = $full->product->title;
                 $tt['persian_title'] = $full->product->persian_title;
                 $tt['slug'] = $full->product->slug;
-                $tt['stock'] = $full->stock;
-                $tt['image'] = $full->product->images->first()->address ?? null;
+                $tt['category_id'] = new CategoryResource($full->product->category);
+                $tt['brand_id'] = new BrandResource($full->product->brand);
+                if(!is_null($full->product->option)){
+                    $tt['option_id'] = new OptionResource($full->product->option);
+                    $tt['stock'] = $full->stock;
+                } else{
+                    $tt['option_id'] = null;
+                    $tt['stock'] = $full->stock ?? null;
+                }
+                $tt['description'] = $full->product->description;
+                $tt['weight'] = $full->product->weight;
+                $tt['show_weight'] = $full->product->show_weight;
+                $tt['attributes'] = new AttributeCollection($full->product->attributes);
+                $tt['keywords'] = $full->product->keywords;
+                $tt['status'] = $full->product->status;
+                $tt['image'] = $full->product->images;
                 $tt['price'] = $full->price * $full->currency->value;
                 $tt['show_price'] = $full->show_price * $full->currency->value;
-                $tt['percent'] = $full->percentage();
-                $tt['created_at'] = $full->created_at;
+                $tt['varieties'] = new VarietyCollection($full->product['fulls']);
+                $tt['stock'] = $full->stock;
+                // $tt['percent'] = $full->percentage();
+                // $tt['created_at'] = $full->created_at;
                 array_push($newway, $tt);
             }
         }
@@ -287,10 +311,11 @@ class ProductController extends Controller
         if ($request->has('stock') && (!is_null($request->input('stock')))) {
             $newway = $newway->where('stock', '>', 0);
         }
+        // dd($tt['category_id']);
         $paginator = new LengthAwarePaginator($newway, count($newway), 10);
-        return new ProductForCategoriesCollection($paginator);
+        return new ProductByCategoriesCollection($paginator);
 
-        $products = $category->products;
-        return new ProductCollection($products);
+        //  $products = $category->products;
+        //  return new ProductCollection($products);
     }
 }

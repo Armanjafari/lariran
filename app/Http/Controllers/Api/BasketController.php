@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Exists;
 
 class BasketController extends Controller
 {
@@ -44,7 +45,6 @@ class BasketController extends Controller
                 ],
                 'status' => 'error',
             ]);
-
         }
         // dd($cookie);
         $cookie = Cookie::get('laravel_session');
@@ -165,7 +165,7 @@ class BasketController extends Controller
             ]);
         }
     }
-    public function checkCost(CostInterface $cost , Request $request)
+    public function checkCost(CostInterface $cost, Request $request)
     { // TODO end this
         $validator = Validator::make($request->all(), [
             'shipping' => 'required|exists:shipings,id',

@@ -165,7 +165,7 @@ returns : [product collection]
 ### Product ###
 [GET] https//api.lariran.com/api/v1/product
 
-params[optional=>s]
+params[optional=>s, category_id, stock]
 
 returns : [product collection with pagination links]
 ---------
@@ -373,9 +373,9 @@ returns : [success message]
 ### Basket ###
 [GET] https//api.lariran.com/api/v1/basket/
 
-params[]
+params[cookie]
 
-returns : [basket products with quantity]
+returns : [basket products,cookie with quantity]
 ---------
 [GET] https//api.lariran.com/api/v1/basket/add/{vareity_id}
 
