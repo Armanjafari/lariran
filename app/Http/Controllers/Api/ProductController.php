@@ -20,6 +20,7 @@ use App\Models\Image;
 use App\Models\Product;
 use GuzzleHttp\Client;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
@@ -138,6 +139,16 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'category_id' => 'exists:categories,id',
+            'stock' => 'integer',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => $validator->errors(),
+                'status' => 'error',
+            ]);
+        }
         if ($request->has('s')) {
             if (!is_null($request->input('s'))) {
                 $query = $request->s;
@@ -155,7 +166,8 @@ class ProductController extends Controller
                 return $this->byCategory($request);
             }
         }
-        $products = Product::orderBy('created_at', 'desc')->get();
+        $products = Product::orderBy('created_at', 'desc')->paginate(10);
+        // $products = $this->paginate($products->toArray());
         return new ProductCollection($products);
     }
     public function delete(Product $product)
@@ -245,9 +257,8 @@ class ProductController extends Controller
     }
     private function byCategory(Request $request)
     {
-        $category = Category::find($request->category_id);
+        $category = Category::with('products')->find($request->category_id);
         $products = $category->products;
-        // dd($products);
         // foreach ($category->child as $category) {
         //     $products = $products->push($category->products()->get());
         //     foreach ($category->child as $category) {
@@ -270,11 +281,10 @@ class ProductController extends Controller
                 array_push($fulls, $product->fulls->first());
             }
         }
-        // dd($fulls);
         $newway = [];
+        $tt = [];
         foreach ($fulls as $full) {
             if (!is_null($full)) {
-                $tt = [];
                 $tt['id'] = $full->product_id;
                 $tt['title'] = $full->product->title;
                 $tt['persian_title'] = $full->product->persian_title;
@@ -291,7 +301,7 @@ class ProductController extends Controller
                 $tt['description'] = $full->product->description;
                 $tt['weight'] = $full->product->weight;
                 $tt['show_weight'] = $full->product->show_weight;
-                $tt['attributes'] = new AttributeCollection($full->product->attributes);
+                // $tt['attributes'] = new AttributeCollection($full->product->attributes) ?? ''; // TODO bugy
                 $tt['keywords'] = $full->product->keywords;
                 $tt['status'] = $full->product->status;
                 $tt['image'] = $full->product->images;
@@ -308,13 +318,24 @@ class ProductController extends Controller
         if ($request->has('stock') && (!is_null($request->input('stock')))) {
             $newway = $newway->where('stock', '>', 0);
         }
+        // $newway = $newway->toArray();
         // dd($tt['category_id']);
-
-
-
+        // Arr::flatten(dd($newway));
+        $newway = $this->paginate($newway->toArray());
         return new ProductByCategoriesCollection($newway);
 
         //  $products = $category->products;
         //  return new ProductCollection($products);
     }
+    private function paginate(array $items, int $perPage = 10, ?int $page = null, $options = [])// : Paginator
+    {
+        $pageStart = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+    // Start displaying items from this number;
+    $offSet = ($pageStart * $perPage) - $perPage; 
+
+    // Get only the items you need using array_slice
+    $itemsForCurrentPage = array_slice($items, $offSet, $perPage);
+    // return $pagination = new Paginator($itemsForCurrentPage, count($itemsForCurrentPage));
+    return new LengthAwarePaginator($itemsForCurrentPage, count($items), $perPage,Paginator::resolveCurrentPage(), );
+}
 }

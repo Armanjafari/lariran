@@ -18,7 +18,7 @@ class ProductByCategoriesCollection extends ResourceCollection
 
         return [
             'data' => $this->collection->transform(function ($product) {
-                // dd($product['option_id']);
+                // return $product['attributes'];
                 return [
                     'id' => $product['id'],
                     'title' => $product['title'],
@@ -34,7 +34,7 @@ class ProductByCategoriesCollection extends ResourceCollection
                     'status' => $product['status'] ?? '',
                     'stock' => $product['stock'],
                     'images' => $product['image'],
-                    'attributes' => $product['attributes'],
+                    // 'attributes' => $product['attributes'],
                     'varieties' => $product['varieties'],
 
                 ];

@@ -203,5 +203,6 @@ return [
         'score' => 'امتیاز',
         'quantity' => 'تعداد',
         'status' => 'وضعیت',
+        'category_id' => 'دسته بندی',
     ],
 ];

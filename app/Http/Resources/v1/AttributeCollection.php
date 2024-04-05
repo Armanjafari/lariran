@@ -17,9 +17,9 @@ class AttributeCollection extends ResourceCollection
         return [
             'data' => $this->collection->transform(function($attribute){
                 return [
-                    'id' => $attribute->id,
-                    'name' => $attribute->name,
-                    'category' => new CategoryResource($attribute->category),
+                    'id' => $attribute->id ?? '',
+                    'name' => $attribute->name ?? '',
+                    'category' => new CategoryResource($attribute->category) ?? '',
                 ];
             }),
         ];
