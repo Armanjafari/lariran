@@ -43,20 +43,5 @@ class AppServiceProvider extends ServiceProvider
             $discountCost = new DiscountCost($shippingCost, $app->make(DiscountManager::class));
             return $discountCost;
         });
-
-
-        Collection::macro('paginate', function($perPage, $page = null, $pageName = 'page') {
-            $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
-            return new LengthAwarePaginator(
-                $this->forPage($page, $perPage), // $items
-                $this->count(),                  // $total
-                $perPage,
-                $page,
-                [                                // $options
-                    'path' => LengthAwarePaginator::resolveCurrentPath(),
-                    'pageName' => $pageName,
-                ]
-            );
-        });
     }
 }

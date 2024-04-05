@@ -156,7 +156,7 @@ class ProductController extends Controller
             }
         }
         $products = Product::orderBy('created_at', 'desc')->get();
-        return new ProductCollection($products->paginate(10));
+        return new ProductCollection($products);
     }
     public function delete(Product $product)
     {
@@ -312,7 +312,7 @@ class ProductController extends Controller
 
 
 
-        return new ProductByCategoriesCollection($newway->paginate(10));
+        return new ProductByCategoriesCollection($newway);
 
         //  $products = $category->products;
         //  return new ProductCollection($products);
