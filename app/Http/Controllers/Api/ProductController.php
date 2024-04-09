@@ -315,9 +315,9 @@ class ProductController extends Controller
             }
         }
         $newway = collect($newway);
-        if ($request->has('stock') && (!is_null($request->input('stock')))) {
+        if ($request->has('stock') && ($request->input('stock') == 1)) {
             $newway = $newway->where('stock', '>', 0);
-        } else if ($request->has('stock') && (!is_null($request->input('stock')))) {
+        } else if ($request->has('stock') && ($request->input('stock') == 0)) {
             $newway = $newway->where('stock', '<=', 0);
         }
         // $newway = $newway->toArray();
