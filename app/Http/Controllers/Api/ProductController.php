@@ -291,10 +291,10 @@ class ProductController extends Controller
                 $tt['slug'] = $full->product->slug;
                 $tt['category_id'] = new CategoryResource($full->product->category);
                 $tt['brand_id'] = new BrandResource($full->product->brand);
-                if(!is_null($full->product->option)){
+                if (!is_null($full->product->option)) {
                     $tt['option_id'] = new OptionResource($full->product->option);
                     $tt['stock'] = $full->stock;
-                } else{
+                } else {
                     $tt['option_id'] = null;
                     $tt['stock'] = $full->stock ?? null;
                 }
@@ -317,6 +317,8 @@ class ProductController extends Controller
         $newway = collect($newway);
         if ($request->has('stock') && (!is_null($request->input('stock')))) {
             $newway = $newway->where('stock', '>', 0);
+        } else if ($request->has('stock') && (!is_null($request->input('stock')))) {
+            $newway = $newway->where('stock', '<=', 0);
         }
         // $newway = $newway->toArray();
         // dd($tt['category_id']);
@@ -327,15 +329,15 @@ class ProductController extends Controller
         //  $products = $category->products;
         //  return new ProductCollection($products);
     }
-    private function paginate(array $items, int $perPage = 10, ?int $page = null, $options = [])// : Paginator
+    private function paginate(array $items, int $perPage = 10, ?int $page = null, $options = []) // : Paginator
     {
         $pageStart = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-    // Start displaying items from this number;
-    $offSet = ($pageStart * $perPage) - $perPage; 
+        // Start displaying items from this number;
+        $offSet = ($pageStart * $perPage) - $perPage;
 
-    // Get only the items you need using array_slice
-    $itemsForCurrentPage = array_slice($items, $offSet, $perPage);
-    // return $pagination = new Paginator($itemsForCurrentPage, count($itemsForCurrentPage));
-    return new LengthAwarePaginator($itemsForCurrentPage, count($items), $perPage,Paginator::resolveCurrentPage(), );
-}
+        // Get only the items you need using array_slice
+        $itemsForCurrentPage = array_slice($items, $offSet, $perPage);
+        // return $pagination = new Paginator($itemsForCurrentPage, count($itemsForCurrentPage));
+        return new LengthAwarePaginator($itemsForCurrentPage, count($items), $perPage, Paginator::resolveCurrentPage(),);
+    }
 }
