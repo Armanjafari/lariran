@@ -33,7 +33,7 @@ class ProductByCategoriesCollection extends ResourceCollection
                     'keywords' => $product['keywords'] ?? '',
                     'status' => $product['status'] ?? '',
                     'stock' => $product['stock'],
-                    'images' => new ImageCollection($product->images),
+                    'images' => new ImageCollection($product['image']),
                     // 'images' => $product['image'],
                     // 'attributes' => $product['attributes'],
                     'varieties' => $product['varieties'],
