@@ -202,7 +202,7 @@ class ProductController extends Controller
     public function imageCreate(Request $request, Product $product)
     {
         $validator = Validator::make($request->all(), [
-            'image' => 'image|mimes:jpeg,jpg,png|max:512'
+            'image' => 'image|mimes:jpeg,jpg,png,webp|max:512'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -225,7 +225,7 @@ class ProductController extends Controller
     public function imageDescCreate(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'image' => 'image|mimes:jpeg,jpg,png|max:1024'
+            'image' => 'image|mimes:jpeg,jpg,png,webp|max:1024'
         ]);
         if ($validator->fails()) {
             return response()->json([
